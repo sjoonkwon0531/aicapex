@@ -14,4 +14,4 @@
 3. 최신 완결 분기가 바뀌었으면 `page.html`에서 분기를 가리키는 문구를 고친다(파이프라인 README의 "페이지에서 분기를 가리키는 곳").
 4. `python3 tools/capex/build_capex.py` 후 커밋·푸시. Cloudflare가 1분 안에 배포한다.
 
-`public/capex/data/kr_customs.csv`(그림 n, 관세청 2025·2026년 1~9월)는 2026-11-05에 고정한 값이다. 월간 갱신은 이 파일을 건드리지 않는다.
+그림 n은 https://memsim.sjoonkwon.com/data/kr_customs_ytd.csv 를 읽는다(연구실 노트북이 매일 만들고, memsim의 `_headers`가 이 출처에만 CORS를 연다). 읽지 못하면 `public/capex/data/kr_customs.csv`(2026-11-05 고정, 같은 열 구성)로 그린다. 월간 갱신은 이 파일을 건드리지 않는다.

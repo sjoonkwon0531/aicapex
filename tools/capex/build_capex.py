@@ -15,7 +15,7 @@ page = page.replace('<meta name="dash-one-writer">\n', '')
 # ---- new panel n: 2026 customs breakdown (fixed snapshot) ----
 card_n = '''
     <section class="card wide" id="fig-n">
-      <p class="cap"><span class="lab">n</span><span class="note">한국 메모리 수출을 관세청 10자리 품목으로 나눈 값, 2025년과 2026년 1~9월(십억 달러). 2026년 증가분의 절반가량이 범용 D램이고, 그것도 물량이 아니라 값에서 왔습니다. 복합구조칩은 대만행 몫이 커서 HBM으로 보이지만, 품목명에 HBM이 따로 있지는 않습니다.</span></p>
+      <p class="cap"><span class="lab">n</span><span class="note">한국 메모리 수출을 관세청 10자리 품목으로 나눈 값, <span data-n="period">—</span>(십억 달러). 늘어난 금액 가운데 범용 D램이 <span data-n="dram_share">—</span>, 복합구조칩이 <span data-n="hbm_share">—</span>입니다. 복합구조칩은 대만행 몫이 커서 HBM으로 보이지만, 품목명에 HBM이 따로 있지는 않습니다. <span data-n="src">—</span></span></p>
       <div class="chart" style="min-height:0" data-draw="chartN" data-source="kr_customs"></div>
     </section>
 '''
@@ -24,7 +24,7 @@ assert page.count(anchor) == 1
 page = page.replace(anchor, card_n + '\n' + anchor)
 li_old = '    </ul>\n  </section>'
 assert page.count(li_old) == 1
-page = page.replace(li_old, '      <li>그림 n은 관세청 품목별 수출입실적(공공데이터포털 API, 10자리 HSK 854232xxxx)을 1~9월끼리 더한 값입니다. 2021~2025년 대만행 분기 값은 UN Comtrade와 금액·중량 모두 일치했습니다. 이 그림은 2026년 11월 5일에 고정한 값이며 월간 갱신에 들어 있지 않습니다. 범용 D램 가격 국면은 <a href="https://memsim.sjoonkwon.com">메모리 국면 모니터</a>에서 매일 갱신됩니다.</li>\n' + li_old)
+page = page.replace(li_old, '      <li>그림 n은 관세청 품목별 수출입실적(공공데이터포털 API, 10자리 HSK 854232xxxx)을 1~9월끼리 더한 값입니다. 2021~2025년 대만행 분기 값은 UN Comtrade와 금액·중량 모두 일치했습니다. 이 그림은 연구실의 매일 수집 자료(메모리 국면 모니터의 공개 데이터)를 읽어 매일 갱신되며, 그 자료를 불러오지 못하면 2026년 11월 5일에 고정한 값으로 그립니다. 범용 D램 가격 국면은 <a href="https://memsim.sjoonkwon.com">메모리 국면 모니터</a>에서 매일 갱신됩니다.</li>\n' + li_old)
 
 chart_n = r'''
 <script>
@@ -33,7 +33,12 @@ chart_n = r'''
   dash.draw('chartN', (el) => {
     const g = dash.data('kr_customs');
     if (g.status !== 'ok') { el.textContent = '—'; return; }
-    const rows = g.data.map((r) => ({ item: r.item, a: N(r.v2025), b: N(r.v2026), ta: N(r.t2025), tb: N(r.t2026) }));
+    const r0 = g.data[0] || {}; const LA = `${r0.y_prev}년 1~${r0.m_last}월`, LB = `${r0.y_cur}년 1~${r0.m_last}월`;
+    const rows = g.data.map((r) => ({ code: r.code, item: r.item, a: N(r.v_prev), b: N(r.v_cur), ta: N(r.t_prev), tb: N(r.t_cur) }));
+    const inc = d3.sum(rows, (r) => r.b - r.a), share = (c) => { const x = rows.find((r) => r.code === c); return x && inc > 0 ? d3.format('.0%')((x.b - x.a) / inc) : '—'; };
+    const setN = (k, v) => document.querySelectorAll(`[data-n="${k}"]`).forEach((e) => { e.textContent = v; });
+    setN('period', `${LA}과 ${LB}`); setN('dram_share', share('8542321010')); setN('hbm_share', share('8542323000'));
+    setN('src', g.from === 'live' ? '매일 갱신됩니다.' : '2026년 11월 5일 기준 고정 값입니다.');
     el.replaceChildren();
     const W = el.clientWidth, rowH = 46, M = { t: 28, r: 64, b: 24, l: Math.min(170, W * 0.36) };
     const H = M.t + rows.length * rowH + M.b;
@@ -48,7 +53,7 @@ chart_n = r'''
     const show = (ev, r) => {
       tip.replaceChildren();
       const h = document.createElement('div'); h.className = 'h'; h.textContent = r.item; tip.appendChild(h);
-      [[c[7], '2025년 1~9월', r.a, r.ta], [c[0], '2026년 1~9월', r.b, r.tb]].forEach(([col, lab, v, t]) => {
+      [[c[7], LA, r.a, r.ta], [c[0], LB, r.b, r.tb]].forEach(([col, lab, v, t]) => {
         const d = document.createElement('div'); const i = document.createElement('i'); i.style.background = col; d.appendChild(i);
         d.appendChild(document.createTextNode(`${lab}  ${d3.format(',.1f')(v)}십억 달러 · ${d3.format(',.0f')(t)}톤`)); tip.appendChild(d);
       });
@@ -65,7 +70,7 @@ chart_n = r'''
     gr.append('text').attr('x', (r) => x(r.b) + 6).attr('y', half * 1.5).attr('dy', '0.35em')
       .text((r) => (r.a > 0 ? '×' + d3.format('.1f')(r.b / r.a) : ''));
     const lg = svg.append('g').attr('transform', `translate(${M.l},${H - 6})`);
-    [[c[7], '2025년 1~9월'], [c[0], '2026년 1~9월']].forEach(([col, lab], i) => {
+    [[c[7], LA], [c[0], LB]].forEach(([col, lab], i) => {
       const gg = lg.append('g').attr('transform', `translate(${i * 130},0)`);
       gg.append('rect').attr('y', -10).attr('width', 10).attr('height', 10).attr('rx', 2).attr('fill', col);
       gg.append('text').attr('x', 15).attr('y', -1).text(lab);
@@ -106,7 +111,12 @@ shim = r'''<script>
     onData: (fn) => { draws.push(['__all__', fn]); },
   };
   DATASETS.forEach((id) => { store[id] = { status: 'loading', data: [], columns: [] }; });
-  Promise.all(DATASETS.map((id) => d3.csv(`/capex/data/${id}.csv`).then((rows) => { store[id] = { status: 'ok', data: rows, columns: rows.columns }; },
+  const REMOTE = { kr_customs: 'https://memsim.sjoonkwon.com/data/kr_customs_ytd.csv' };
+  const load = (id) => {
+    const local = () => d3.csv(`/capex/data/${id}.csv`).then((rows) => ({ rows, from: 'local' }));
+    return REMOTE[id] ? d3.csv(REMOTE[id], { cache: 'no-store' }).then((rows) => (rows.length ? { rows, from: 'live' } : local()), local) : local();
+  };
+  Promise.all(DATASETS.map((id) => load(id).then(({ rows, from }) => { store[id] = { status: 'ok', data: rows, columns: rows.columns, from }; },
     () => { store[id] = { status: 'error', data: [], columns: [] }; })))
     .then(() => {
       renderAll();
