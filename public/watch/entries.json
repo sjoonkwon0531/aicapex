@@ -1,0 +1,21 @@
+{
+  "updated": "2026-11-05",
+  "entries": [
+    {
+      "date": "2026-11-05",
+      "title": "2026년 1~9월 한국 메모리 수출 증가분의 절반은 범용 D램 값",
+      "body": "관세청 10자리 품목으로 나누면 1~9월 메모리 수출은 629억 달러에서 2,222억 달러로 늘었다. 증가분 1,593억 달러 가운데 범용 D램이 49%, 복합구조칩(HBM 추정)이 34%다. 범용 D램은 중량이 6% 느는 사이 kg당 값이 4.6배가 되었다. 2025년까지 대만행 증가를 이끈 것은 HBM 단가였지만, 2026년에는 범용 가격 국면이 더 큰 몫을 차지한다.",
+      "sites": ["capex", "memsim"],
+      "sources": [{"title": "관세청 품목별 수출입실적(공공데이터포털)", "url": "https://www.data.go.kr/"}],
+      "decision": false
+    },
+    {
+      "date": "2026-11-05",
+      "title": "추가 설비투자의 손익분기: 컨센서스가 MSFT 5%, AMZN 10%, META 17% 더 높아야",
+      "body": "하이퍼스케일러 시뮬레이터 기준으로, 2027~2028년 매출 컨센서스가 지금보다 마이크로소프트 약 5%, 아마존 약 10%, 메타 약 17% 높으면 2027년 추가 설비투자가 본전이 된다. 알파벳은 지금 수준이면 이미 본전이다. 이때의 회수율은 0.57~0.66으로 지난 1년 실적과 비슷하다. 마이크로소프트·알파벳 컨센서스는 3분기 실적 발표(10월 28일) 전 값이며, 발표 뒤 값은 11월 중 다시 확인한다.",
+      "sites": ["hyperscaler"],
+      "sources": [{"title": "stockanalysis MSFT forecast", "url": "https://stockanalysis.com/stocks/msft/forecast/"}, {"title": "TIKR, Alphabet (2026-10-25)", "url": "https://www.tikr.com/blog/alphabet-stock-is-up-26-5-over-the-past-year-still-a-buy-at-320"}, {"title": "tickflow META forecast", "url": "https://www.tickflow.io/stock/META/forecast"}],
+      "decision": false
+    }
+  ]
+}
