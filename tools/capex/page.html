@@ -1,0 +1,879 @@
+<meta name="dash-one-writer">
+<style>
+#dash-root .bt { --nar: "Arial Narrow", "Liberation Sans Narrow", "Roboto Condensed", var(--font-anthropic-sans), sans-serif; display: grid; gap: var(--cds-gap-lg); font-family: var(--font-anthropic-sans); }
+.bt h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+.bt .lead { margin: 0; max-width: 68ch; color: var(--color-fg); line-height: 1.6; }
+.bt .lead b, .bt .finds b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.bt .finds { margin: 0; padding-left: 1.2em; display: grid; gap: var(--cds-gap-xs); max-width: 76ch; line-height: 1.55; }
+.bt .grid { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr)); }
+.bt .card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: var(--cds-gap-sm); min-width: 0; }
+.bt .card.wide { grid-column: 1 / -1; }
+.bt .cap { display: flex; gap: var(--cds-gap-sm); align-items: baseline; margin: 0; }
+.bt .lab { font-family: var(--nar); font-weight: 700; font-size: 1.35rem; line-height: 1; }
+.bt .note { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); line-height: 1.5; }
+.bt .chart { position: relative; min-height: 320px; }
+.bt .chart.short { min-height: 360px; }
+.bt .chart svg { display: block; overflow: visible; }
+.bt .chart text { font-family: var(--nar); fill: var(--color-fg-muted); font-size: 14px; }
+.bt .chart text.strong { fill: var(--color-fg); font-size: 15px; }
+.bt .mini { display: grid; gap: var(--cds-gap-sm); grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+.bt .tt { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); font-family: var(--nar); white-space: nowrap; z-index: 5; }
+.bt .tt .h { color: var(--cds-text-secondary); }
+.bt .tt i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
+.bt .tblwrap { overflow-x: auto; }
+.bt table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-family: var(--nar); font-size: 15px; }
+.bt th, .bt td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+.bt th:first-child, .bt td:first-child { text-align: left; }
+.bt th { font-weight: 600; color: var(--color-fg-muted); }
+.bt .method { display: grid; gap: var(--cds-gap-xs); }
+.bt .method h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+.bt .method ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); line-height: 1.55; max-width: 90ch; }
+[data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+[data-dash-source-state=empty] { color: transparent; }
+</style>
+
+<div class="bt">
+  <header style="display:grid;gap:var(--cds-gap-sm)">
+    <h1>빅테크 AI 설비투자 추적</h1>
+    <p class="lead">4대 빅테크(마이크로소프트, 알파벳, 아마존, 메타)는 <b data-draw="v" data-source="core4_latest" data-field="cq" data-row="0" data-fmt="raw">—</b>에 설비투자 <b data-draw="v" data-source="core4_latest" data-field="capex" data-row="0" data-fmt="usd">—</b>를 썼습니다. 같은 분기 영업현금흐름은 <b data-draw="v" data-source="core4_latest" data-field="ocf" data-row="0" data-fmt="usd">—</b>였고, 그 결과 합산 잉여현금흐름은 <b data-draw="v" data-source="core4_latest" data-field="fcf" data-row="0" data-fmt="usd">—</b>가 되었습니다.</p>
+  </header>
+
+  <ul class="finds">
+    <li>설비투자가 매출에서 차지하는 비중(4사 합산)은 2012~2019년 <b data-draw="v" data-source="periods" data-field="intensity" data-where="period=2012~2019" data-fmt="pct">—</b>, 2020~2022년 <b data-draw="v" data-source="periods" data-field="intensity" data-where="period=2020~2022" data-fmt="pct">—</b>, 2023~2024년 <b data-draw="v" data-source="periods" data-field="intensity" data-where="period=2023~2024" data-fmt="pct">—</b>, 2025년 <b data-draw="v" data-source="periods" data-field="intensity" data-where="period=2025" data-fmt="pct">—</b>, 2026년 1~3분기 <b data-draw="v" data-source="periods" data-field="intensity" data-where="period=2026Q1~Q3" data-fmt="pct">—</b>입니다. ChatGPT 직후인 2023~2024년의 상승 폭은 그 전 기간과 비슷했고, 큰 상승은 2025년부터 나타납니다.</li>
+    <li>영업현금흐름 가운데 설비투자로 나간 몫은 2012~2019년 <b data-draw="v" data-source="periods" data-field="capex_ocf" data-where="period=2012~2019" data-fmt="pct">—</b>에서 2026년 1~3분기 <b data-draw="v" data-source="periods" data-field="capex_ocf" data-where="period=2026Q1~Q3" data-fmt="pct">—</b>로 커졌습니다. 같은 기간 자사주 매입과 배당으로 나간 몫은 2020~2022년 <b data-draw="v" data-source="periods" data-field="shret_ocf" data-where="period=2020~2022" data-fmt="pct">—</b>에서 <b data-draw="v" data-source="periods" data-field="shret_ocf" data-where="period=2026Q1~Q3" data-fmt="pct">—</b>로 줄었습니다.</li>
+    <li>4사가 장단기 차입을 순증한 금액(발행에서 상환을 뺀 현금흐름)은 2023~2024년 <b data-draw="v" data-source="periods" data-field="net_debt_B" data-where="period=2023~2024" data-fmt="usd">—</b>였습니다. 그런데 2025년에는 <b data-draw="v" data-source="periods" data-field="net_debt_B" data-where="period=2025" data-fmt="usd">—</b>, 2026년 1~3분기에는 <b data-draw="v" data-source="periods" data-field="net_debt_B" data-where="period=2026Q1~Q3" data-fmt="usd">—</b>로 늘었습니다. 설비투자의 자금원 가운데 외부 차입의 비중이 커지고 있다는 뜻입니다.</li>
+    <li>계약했지만 아직 시작하지 않은 리스(대부분 데이터센터)는 4사 합계로 2022년 4분기 말 <b data-draw="v" data-source="commit_total" data-field="total" data-where="cq=2022Q4" data-fmt="usd">—</b>에서 2023년 4분기 말 <b data-draw="v" data-source="commit_total" data-field="total" data-where="cq=2023Q4" data-fmt="usd">—</b>로 1년 만에 두 배 넘게 늘었습니다. 증가분의 대부분은 마이크로소프트로, <b data-draw="v" data-source="commit" data-field="lease_not_commenced_B" data-where="ticker=MSFT&amp;cq=2022Q4" data-fmt="usd">—</b>에서 <b data-draw="v" data-source="commit" data-field="lease_not_commenced_B" data-where="ticker=MSFT&amp;cq=2023Q4" data-fmt="usd">—</b>가 되었습니다. 따라서 현금 설비투자로는 비어 보이는 2023년에도, 적어도 마이크로소프트는 리스 계약으로 투자를 먼저 결정해 두었습니다. 4사 합계는 2026년 3분기 말 <b data-draw="v" data-source="commit_total" data-field="total" data-where="cq=2026Q3" data-fmt="usd">—</b>이고, 오라클 한 곳도 <b data-draw="v" data-source="commit" data-field="lease_not_commenced_B" data-where="ticker=ORCL&amp;cq=2026Q3" data-fmt="usd">—</b>입니다.</li>
+    <li>리스 밖의 약정(서버·부품 구매, 외부 클라우드 용량, 전력 계약 등)까지 더하면, 4사가 앞으로 쓰기로 계약한 금액은 최신 공시 기준 <b data-draw="v" data-source="snap_core4" data-field="total_B" data-row="0" data-fmt="usd">—</b>입니다. 이 가운데 리스가 <b data-draw="v" data-source="snap_core4" data-field="lease_B" data-row="0" data-fmt="usd">—</b>, 그 밖의 약정이 <b data-draw="v" data-source="snap_core4" data-field="nonlease_B" data-row="0" data-fmt="usd">—</b>입니다. 회사마다 포함 범위가 달라 이 합계는 대략의 규모로만 읽어야 합니다.</li>
+    <li>아마존의 설비 추가를 사업부별로 나누면, 2023년에 줄어든 것은 리테일(북미·해외)만이 아니었습니다. AWS도 2022년 <b data-draw="v" data-source="amzn_seg" data-field="aws" data-where="year=2022" data-fmt="usd">—</b>에서 2023년 <b data-draw="v" data-source="amzn_seg" data-field="aws" data-where="year=2023" data-fmt="usd">—</b>로 줄었고, 2025년에는 <b data-draw="v" data-source="amzn_seg" data-field="aws" data-where="year=2025" data-fmt="usd">—</b>가 되었습니다.</li>
+    <li>오라클은 AI 시대에 설비투자가 영업현금흐름의 <b data-draw="v" data-source="era" data-field="capex_ocf" data-where="ticker=ORCL&amp;era=AI 시대" data-fmt="pct">—</b>에 이릅니다. 대조군인 애플은 같은 기간 설비투자 비중이 <b data-draw="v" data-source="era" data-field="intensity" data-where="ticker=AAPL&amp;era=AI 이전" data-fmt="pct">—</b>에서 <b data-draw="v" data-source="era" data-field="intensity" data-where="ticker=AAPL&amp;era=AI 시대" data-fmt="pct">—</b>로 오히려 낮아졌습니다.</li>
+    <li>한국의 메모리(HS 854232) 수출 가운데 대만행은 2022년 <b data-draw="v" data-source="kr_annual" data-field="taiwan" data-where="year=2022" data-fmt="usd">—</b>에서 2025년 <b data-draw="v" data-source="kr_annual" data-field="taiwan" data-where="year=2025" data-fmt="usd">—</b>로 늘었고, 메모리 수출에서 차지하는 비중도 <b data-draw="v" data-source="kr_annual" data-field="tw_share" data-where="year=2022" data-fmt="pct">—</b>에서 <b data-draw="v" data-source="kr_annual" data-field="tw_share" data-where="year=2025" data-fmt="pct">—</b>로 커졌습니다. 같은 기간 대만행 물량(순중량)은 <b data-draw="v" data-source="kr_annual" data-field="kg_taiwan_t" data-where="year=2022" data-fmt="t">—</b>에서 <b data-draw="v" data-source="kr_annual" data-field="kg_taiwan_t" data-where="year=2025" data-fmt="t">—</b>으로 조금 늘었을 뿐입니다. 늘어난 것은 주로 킬로그램당 값으로, <b data-draw="v" data-source="kr_annual" data-field="uv_taiwan_k" data-where="year=2022" data-fmt="kusd">—</b>에서 <b data-draw="v" data-source="kr_annual" data-field="uv_taiwan_k" data-where="year=2025" data-fmt="kusd">—</b>가 되었습니다. 같은 두 해 중국·홍콩행의 킬로그램당 값은 <b data-draw="v" data-source="kr_annual" data-field="uv_china_hk_k" data-where="year=2022" data-fmt="kusd">—</b>와 <b data-draw="v" data-source="kr_annual" data-field="uv_china_hk_k" data-where="year=2025" data-fmt="kusd">—</b>였습니다. 따라서 대만행 증가의 대부분은 품목 구성의 변화이며, TSMC 패키징 공정에 들어가는 HBM이 가장 자연스러운 설명입니다. 다만 통관 자료만으로 HBM을 따로 가려낼 수는 없습니다.</li>
+  </ul>
+
+  <div class="grid">
+    <section class="card wide" id="fig-a">
+      <p class="cap"><span class="lab">a</span><span class="note">4사 합산 분기 설비투자, 영업현금흐름, 잉여현금흐름(십억 달러). 점선은 금융리스 원금 상환까지 뺀 잉여현금흐름입니다. 음영은 AI 시대, 세로선은 <span data-draw="k" data-k="BREAK">—</span>입니다.</span></p>
+      <div class="chart" data-draw="chartA" data-source="core4"></div>
+    </section>
+
+    <section class="card" id="fig-b">
+      <p class="cap"><span class="lab">b</span><span class="note">회사별 설비투자 ÷ 매출. 빈 원은 AI 이전(2012~2022년), 채운 원은 AI 시대(2023년~2026년 3분기) 평균입니다.</span></p>
+      <div class="chart short" data-draw="chartB" data-source="era"></div>
+    </section>
+
+    <section class="card" id="fig-e">
+      <p class="cap"><span class="lab">c</span><span class="note">4사 합산 연간 잉여현금흐름, 주주환원(자사주 매입+배당), 외부 순조달(순차입+보통주·우선주 발행). 2026년은 1~3분기 합계입니다(십억 달러).</span></p>
+      <div class="chart short" data-draw="chartE" data-source="core4_annual"></div>
+    </section>
+
+    <section class="card wide" id="fig-c">
+      <p class="cap"><span class="lab">d</span><span class="note">회사별 설비투자 ÷ 영업현금흐름(최근 4분기 합계 기준). 점선 100%를 넘으면 영업으로 번 현금보다 더 많이 투자한다는 뜻입니다. 모든 패널의 세로축은 같습니다.</span></p>
+      <div class="mini" data-draw="chartC" data-source="quarterly"></div>
+    </section>
+
+    <section class="card" id="fig-f">
+      <p class="cap"><span class="lab">e</span><span class="note">4사 설비투자와 엔비디아 매출(모두 최근 4분기 합계, 십억 달러). 엔비디아의 회계 분기는 달력 분기보다 한 달 늦게 끝납니다.</span></p>
+      <div class="chart" data-draw="chartF" data-source="mirror"></div>
+    </section>
+
+    <section class="card" id="fig-g">
+      <p class="cap"><span class="lab">g</span><span class="note">4사 합산 연간 설비투자에 리스로 새로 들인 설비를 더한 값(2017년부터, 십억 달러). 운영리스는 2019년부터 장부에 오릅니다. 2026년은 1~3분기이며, 메타의 2026년 리스는 아직 공시되지 않아 빠져 있습니다.</span></p>
+      <div class="chart short" data-draw="chartG" data-source="lease_core4"></div>
+    </section>
+
+    <section class="card" id="fig-h">
+      <p class="cap"><span class="lab">h</span><span class="note">회사별 개시 전 리스 약정(앞으로 낼 리스료 합계, 십억 달러). 설비투자와 달리 15~30년에 걸쳐 나갈 돈이므로, 크기보다 늘어난 시점과 속도를 보는 지표입니다.</span></p>
+      <div class="chart" data-draw="chartH" data-source="commit"></div>
+    </section>
+
+    <section class="card" id="fig-i">
+      <p class="cap"><span class="lab">i</span><span class="note">회사별 리스 밖 약정(십억 달러, 로그 눈금). 정의가 회사마다 다르므로 수준보다 기울기를 비교하는 그림입니다. 마이크로소프트는 6월 회계연도 말에만 공시합니다.</span></p>
+      <div class="chart" data-draw="chartI" data-source="nonlease"></div>
+    </section>
+
+    <section class="card" id="fig-j">
+      <p class="cap"><span class="lab">j</span><span class="note">최신 공시 기준 약정 합계(십억 달러). 알파벳은 콘텐츠 라이선스와 재고 구매, 메타는 리얼리티랩 하드웨어를 포함합니다.</span></p>
+      <div class="tblwrap">
+        <table data-source="snapshot" data-row-key="ticker">
+          <thead><tr>
+            <th data-field="ticker">회사</th>
+            <th data-field="lease_B">개시 전 리스</th>
+            <th data-field="nonlease_B">그 밖의 약정</th>
+            <th data-field="total_B">합계</th>
+            <th data-field="nonlease_as_of">기준일</th>
+          </tr></thead>
+          <tbody data-draw="tableJ"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" id="fig-k">
+      <p class="cap"><span class="lab">k</span><span class="note">아마존 사업부별 설비 추가(10-K, 금융리스·건설형 리스 포함, 십억 달러). 리테일은 북미와 해외 사업부의 합입니다.</span></p>
+      <div class="chart short" data-draw="chartK" data-source="amzn_seg"></div>
+    </section>
+
+    <section class="card wide" id="fig-l">
+      <p class="cap"><span class="lab">l</span><span class="note">한국의 분기 메모리 수출(HS 854232)을 목적지별로 나눈 값(십억 달러, UN Comtrade). 선은 같은 분기 4사 현금 설비투자를 10으로 나눈 값입니다.</span></p>
+      <div class="chart" data-draw="chartL" data-source="kr_mem"></div>
+    </section>
+
+    <section class="card" id="fig-m">
+      <p class="cap"><span class="lab">m</span><span class="note">한국 메모리 수출의 킬로그램당 값(천 달러). 순중량이 2015년부터 믿을 만해 그때부터 그렸습니다.</span></p>
+      <div class="chart short" data-draw="chartM" data-source="kr_mem"></div>
+    </section>
+
+    <section class="card" id="fig-d">
+      <p class="cap"><span class="lab">f</span><span class="note">4사 합산 기간별 비교. 비율은 기간 합계끼리 나눈 값이고, 순차입은 기간 합계입니다.</span></p>
+      <div class="tblwrap">
+        <table data-source="periods" data-row-key="period">
+          <thead><tr>
+            <th data-field="period">기간</th>
+            <th data-field="capex_total">설비투자 합계</th>
+            <th data-field="intensity">설비투자/매출</th>
+            <th data-field="capex_ocf">설비투자/영업현금흐름</th>
+            <th data-field="fcf_margin">잉여현금흐름/매출</th>
+            <th data-field="shret_ocf">주주환원/영업현금흐름</th>
+            <th data-field="net_debt_B">순차입</th>
+          </tr></thead>
+          <tbody data-draw="tableD"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <section class="method">
+    <h2>방법과 한계</h2>
+    <ul>
+      <li>원자료는 SEC EDGAR XBRL(companyfacts)입니다. 10-Q의 현금흐름 항목은 연초 누계이므로, 누계끼리 빼서 분기 값을 만들었습니다. 2015년 이전 알파벳은 Google Inc. 공시를 이어 붙였습니다.</li>
+      <li>설비투자는 현금흐름표의 유형자산 취득액입니다. 금융리스로 들여온 설비는 빠지므로 실제 투자 규모보다 작게 잡힙니다. 잉여현금흐름은 영업현금흐름에서 이 값을 뺀 것입니다.</li>
+      <li>회계연도가 다른 회사(마이크로소프트, 오라클, 애플, 엔비디아)는 분기 말일에서 45일을 뺀 날이 속한 달력 분기로 맞췄습니다. AI 시대의 시작은 <span data-draw="k" data-k="AI_START">—</span>로 두었습니다.</li>
+      <li>오라클의 영업현금흐름에는 고객 선수금이 포함되어 있어, 최근 분기의 실제 현금 창출력보다 크게 보입니다.</li>
+      <li>순차입은 장기채 발행에서 상환을 뺀 값에 단기 차입의 순증을 더한 현금흐름입니다. 회사마다 태그 방식이 달라 기업어음 등 일부 단기 조달은 빠졌을 수 있습니다. 합작법인이나 리스를 통한 장부 밖 조달(예: 메타의 하이페리온 데이터센터)은 들어 있지 않습니다. 알파벳의 상환액 태그에는 금융리스 원금이 함께 들어 있을 수 있습니다.</li>
+      <li>아마존의 2016년 이전 설비투자는 인센티브를 뺀 순액입니다. 총액 기준 분기 값이 공시되지 않았기 때문이며, 2016년 연간 기준으로 총액보다 약 14% 작습니다.</li>
+      <li>엔비디아는 일부 분기의 설비투자가 비어 있어, 비율을 계산할 때 그 분기를 분자와 분모에서 함께 뺐습니다. 엔비디아는 2026년 3분기(회계연도 2027년 3분기) 실적이 아직 데이터에 없습니다.</li>
+      <li>리스 설비는 현금흐름표 보충 정보의 '리스 부채와 교환해 얻은 사용권자산'(2019년 이전 금융리스는 자본리스 발생액)으로 셌습니다. 운영리스에는 사무실과 물류창고도 섞여 있습니다. 메타는 이 값을 10-K에만 공시합니다. 오라클의 2019년 값에서는 새 리스 회계기준을 도입하며 장부에 올린 기존 리스(약 19억 달러)를 뺐고, 오라클은 일부 연도에 이 값을 연간·9개월 누계로만 공시해 연도 사이에 몰린 부분이 있습니다.</li>
+      <li>개시 전 리스 약정은 각 사 10-K·10-Q 리스 주석의 문장에서 읽었습니다. 회사마다 표현이 조금씩 다릅니다. 마이크로소프트와 메타가 운영리스와 금융리스를 나눠 적은 경우에는 둘을 더했습니다. 메타의 2024년 1~3분기 10-Q는 운영리스만 적었고, 오라클은 2024년 이전 운영리스만 적었으며, 아마존은 2020년 말부터 따로 공시합니다. 할인 전 미래 지급액이라고 명시한 곳은 알파벳과 아마존이며, 나머지도 같은 성격으로 보입니다. 출처 패널에서 공시 문장과 원문 주소를 행마다 확인할 수 있습니다.</li>
+      <li>리스 밖 약정은 각 사가 쓰는 이름 그대로 모았습니다(마이크로소프트: 구매 약정과 건설 약정, 알파벳: 중요 구매 약정, 아마존: 무조건부 구매 의무와 설비 구매 약정, 메타: 취소할 수 없는 계약 약정, 오라클: 1년 이상 구매 의무). 알파벳은 2023년 말부터 미체결 구매주문까지 포함하도록 범위가 넓어졌습니다. 한 회사의 약정이 다른 회사의 매출이 되는 경우(예: 메타가 외부 클라우드에서 빌리는 용량)도 있으므로, 이 합계는 경제 전체의 순투자가 아닙니다.</li>
+      <li>현금 설비투자에는 아직 대금을 치르지 않은 설비(미지급 설비대금)도 빠져 있습니다. 예를 들어 메타는 이 금액이 2026년 9월 말 211억 달러로 1년 전의 두 배를 넘습니다.</li>
+      <li>회사가 연간 수치를 재작성하면 그 차이가 4분기 값에 들어갑니다. 분기 사이에 항목이 공시되지 않은 경우에는 그 분기를 0으로 보았습니다.</li>
+      <li>한국 수출은 UN Comtrade에 한국이 보고한 월별 통관 수출(HS 8542와 그 아래 854232 메모리)입니다. 대만은 Comtrade에서 '그 밖의 아시아(코드 490)'로 표시됩니다. 2025년 HS 8542 수출 합계는 산업부가 발표한 반도체 수출의 약 82%로, 산업부 집계에는 개별 소자 등이 더 들어갑니다. 2026년 월별 값은 아직 Comtrade에 올라오지 않았습니다. 킬로그램당 값은 품목 구성과 가격이 섞인 지표이며, 2013~2014년 순중량은 단위가 맞지 않아 쓰지 않았습니다.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+(function () {
+  const CORE = ['MSFT', 'GOOGL', 'AMZN', 'META'];
+  const N = (x) => (x === '' || x == null ? NaN : Number(x));
+  const ok = (id) => dash.data(id).status === 'ok';
+  const rowsOf = (id) => (ok(id) ? dash.data(id).data : []);
+
+  dash.calc('core4', {
+    inputs: ['quarterly'],
+    title: '4대 빅테크 분기 합계',
+    description: '마이크로소프트, 알파벳, 아마존, 메타의 분기 값을 더한 표(십억 달러).',
+    fn: (quarterly) => {
+      const by = new Map();
+      for (const r of quarterly) {
+        if (!['MSFT', 'GOOGL', 'AMZN', 'META'].includes(r.ticker)) continue;
+        const o = by.get(r.cq) || { cq: r.cq, capex: 0, ocf: 0, fcf: 0, fcf_lease: 0, sh_return: 0, net_debt: 0, new_equity: 0, revenue: 0, n: 0 };
+        for (const k of ['capex', 'ocf', 'fcf', 'fcf_lease', 'sh_return', 'net_debt', 'new_equity', 'revenue']) o[k] += Number(r[k]) || 0;
+        o.n += 1;
+        by.set(r.cq, o);
+      }
+      return [...by.values()].filter((o) => o.n === 4).sort((a, b) => (a.cq < b.cq ? -1 : 1))
+        .map((o) => ({ ...o, net_external: o.net_debt + o.new_equity }));
+    },
+  });
+  dash.calc('core4_latest', {
+    inputs: ['core4'],
+    title: '4대 빅테크 최근 분기',
+    description: '4사 합산 표의 마지막 분기 한 줄.',
+    fn: (core4) => core4.slice(-1),
+  });
+  dash.calc('core4_annual', {
+    inputs: ['core4'],
+    title: '4대 빅테크 연간 합계',
+    description: '4사 합산 분기 값을 달력 연도별로 더한 표.',
+    fn: (core4) => {
+      const by = new Map();
+      for (const r of core4) {
+        const y = r.cq.slice(0, 4);
+        const o = by.get(y) || { year: y, fcf: 0, sh_return: 0, net_external: 0, quarters: 0 };
+        o.fcf += r.fcf; o.sh_return += r.sh_return; o.net_external += r.net_external; o.quarters += 1;
+        by.set(y, o);
+      }
+      return [...by.values()];
+    },
+  });
+  dash.calc('mirror', {
+    inputs: ['quarterly', 'core4'],
+    title: '4사 설비투자와 엔비디아 매출',
+    description: '2019년 이후 4사 설비투자(최근 4분기 합계)와 엔비디아 매출(최근 4분기 합계).',
+    fn: (quarterly, core4) => {
+      const nv = new Map(quarterly.filter((r) => r.ticker === 'NVDA').map((r) => [r.cq, Number(r.revenue_ttm)]));
+      const out = [];
+      core4.forEach((r, i) => {
+        if (i < 3 || r.cq < '2019Q1') return;
+        const ttm = core4.slice(i - 3, i + 1).reduce((s, x) => s + x.capex, 0);
+        out.push({ cq: r.cq, core4_capex_ttm: ttm, nvda_revenue_ttm: nv.has(r.cq) && !isNaN(nv.get(r.cq)) ? nv.get(r.cq) : null });
+      });
+      return out;
+    },
+  });
+
+  dash.calc('lease_core4', {
+    inputs: ['leases'],
+    title: '4대 빅테크 리스 포함 설비투자',
+    description: '4사의 연간 현금 설비투자, 금융리스·운영리스로 새로 들인 설비를 연도별로 더한 표(십억 달러).',
+    fn: (leases) => {
+      const by = new Map();
+      for (const r of leases) {
+        if (!['MSFT', 'GOOGL', 'AMZN', 'META'].includes(r.ticker)) continue;
+        const o = by.get(r.year) || { year: r.year, cash_capex: 0, fin_lease_added: 0, op_lease_added: 0, quarters: 0 };
+        o.cash_capex += Number(r.cash_capex) || 0;
+        o.fin_lease_added += Number(r.fin_lease_added) || 0;
+        o.op_lease_added += Number(r.op_lease_added) || 0;
+        o.quarters = Math.max(o.quarters, Number(r.quarters) || 0);
+        by.set(r.year, o);
+      }
+      return [...by.values()].sort((a, b) => (a.year < b.year ? -1 : 1));
+    },
+  });
+  dash.calc('commit_total', {
+    inputs: ['commit'],
+    title: '4대 빅테크 개시 전 리스 약정 합계',
+    description: '4사가 모두 공시한 분기에 한해 개시 전 리스 약정을 더한 값(십억 달러).',
+    fn: (commit) => {
+      const by = new Map();
+      for (const r of commit) {
+        if (!['MSFT', 'GOOGL', 'AMZN', 'META'].includes(r.ticker)) continue;
+        const o = by.get(r.cq) || { cq: r.cq, total: 0, n: 0 };
+        o.total += Number(r.lease_not_commenced_B); o.n += 1; by.set(r.cq, o);
+      }
+      return [...by.values()].filter((o) => o.n === 4).sort((a, b) => (a.cq < b.cq ? -1 : 1));
+    },
+  });
+
+  dash.calc('snap_core4', {
+    inputs: ['snapshot'],
+    title: '4대 빅테크 약정 합계',
+    description: '최신 공시 기준 4사의 개시 전 리스 약정과 그 밖의 약정을 더한 값(십억 달러).',
+    fn: (snapshot) => {
+      const core = snapshot.filter((r) => ['MSFT', 'GOOGL', 'AMZN', 'META'].includes(r.ticker));
+      const sum = (k) => core.reduce((a, r) => a + Number(r[k]), 0);
+      return [{ lease_B: sum('lease_B'), nonlease_B: sum('nonlease_B'), total_B: sum('total_B') }];
+    },
+  });
+
+  dash.calc('kr_annual', {
+    inputs: ['kr_mem'],
+    title: '한국 메모리 수출 연간 합계',
+    description: '분기 메모리 수출을 달력 연도별로 더하고, 대만 비중과 킬로그램당 값(천 달러)을 다시 계산한 표.',
+    fn: (kr_mem) => {
+      const by = new Map();
+      for (const r of kr_mem) {
+        const y = r.cq.slice(0, 4);
+        const o = by.get(y) || { year: y, taiwan: 0, china_hk: 0, world: 0, kg_taiwan_t: 0, kg_china_hk_t: 0 };
+        o.taiwan += Number(r.taiwan); o.china_hk += Number(r.china_hk); o.world += Number(r.memory_world);
+        o.kg_taiwan_t += Number(r.kg_taiwan_t) || 0; o.kg_china_hk_t += Number(r.kg_china_hk_t) || 0;
+        by.set(y, o);
+      }
+      return [...by.values()].map((o) => ({ ...o, tw_share: o.taiwan / o.world,
+        uv_taiwan_k: o.kg_taiwan_t ? o.taiwan * 1e3 / o.kg_taiwan_t : null, uv_china_hk_k: o.kg_china_hk_t ? o.china_hk * 1e3 / o.kg_china_hk_t : null }));
+    },
+  });
+
+  // ---------- shared constants and helpers ----------
+  const AI_START = '2023Q1';
+  const BREAK = '2025Q1';
+  const NAME = { MSFT: '마이크로소프트', GOOGL: '알파벳', AMZN: '아마존', META: '메타', ORCL: '오라클', AAPL: '애플', NVDA: '엔비디아' };
+  const fmtUsd = (b) => {
+    if (b == null || isNaN(b)) return '—';
+    const eok = Math.round(b * 10); // 십억 달러 → 억 달러
+    return (eok < 0 ? '−' : '') + d3.format(',')(Math.abs(eok)) + '억 달러';
+  };
+  const fmtPct = (x) => (x == null || isNaN(x) ? '—' : d3.format('.1%')(x));
+  const fmtB = (b) => (b < 0 ? '−' : '') + d3.format(',.0f')(Math.abs(b));
+  const qLabel = (cq) => cq.slice(0, 4) + '년 ' + cq.slice(5) + '분기';
+  const C = () => dash.colors;
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim() || null;
+
+  function textWidth(svg, s, cls) {
+    const t = svg.append('text').attr('class', cls || null).text(s);
+    const w = t.node().getComputedTextLength(); t.remove(); return w;
+  }
+  function tipBox(el) {
+    let t = el.querySelector(':scope > .tt');
+    if (!t) { t = document.createElement('div'); t.className = 'tt'; t.hidden = true; el.appendChild(t); }
+    return t;
+  }
+  function placeTip(el, tip, x, y) {
+    tip.hidden = false;
+    const W = el.clientWidth, w = tip.offsetWidth, h = tip.offsetHeight;
+    let left = x + 14; if (left + w > W) left = x - w - 14; if (left < 0) left = 0;
+    let top = y - h - 8; if (top < 0) top = y + 12;
+    tip.style.left = left + 'px'; tip.style.top = top + 'px';
+  }
+  function fillTip(tip, head, lines) {
+    tip.replaceChildren();
+    const h = document.createElement('div'); h.className = 'h'; h.textContent = head; tip.appendChild(h);
+    for (const [color, label, value] of lines) {
+      const d = document.createElement('div');
+      if (color) { const i = document.createElement('i'); i.style.background = color; d.appendChild(i); }
+      d.appendChild(document.createTextNode(label + '  ' + value));
+      tip.appendChild(d);
+    }
+  }
+  function failed(el, id) {
+    el.replaceChildren();
+    if (dash.data(id).status === 'error') {
+      const p = document.createElement('div');
+      p.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;min-height:inherit;color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)';
+      const dot = document.createElement('span'); dot.style.cssText = 'width:.375rem;height:.375rem;border-radius:50%;background:var(--color-bad)';
+      p.append(dot, document.createTextNode('Failed to load'));
+      el.appendChild(p);
+    } else { el.textContent = '—'; }
+  }
+
+  // ---------- inline values ----------
+  const parseWhere = (s) => Object.fromEntries(s.split('&').map((p) => p.split('=').map(decodeURIComponent)));
+  dash.draw('v', (el) => {
+    const id = el.dataset.source; const g = dash.data(id);
+    if (g.status !== 'ok') { el.textContent = '—'; return; }
+    let row;
+    if (el.dataset.row != null) row = g.data[Number(el.dataset.row)];
+    else { const w = parseWhere(el.dataset.where); row = g.data.find((r) => Object.entries(w).every(([k, v]) => String(r[k]) === v)); }
+    if (!row) { el.textContent = '—'; return; }
+    const val = row[el.dataset.field];
+    const f = el.dataset.fmt;
+    el.textContent = f === 'usd' ? fmtUsd(N(val)) : f === 'pct' ? fmtPct(N(val)) : f === 't' ? d3.format(',.0f')(N(val)) + '톤' : f === 'kusd' ? d3.format(',')(Math.round(N(val) * 10) * 100) + '달러' : f === 'raw' && el.dataset.field === 'cq' ? qLabel(String(val)) : String(val);
+  });
+  dash.draw('k', (el) => { el.textContent = el.dataset.k === 'AI_START' ? qLabel(AI_START) : qLabel(BREAK); });
+
+  // ---------- a: core four cash flows ----------
+  dash.draw('chartA', (el) => {
+    if (!ok('core4')) return failed(el, 'core4');
+    const rows = rowsOf('core4');
+    el.replaceChildren();
+    const W = el.clientWidth, H = 360;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const series = [
+      { k: 'capex', name: '설비투자', color: C()[0], dash: null },
+      { k: 'ocf', name: '영업현금흐름', color: C()[1], dash: null },
+      { k: 'fcf', name: '잉여현금흐름', color: C()[2], dash: null },
+      { k: 'fcf_lease', name: '리스 포함 잉여현금흐름', color: C()[2], dash: '5 4' },
+    ];
+    const ymax = d3.max(rows, (r) => Math.max(r.capex, r.ocf)), ymin = Math.min(0, d3.min(rows, (r) => r.fcf_lease));
+    const y0 = d3.scaleLinear([ymin, ymax], [H - 30, 12]).nice();
+    const yt = y0.ticks(6);
+    const left = d3.max(yt, (t) => textWidth(svg, fmtB(t))) + 10;
+    const endW = d3.max(series.slice(0, 3), (s) => textWidth(svg, s.name, 'strong')) + 12;
+    const x = d3.scalePoint(rows.map((r) => r.cq), [left, W - endW - 8]);
+    const y = y0;
+    const g = svg.append('g');
+    const ia = rows.findIndex((r) => r.cq >= AI_START), ib = rows.findIndex((r) => r.cq >= BREAK);
+    if (ia >= 0) g.append('rect').attr('x', x(rows[ia].cq)).attr('y', 12).attr('width', x(rows[rows.length - 1].cq) - x(rows[ia].cq)).attr('height', H - 42).attr('fill', 'var(--cds-chart-grid)').attr('opacity', 0.6);
+    if (ib >= 0) g.append('line').attr('x1', x(rows[ib].cq)).attr('x2', x(rows[ib].cq)).attr('y1', 12).attr('y2', H - 30).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 3');
+    for (const t of yt) {
+      g.append('line').attr('x1', left).attr('x2', W - endW - 8).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+      g.append('text').attr('x', left - 8).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmtB(t));
+    }
+    for (const r of rows) if (r.cq.endsWith('Q1') && +r.cq.slice(0, 4) % 2 === 0)
+      g.append('text').attr('x', x(r.cq)).attr('y', H - 8).attr('text-anchor', 'middle').text(r.cq.slice(0, 4));
+    for (const s of series) {
+      g.append('path').datum(rows).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round')
+        .attr('stroke-dasharray', s.dash).attr('d', d3.line().x((r) => x(r.cq)).y((r) => y(r[s.k])));
+    }
+    const last = rows[rows.length - 1];
+    const labs = series.slice(0, 3).map((s) => ({ s, y: y(last[s.k]) })).sort((a, b) => a.y - b.y);
+    for (let i = 1; i < labs.length; i++) if (labs[i].y - labs[i - 1].y < 18) labs[i].y = labs[i - 1].y + 18;
+    for (const l of labs) g.append('text').attr('class', 'strong').attr('x', x(last.cq) + 6).attr('y', l.y).attr('dy', '0.32em').style('fill', l.s.color).text(l.s.name);
+    // tooltip
+    const tip = tipBox(el);
+    const rule = g.append('line').attr('y1', 12).attr('y2', H - 30).attr('stroke', 'var(--cds-chart-axis)').attr('opacity', 0);
+    svg.on('pointermove', (ev) => {
+      const [mx] = d3.pointer(ev);
+      const i = d3.minIndex(rows, (r) => Math.abs(x(r.cq) - mx));
+      const r = rows[i]; const px = x(r.cq);
+      rule.attr('x1', px).attr('x2', px).attr('opacity', 1);
+      fillTip(tip, qLabel(r.cq), series.map((s) => [s.color, s.name, fmtUsd(r[s.k])]));
+      const sc = svg.node().getBoundingClientRect().width / W;
+      placeTip(el, tip, px * sc, y(r.capex) * sc);
+    }).on('pointerleave', () => { tip.hidden = true; rule.attr('opacity', 0); });
+  });
+
+  // ---------- b: dumbbell of capex intensity ----------
+  dash.draw('chartB', (el) => {
+    if (!ok('era')) return failed(el, 'era');
+    const rows = rowsOf('era');
+    el.replaceChildren();
+    const tick = [...new Set(rows.map((r) => r.ticker))];
+    const get = (t, e, k) => N((rows.find((r) => r.ticker === t && r.era === e) || {})[k]);
+    const items = tick.map((t) => ({ t, group: rows.find((r) => r.ticker === t).group, pre: get(t, 'AI 이전', 'intensity'), ai: get(t, 'AI 시대', 'intensity') }))
+      .sort((a, b) => b.ai - a.ai);
+    const W = el.clientWidth, rowH = 46, H = items.length * rowH + 34;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const left = d3.max(items, (d) => textWidth(svg, NAME[d.t], 'strong')) + 14;
+    const xmax = d3.max(items, (d) => Math.max(d.pre, d.ai));
+    const x = d3.scaleLinear([0, xmax], [left, W - 56]).nice();
+    const g = svg.append('g');
+    for (const t of x.ticks(5)) {
+      g.append('line').attr('x1', x(t)).attr('x2', x(t)).attr('y1', 6).attr('y2', H - 26).attr('stroke', 'var(--cds-chart-grid)');
+      g.append('text').attr('x', x(t)).attr('y', H - 6).attr('text-anchor', 'middle').text(d3.format('.0%')(t));
+    }
+    const tip = tipBox(el);
+    items.forEach((d, i) => {
+      const cy = 10 + i * rowH + rowH / 2 - 6;
+      g.append('text').attr('class', 'strong').attr('x', left - 12).attr('y', cy - 5).attr('text-anchor', 'end').text(NAME[d.t]);
+      g.append('text').attr('x', left - 12).attr('y', cy + 13).attr('text-anchor', 'end').style('font-size', '12px').text(d.group);
+      const up = d.ai >= d.pre;
+      const col = up ? C()[0] : 'var(--cds-chart-muted)';
+      g.append('line').attr('x1', x(d.pre)).attr('x2', x(d.ai)).attr('y1', cy).attr('y2', cy).attr('stroke', col).attr('stroke-width', 3).attr('stroke-linecap', 'round');
+      g.append('circle').attr('cx', x(d.pre)).attr('cy', cy).attr('r', 6).attr('fill', 'var(--color-panel)').attr('stroke', col).attr('stroke-width', 2);
+      g.append('circle').attr('cx', x(d.ai)).attr('cy', cy).attr('r', 6).attr('fill', col);
+      g.append('text').attr('class', 'strong').attr('x', x(Math.max(d.ai, d.pre)) + 10).attr('y', cy).attr('dy', '0.32em').text(fmtPct(d.ai));
+      g.append('rect').attr('x', 0).attr('y', cy - rowH / 2).attr('width', W).attr('height', rowH).attr('fill', 'transparent')
+        .on('pointermove', (ev) => {
+          fillTip(tip, NAME[d.t] + ' · ' + d.group, [[null, 'AI 이전', fmtPct(d.pre)], [null, 'AI 시대', fmtPct(d.ai)]]);
+          const sc = svg.node().getBoundingClientRect().width / W; placeTip(el, tip, x(d.ai) * sc, cy * sc);
+        }).on('pointerleave', () => { tip.hidden = true; });
+    });
+  });
+
+  // ---------- c: annual financing ----------
+  dash.draw('chartE', (el) => {
+    if (!ok('core4_annual')) return failed(el, 'core4_annual');
+    const rows = rowsOf('core4_annual');
+    el.replaceChildren();
+    const keys = [
+      { k: 'fcf', name: '잉여현금흐름', color: C()[2] },
+      { k: 'sh_return', name: '주주환원', color: 'var(--cds-chart-muted)' },
+      { k: 'net_external', name: '외부 순조달', color: C()[0] },
+    ];
+    const W = el.clientWidth, H = 340;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const lo = Math.min(0, d3.min(rows, (r) => d3.min(keys, (k) => r[k.k]))), hi = d3.max(rows, (r) => d3.max(keys, (k) => r[k.k]));
+    const y = d3.scaleLinear([lo, hi], [H - 54, 10]).nice();
+    const left = d3.max(y.ticks(5), (t) => textWidth(svg, fmtB(t))) + 10;
+    const x = d3.scaleBand(rows.map((r) => r.year), [left, W - 4]).paddingInner(0.25);
+    const xi = d3.scaleBand(keys.map((k) => k.k), [0, x.bandwidth()]).padding(0.08);
+    const g = svg.append('g');
+    for (const t of y.ticks(5)) {
+      g.append('line').attr('x1', left).attr('x2', W - 4).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+      g.append('text').attr('x', left - 8).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmtB(t));
+    }
+    const step = x.bandwidth() < 22 ? 2 : 1;
+    rows.forEach((r, i) => {
+      if (i % step === 0 || i === rows.length - 1) g.append('text').attr('x', x(r.year) + x.bandwidth() / 2).attr('y', H - 36).attr('text-anchor', 'middle').text(r.year.slice(2) + (r.quarters < 4 ? '*' : ''));
+      for (const k of keys) {
+        const v = r[k.k];
+        g.append('rect').attr('x', x(r.year) + xi(k.k)).attr('width', xi.bandwidth()).attr('y', y(Math.max(0, v))).attr('height', Math.abs(y(v) - y(0))).attr('rx', 1).attr('fill', k.color);
+      }
+    });
+    let lx = left;
+    for (const k of keys) {
+      g.append('rect').attr('x', lx).attr('y', H - 16).attr('width', 10).attr('height', 10).attr('rx', 2).attr('fill', k.color);
+      const t = g.append('text').attr('x', lx + 14).attr('y', H - 7).text(k.name);
+      lx += 14 + t.node().getComputedTextLength() + 16;
+    }
+    const tip = tipBox(el);
+    svg.on('pointermove', (ev) => {
+      const sc = svg.node().getBoundingClientRect().width / W;
+      const mx = d3.pointer(ev)[0];
+      const r = rows.find((r) => mx >= x(r.year) - 4 && mx <= x(r.year) + x.bandwidth() + 4);
+      if (!r) { tip.hidden = true; return; }
+      fillTip(tip, r.quarters < 4 ? r.year + '년 1~' + r.quarters + '분기' : r.year + '년', keys.map((k) => [k.color, k.name, fmtUsd(r[k.k])]));
+      placeTip(el, tip, (x(r.year) + x.bandwidth()) * sc, y(hi) * sc + 20);
+    }).on('pointerleave', () => { tip.hidden = true; });
+  });
+
+  // ---------- d: small multiples of capex / OCF ----------
+  dash.draw('chartC', (el) => {
+    if (!ok('quarterly')) return failed(el, 'quarterly');
+    const all = rowsOf('quarterly').map((r) => ({ t: r.ticker, group: r.group, cq: r.cq, v: N(r.capex_ocf_ttm) })).filter((r) => !isNaN(r.v));
+    el.replaceChildren();
+    const order = ['MSFT', 'GOOGL', 'AMZN', 'META', 'ORCL', 'AAPL', 'NVDA'];
+    const quarters = [...new Set(all.map((r) => r.cq))].sort();
+    const ymax = Math.max(1.2, d3.max(all, (r) => r.v));
+    for (const t of order) {
+      const rows = all.filter((r) => r.t === t);
+      if (!rows.length) continue;
+      const box = document.createElement('div'); box.style.position = 'relative'; box.style.minWidth = '0';
+      el.appendChild(box);
+      const W = box.clientWidth || 240, H = 190;
+      const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+      const y = d3.scaleLinear([0, ymax], [H - 24, 30]).nice();
+      const left = textWidth(svg, '000%') + 8;
+      const x = d3.scalePoint(quarters, [left, W - 8]);
+      const g = svg.append('g');
+      g.append('text').attr('class', 'strong').attr('x', left).attr('y', 14).text(NAME[t] + ' · ' + rows[0].group);
+      const ia = quarters.findIndex((q) => q >= AI_START);
+      g.append('rect').attr('x', x(quarters[ia])).attr('y', 30).attr('width', x(quarters[quarters.length - 1]) - x(quarters[ia])).attr('height', H - 54).attr('fill', 'var(--cds-chart-grid)').attr('opacity', 0.6);
+      for (const tk of y.ticks(3)) {
+        g.append('line').attr('x1', left).attr('x2', W - 8).attr('y1', y(tk)).attr('y2', y(tk)).attr('stroke', 'var(--cds-chart-grid)');
+        g.append('text').attr('x', left - 6).attr('y', y(tk)).attr('dy', '0.32em').attr('text-anchor', 'end').text(d3.format('.0%')(tk));
+      }
+      g.append('line').attr('x1', left).attr('x2', W - 8).attr('y1', y(1)).attr('y2', y(1)).attr('stroke', 'var(--cds-chart-status-critical)').attr('stroke-dasharray', '5 4');
+      for (const yr of ['2014', '2019', '2024']) { const q = yr + 'Q1'; if (x(q) != null) g.append('text').attr('x', x(q)).attr('y', H - 6).attr('text-anchor', 'middle').text(yr); }
+      g.append('path').datum(rows).attr('fill', 'none').attr('stroke', C()[0]).attr('stroke-width', 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round')
+        .attr('d', d3.line().x((r) => x(r.cq)).y((r) => y(r.v)));
+      const last = rows[rows.length - 1];
+      g.append('circle').attr('cx', x(last.cq)).attr('cy', y(last.v)).attr('r', 3.5).attr('fill', C()[0]);
+      g.append('text').attr('class', 'strong').attr('x', W - 8).attr('y', 14).attr('text-anchor', 'end').text(fmtPct(last.v));
+      const tip = tipBox(box);
+      const dot = g.append('circle').attr('r', 4).attr('fill', C()[0]).attr('opacity', 0);
+      svg.on('pointermove', (ev) => {
+        const sc = svg.node().getBoundingClientRect().width / W;
+        const mx = d3.pointer(ev)[0];
+        const r = rows[d3.minIndex(rows, (r) => Math.abs(x(r.cq) - mx))];
+        dot.attr('cx', x(r.cq)).attr('cy', y(r.v)).attr('opacity', 1);
+        fillTip(tip, NAME[t] + ' · ' + qLabel(r.cq), [[null, '설비투자/영업현금흐름', fmtPct(r.v)]]);
+        placeTip(box, tip, x(r.cq) * sc, y(r.v) * sc);
+      }).on('pointerleave', () => { tip.hidden = true; dot.attr('opacity', 0); });
+    }
+  });
+
+  // ---------- e: supplier mirror ----------
+  dash.draw('chartF', (el) => {
+    if (!ok('mirror')) return failed(el, 'mirror');
+    const rows = rowsOf('mirror');
+    el.replaceChildren();
+    const series = [
+      { k: 'core4_capex_ttm', name: '4사 설비투자', color: C()[0] },
+      { k: 'nvda_revenue_ttm', name: '엔비디아 매출', color: C()[3] },
+    ];
+    const W = el.clientWidth, H = 320;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const y = d3.scaleLinear([0, d3.max(rows, (r) => Math.max(r.core4_capex_ttm, r.nvda_revenue_ttm || 0))], [H - 30, 12]).nice();
+    const left = d3.max(y.ticks(5), (t) => textWidth(svg, fmtB(t))) + 10;
+    const endW = d3.max(series, (s) => textWidth(svg, s.name, 'strong')) + 12;
+    const x = d3.scalePoint(rows.map((r) => r.cq), [left, W - endW - 8]);
+    const g = svg.append('g');
+    for (const t of y.ticks(5)) {
+      g.append('line').attr('x1', left).attr('x2', W - endW - 8).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+      g.append('text').attr('x', left - 8).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmtB(t));
+    }
+    for (const r of rows) if (r.cq.endsWith('Q1')) g.append('text').attr('x', x(r.cq)).attr('y', H - 8).attr('text-anchor', 'middle').text(r.cq.slice(2, 4) + '년');
+    const labs = [];
+    for (const s of series) {
+      const pts = rows.filter((r) => r[s.k] != null);
+      g.append('path').datum(pts).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round')
+        .attr('d', d3.line().x((r) => x(r.cq)).y((r) => y(r[s.k])));
+      const l = pts[pts.length - 1]; labs.push({ s, x: x(l.cq), y: y(l[s.k]) });
+    }
+    labs.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < labs.length; i++) if (labs[i].y - labs[i - 1].y < 18) labs[i].y = labs[i - 1].y + 18;
+    const xe = x(rows[rows.length - 1].cq) + 6;
+    for (const l of labs) g.append('text').attr('class', 'strong').attr('x', xe).attr('y', l.y).attr('dy', '0.32em').style('fill', l.s.color).text(l.s.name);
+    const tip = tipBox(el);
+    const rule = g.append('line').attr('y1', 12).attr('y2', H - 30).attr('stroke', 'var(--cds-chart-axis)').attr('opacity', 0);
+    svg.on('pointermove', (ev) => {
+      const sc = svg.node().getBoundingClientRect().width / W;
+      const mx = d3.pointer(ev)[0];
+      const r = rows[d3.minIndex(rows, (r) => Math.abs(x(r.cq) - mx))];
+      rule.attr('x1', x(r.cq)).attr('x2', x(r.cq)).attr('opacity', 1);
+      fillTip(tip, qLabel(r.cq), series.map((s) => [s.color, s.name, r[s.k] == null ? '—' : fmtUsd(r[s.k])]));
+      placeTip(el, tip, x(r.cq) * sc, y(r.core4_capex_ttm) * sc);
+    }).on('pointerleave', () => { tip.hidden = true; rule.attr('opacity', 0); });
+  });
+
+  // ---------- g: lease-inclusive capex ----------
+  dash.draw('chartG', (el) => {
+    if (!ok('lease_core4')) return failed(el, 'lease_core4');
+    const rows = rowsOf('lease_core4');
+    el.replaceChildren();
+    const keys = [
+      { k: 'cash_capex', name: '현금 설비투자', color: C()[0] },
+      { k: 'fin_lease_added', name: '금융리스 개시', color: C()[4] },
+      { k: 'op_lease_added', name: '운영리스 개시', color: 'var(--cds-chart-muted)' },
+    ];
+    const W = el.clientWidth, H = 340;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const tot = (r) => keys.reduce((a, k) => a + (r[k.k] || 0), 0);
+    const y = d3.scaleLinear([0, d3.max(rows, tot)], [H - 54, 10]).nice();
+    const left = d3.max(y.ticks(5), (t) => textWidth(svg, fmtB(t))) + 10;
+    const x = d3.scaleBand(rows.map((r) => r.year), [left, W - 4]).paddingInner(0.25);
+    const g = svg.append('g');
+    for (const t of y.ticks(5)) {
+      g.append('line').attr('x1', left).attr('x2', W - 4).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+      g.append('text').attr('x', left - 8).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmtB(t));
+    }
+    const step = x.bandwidth() < 22 ? 2 : 1;
+    rows.forEach((r, i) => {
+      if (i % step === 0 || i === rows.length - 1) g.append('text').attr('x', x(r.year) + x.bandwidth() / 2).attr('y', H - 36).attr('text-anchor', 'middle').text(r.year.slice(2) + (r.quarters < 4 ? '*' : ''));
+      let acc = 0;
+      for (const k of keys) {
+        const v = r[k.k] || 0;
+        g.append('rect').attr('x', x(r.year)).attr('width', x.bandwidth()).attr('y', y(acc + v)).attr('height', Math.max(0, y(acc) - y(acc + v))).attr('fill', k.color);
+        acc += v;
+      }
+    });
+    let lx = left;
+    for (const k of keys) {
+      g.append('rect').attr('x', lx).attr('y', H - 16).attr('width', 10).attr('height', 10).attr('rx', 2).attr('fill', k.color);
+      const t = g.append('text').attr('x', lx + 14).attr('y', H - 7).text(k.name);
+      lx += 14 + t.node().getComputedTextLength() + 16;
+    }
+    const tip = tipBox(el);
+    svg.on('pointermove', (ev) => {
+      const sc = svg.node().getBoundingClientRect().width / W;
+      const mx = d3.pointer(ev)[0];
+      const r = rows.find((r) => mx >= x(r.year) - 4 && mx <= x(r.year) + x.bandwidth() + 4);
+      if (!r) { tip.hidden = true; return; }
+      fillTip(tip, r.quarters < 4 ? r.year + '년 1~' + r.quarters + '분기' : r.year + '년',
+        keys.map((k) => [k.color, k.name, fmtUsd(r[k.k])]).concat([[null, '합계', fmtUsd(tot(r))]]));
+      placeTip(el, tip, (x(r.year) + x.bandwidth()) * sc, y(tot(r)) * sc);
+    }).on('pointerleave', () => { tip.hidden = true; });
+  });
+
+  // ---------- h: lease commitments not yet commenced ----------
+  dash.draw('chartH', (el) => {
+    if (!ok('commit')) return failed(el, 'commit');
+    const all = rowsOf('commit').map((r) => ({ t: r.ticker, cq: r.cq, v: N(r.lease_not_commenced_B) })).filter((r) => !isNaN(r.v));
+    el.replaceChildren();
+    const order = ['MSFT', 'META', 'ORCL', 'AMZN', 'GOOGL'];
+    const col = { MSFT: C()[0], META: C()[1], ORCL: C()[2], AMZN: C()[3], GOOGL: C()[4] };
+    const quarters = [...new Set(all.map((r) => r.cq))].sort();
+    const W = el.clientWidth, H = 340;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const y = d3.scaleLinear([0, d3.max(all, (r) => r.v)], [H - 30, 12]).nice();
+    const left = d3.max(y.ticks(5), (t) => textWidth(svg, fmtB(t))) + 10;
+    const endW = d3.max(order, (t) => textWidth(svg, NAME[t], 'strong')) + 12;
+    const x = d3.scalePoint(quarters, [left, W - endW - 8]);
+    const g = svg.append('g');
+    for (const t of y.ticks(5)) {
+      g.append('line').attr('x1', left).attr('x2', W - endW - 8).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+      g.append('text').attr('x', left - 8).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmtB(t));
+    }
+    for (const q of quarters) if (q.endsWith('Q1')) g.append('text').attr('x', x(q)).attr('y', H - 8).attr('text-anchor', 'middle').text(q.slice(2, 4) + '년');
+    const labs = [];
+    for (const t of order) {
+      const pts = all.filter((r) => r.t === t).sort((a, b) => (a.cq < b.cq ? -1 : 1));
+      if (!pts.length) continue;
+      g.append('path').datum(pts).attr('fill', 'none').attr('stroke', col[t]).attr('stroke-width', 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round')
+        .attr('d', d3.line().x((r) => x(r.cq)).y((r) => y(r.v)));
+      const l = pts[pts.length - 1]; labs.push({ t, y: y(l.v) });
+    }
+    labs.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < labs.length; i++) if (labs[i].y - labs[i - 1].y < 18) labs[i].y = labs[i - 1].y + 18;
+    const xe = x(quarters[quarters.length - 1]) + 6;
+    for (const l of labs) g.append('text').attr('class', 'strong').attr('x', xe).attr('y', l.y).attr('dy', '0.32em').style('fill', col[l.t]).text(NAME[l.t]);
+    const tip = tipBox(el);
+    const rule = g.append('line').attr('y1', 12).attr('y2', H - 30).attr('stroke', 'var(--cds-chart-axis)').attr('opacity', 0);
+    svg.on('pointermove', (ev) => {
+      const sc = svg.node().getBoundingClientRect().width / W;
+      const mx = d3.pointer(ev)[0];
+      const q = quarters[d3.minIndex(quarters, (q) => Math.abs(x(q) - mx))];
+      rule.attr('x1', x(q)).attr('x2', x(q)).attr('opacity', 1);
+      const lines = order.map((t) => { const r = all.find((r) => r.t === t && r.cq === q); return [col[t], NAME[t], r ? fmtUsd(r.v) : '—']; });
+      fillTip(tip, qLabel(q), lines);
+      placeTip(el, tip, x(q) * sc, 40 * sc);
+    }).on('pointerleave', () => { tip.hidden = true; rule.attr('opacity', 0); });
+  });
+
+  // ---------- i: non-lease commitments (log scale) ----------
+  dash.draw('chartI', (el) => {
+    if (!ok('nonlease')) return failed(el, 'nonlease');
+    const all = rowsOf('nonlease').map((r) => ({ t: r.ticker, cq: r.cq, v: N(r.nonlease_B) })).filter((r) => r.v > 0);
+    el.replaceChildren();
+    const order = ['GOOGL', 'META', 'AMZN', 'MSFT', 'ORCL'];
+    const col = { MSFT: C()[0], META: C()[1], ORCL: C()[2], AMZN: C()[3], GOOGL: C()[4] };
+    const quarters = [...new Set(all.map((r) => r.cq))].sort();
+    const W = el.clientWidth, H = 340;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const y = d3.scaleLog([Math.max(0.5, d3.min(all, (r) => r.v) * 0.8), d3.max(all, (r) => r.v) * 1.2], [H - 30, 12]);
+    const ticks = [1, 3, 10, 30, 100, 300, 1000].filter((t) => t >= y.domain()[0] && t <= y.domain()[1]);
+    const left = d3.max(ticks, (t) => textWidth(svg, fmtB(t))) + 10;
+    const endW = d3.max(order, (t) => textWidth(svg, NAME[t], 'strong')) + 12;
+    const x = d3.scalePoint(quarters, [left, W - endW - 8]);
+    const g = svg.append('g');
+    for (const t of ticks) {
+      g.append('line').attr('x1', left).attr('x2', W - endW - 8).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', 'var(--cds-chart-grid)');
+      g.append('text').attr('x', left - 8).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmtB(t));
+    }
+    let lastYr = '';
+    for (const q of quarters) { const yr = q.slice(0, 4); if (yr !== lastYr) { lastYr = yr; g.append('text').attr('x', x(q)).attr('y', H - 8).attr('text-anchor', 'middle').text(yr.slice(2) + '년'); } }
+    const labs = [];
+    for (const t of order) {
+      const pts = all.filter((r) => r.t === t).sort((a, b) => (a.cq < b.cq ? -1 : 1));
+      if (!pts.length) continue;
+      g.append('path').datum(pts).attr('fill', 'none').attr('stroke', col[t]).attr('stroke-width', 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round')
+        .attr('d', d3.line().x((r) => x(r.cq)).y((r) => y(r.v)));
+      g.selectAll(null).data(pts).join('circle').attr('cx', (r) => x(r.cq)).attr('cy', (r) => y(r.v)).attr('r', 2.5).attr('fill', col[t]);
+      const l = pts[pts.length - 1]; labs.push({ t, y: y(l.v) });
+    }
+    labs.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < labs.length; i++) if (labs[i].y - labs[i - 1].y < 18) labs[i].y = labs[i - 1].y + 18;
+    const xe = x(quarters[quarters.length - 1]) + 6;
+    for (const l of labs) g.append('text').attr('class', 'strong').attr('x', xe).attr('y', l.y).attr('dy', '0.32em').style('fill', col[l.t]).text(NAME[l.t]);
+    const tip = tipBox(el);
+    const rule = g.append('line').attr('y1', 12).attr('y2', H - 30).attr('stroke', 'var(--cds-chart-axis)').attr('opacity', 0);
+    svg.on('pointermove', (ev) => {
+      const sc = svg.node().getBoundingClientRect().width / W;
+      const mx = d3.pointer(ev)[0];
+      const q = quarters[d3.minIndex(quarters, (q) => Math.abs(x(q) - mx))];
+      rule.attr('x1', x(q)).attr('x2', x(q)).attr('opacity', 1);
+      fillTip(tip, qLabel(q), order.map((t) => { const r = all.find((r) => r.t === t && r.cq === q); return [col[t], NAME[t], r ? fmtUsd(r.v) : '—']; }));
+      placeTip(el, tip, x(q) * sc, 40 * sc);
+    }).on('pointerleave', () => { tip.hidden = true; rule.attr('opacity', 0); });
+  });
+
+  // ---------- j: commitment snapshot table ----------
+  dash.draw('tableJ', (tb) => {
+    tb.replaceChildren();
+    if (!ok('snapshot')) return;
+    const rows = rowsOf('snapshot').slice().sort((a, b) => N(b.total_B) - N(a.total_B));
+    for (const r of rows) {
+      const tr = document.createElement('tr'); tr.dataset.key = r.ticker;
+      const cells = [NAME[r.ticker] || r.ticker, fmtUsd(N(r.lease_B)), fmtUsd(N(r.nonlease_B)), fmtUsd(N(r.total_B)), r.nonlease_as_of];
+      for (const c of cells) { const td = document.createElement('td'); td.textContent = c; tr.appendChild(td); }
+      tb.appendChild(tr);
+    }
+  });
+
+  // ---------- k: Amazon segments ----------
+  dash.draw('chartK', (el) => {
+    if (!ok('amzn_seg')) return failed(el, 'amzn_seg');
+    const rows = rowsOf('amzn_seg').map((r) => ({ year: String(r.year), aws: N(r.aws), retail: N(r.north_america) + N(r.international), corporate: N(r.corporate) }));
+    el.replaceChildren();
+    const keys = [
+      { k: 'aws', name: 'AWS', color: C()[0] },
+      { k: 'retail', name: '리테일', color: 'var(--cds-chart-muted)' },
+      { k: 'corporate', name: '본사', color: C()[5] },
+    ];
+    const W = el.clientWidth, H = 340;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const tot = (r) => r.aws + r.retail + r.corporate;
+    const y = d3.scaleLinear([0, d3.max(rows, tot)], [H - 54, 10]).nice();
+    const left = d3.max(y.ticks(5), (t) => textWidth(svg, fmtB(t))) + 10;
+    const x = d3.scaleBand(rows.map((r) => r.year), [left, W - 4]).paddingInner(0.25);
+    const g = svg.append('g');
+    for (const t of y.ticks(5)) {
+      g.append('line').attr('x1', left).attr('x2', W - 4).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+      g.append('text').attr('x', left - 8).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmtB(t));
+    }
+    for (const r of rows) {
+      g.append('text').attr('x', x(r.year) + x.bandwidth() / 2).attr('y', H - 36).attr('text-anchor', 'middle').text(r.year.slice(2));
+      let acc = 0;
+      for (const k of keys) { const v = r[k.k]; g.append('rect').attr('x', x(r.year)).attr('width', x.bandwidth()).attr('y', y(acc + v)).attr('height', Math.max(0, y(acc) - y(acc + v))).attr('fill', k.color); acc += v; }
+    }
+    let lx = left;
+    for (const k of keys) {
+      g.append('rect').attr('x', lx).attr('y', H - 16).attr('width', 10).attr('height', 10).attr('rx', 2).attr('fill', k.color);
+      const t = g.append('text').attr('x', lx + 14).attr('y', H - 7).text(k.name);
+      lx += 14 + t.node().getComputedTextLength() + 16;
+    }
+    const tip = tipBox(el);
+    svg.on('pointermove', (ev) => {
+      const sc = svg.node().getBoundingClientRect().width / W;
+      const mx = d3.pointer(ev)[0];
+      const r = rows.find((r) => mx >= x(r.year) - 4 && mx <= x(r.year) + x.bandwidth() + 4);
+      if (!r) { tip.hidden = true; return; }
+      fillTip(tip, r.year + '년', keys.map((k) => [k.color, k.name, fmtUsd(r[k.k])]));
+      placeTip(el, tip, (x(r.year) + x.bandwidth()) * sc, y(tot(r)) * sc);
+    }).on('pointerleave', () => { tip.hidden = true; });
+  });
+
+  // ---------- l: Korean memory exports by destination ----------
+  dash.draw('chartL', (el) => {
+    if (!ok('kr_mem')) return failed(el, 'kr_mem');
+    const rows = rowsOf('kr_mem').map((r) => ({ cq: r.cq, taiwan: N(r.taiwan), china_hk: N(r.china_hk), vietnam: N(r.vietnam), other: N(r.other), capex10: N(r.core4_capex) / 10 }));
+    el.replaceChildren();
+    const keys = [
+      { k: 'taiwan', name: '대만', color: C()[0] },
+      { k: 'china_hk', name: '중국·홍콩', color: 'var(--cds-chart-muted)' },
+      { k: 'vietnam', name: '베트남', color: C()[2] },
+      { k: 'other', name: '그 밖의 지역', color: C()[5] },
+    ];
+    const W = el.clientWidth, H = 320;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const tot = (r) => r.taiwan + r.china_hk + r.vietnam + r.other;
+    const y = d3.scaleLinear([0, d3.max(rows, (r) => Math.max(tot(r), r.capex10 || 0))], [H - 54, 10]).nice();
+    const left = d3.max(y.ticks(5), (t) => textWidth(svg, fmtB(t))) + 10;
+    const x = d3.scaleBand(rows.map((r) => r.cq), [left, W - 4]).paddingInner(0.2);
+    const g = svg.append('g');
+    for (const t of y.ticks(5)) {
+      g.append('line').attr('x1', left).attr('x2', W - 4).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+      g.append('text').attr('x', left - 8).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmtB(t));
+    }
+    const ai = rows.find((r) => r.cq === AI_START);
+    if (ai) g.append('rect').attr('x', x(ai.cq) - 1).attr('y', 10).attr('width', W - 4 - x(ai.cq) + 1).attr('height', H - 64).attr('fill', 'var(--color-fg)').attr('opacity', 0.04);
+    for (const r of rows) {
+      if (r.cq.endsWith('Q1')) g.append('text').attr('x', x(r.cq)).attr('y', H - 36).text(r.cq.slice(2, 4) + '년');
+      let acc = 0;
+      for (const k of keys) { const v = r[k.k]; g.append('rect').attr('x', x(r.cq)).attr('width', x.bandwidth()).attr('y', y(acc + v)).attr('height', Math.max(0, y(acc) - y(acc + v))).attr('fill', k.color); acc += v; }
+    }
+    const pts = rows.filter((r) => !isNaN(r.capex10));
+    g.append('path').datum(pts).attr('fill', 'none').attr('stroke', 'var(--color-fg)').attr('stroke-width', 1.75).attr('stroke-linejoin', 'round')
+      .attr('d', d3.line().x((r) => x(r.cq) + x.bandwidth() / 2).y((r) => y(r.capex10)));
+    let lx = left;
+    for (const k of [...keys, { name: '4사 설비투자 ÷ 10', color: 'var(--color-fg)', line: true }]) {
+      if (k.line) g.append('line').attr('x1', lx).attr('x2', lx + 12).attr('y1', H - 11).attr('y2', H - 11).attr('stroke', k.color).attr('stroke-width', 2);
+      else g.append('rect').attr('x', lx).attr('y', H - 16).attr('width', 10).attr('height', 10).attr('rx', 2).attr('fill', k.color);
+      const t = g.append('text').attr('x', lx + 16).attr('y', H - 7).text(k.name);
+      lx += 16 + t.node().getComputedTextLength() + 16;
+    }
+    const tip = tipBox(el);
+    svg.on('pointermove', (ev) => {
+      const sc = svg.node().getBoundingClientRect().width / W;
+      const mx = d3.pointer(ev)[0];
+      const r = rows[d3.minIndex(rows, (r) => Math.abs(x(r.cq) + x.bandwidth() / 2 - mx))];
+      fillTip(tip, qLabel(r.cq), [...keys.map((k) => [k.color, k.name, fmtUsd(r[k.k])]), [null, '4사 설비투자', isNaN(r.capex10) ? '—' : fmtUsd(r.capex10 * 10)]]);
+      placeTip(el, tip, (x(r.cq) + x.bandwidth()) * sc, y(tot(r)) * sc);
+    }).on('pointerleave', () => { tip.hidden = true; });
+  });
+
+  // ---------- m: value per kilogram ----------
+  dash.draw('chartM', (el) => {
+    if (!ok('kr_mem')) return failed(el, 'kr_mem');
+    const rows = rowsOf('kr_mem').filter((r) => r.uv_taiwan_k !== '' && r.uv_taiwan_k != null)
+      .map((r) => ({ cq: r.cq, tw: N(r.uv_taiwan_k), cn: N(r.uv_china_hk_k), kgtw: N(r.kg_taiwan_t), kgcn: N(r.kg_china_hk_t) }));
+    el.replaceChildren();
+    const series = [{ k: 'tw', kg: 'kgtw', name: '대만행', color: C()[0] }, { k: 'cn', kg: 'kgcn', name: '중국·홍콩행', color: 'var(--cds-chart-muted)' }];
+    const W = el.clientWidth, H = 340;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const y = d3.scaleLinear([0, d3.max(rows, (r) => Math.max(r.tw, r.cn))], [H - 30, 12]).nice();
+    const left = d3.max(y.ticks(5), (t) => textWidth(svg, fmtB(t))) + 10;
+    const endW = d3.max(series, (s) => textWidth(svg, s.name, 'strong')) + 12;
+    const x = d3.scalePoint(rows.map((r) => r.cq), [left, W - endW - 8]);
+    const g = svg.append('g');
+    for (const t of y.ticks(5)) {
+      g.append('line').attr('x1', left).attr('x2', W - endW - 8).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+      g.append('text').attr('x', left - 8).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmtB(t));
+    }
+    for (const r of rows) if (r.cq.endsWith('Q1') && Number(r.cq.slice(0, 4)) % 2 === 1) g.append('text').attr('x', x(r.cq)).attr('y', H - 8).attr('text-anchor', 'middle').text(r.cq.slice(2, 4) + '년');
+    const labs = [];
+    for (const s of series) {
+      g.append('path').datum(rows).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', 2).attr('stroke-linejoin', 'round')
+        .attr('d', d3.line().x((r) => x(r.cq)).y((r) => y(r[s.k])));
+      const l = rows[rows.length - 1]; labs.push({ s, y: y(l[s.k]) });
+    }
+    labs.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < labs.length; i++) if (labs[i].y - labs[i - 1].y < 18) labs[i].y = labs[i - 1].y + 18;
+    const xe = x(rows[rows.length - 1].cq) + 6;
+    for (const l of labs) g.append('text').attr('class', 'strong').attr('x', xe).attr('y', l.y).attr('dy', '0.32em').style('fill', l.s.color).text(l.s.name);
+    const tip = tipBox(el);
+    const rule = g.append('line').attr('y1', 12).attr('y2', H - 30).attr('stroke', 'var(--cds-chart-axis)').attr('opacity', 0);
+    svg.on('pointermove', (ev) => {
+      const sc = svg.node().getBoundingClientRect().width / W;
+      const mx = d3.pointer(ev)[0];
+      const r = rows[d3.minIndex(rows, (r) => Math.abs(x(r.cq) - mx))];
+      rule.attr('x1', x(r.cq)).attr('x2', x(r.cq)).attr('opacity', 1);
+      fillTip(tip, qLabel(r.cq), series.map((s) => [s.color, s.name, d3.format(',.1f')(r[s.k]) + '천 달러/kg, ' + d3.format(',.0f')(r[s.kg]) + '톤']));
+      placeTip(el, tip, x(r.cq) * sc, y(r.tw) * sc);
+    }).on('pointerleave', () => { tip.hidden = true; rule.attr('opacity', 0); });
+  });
+
+  // ---------- f: period table ----------
+  dash.draw('tableD', (tb) => {
+    tb.replaceChildren();
+    if (!ok('periods')) return;
+    for (const r of rowsOf('periods')) {
+      const tr = document.createElement('tr');
+      const cells = [r.period, fmtUsd(N(r.capex_total)), fmtPct(N(r.intensity)), fmtPct(N(r.capex_ocf)), fmtPct(N(r.fcf_margin)), fmtPct(N(r.shret_ocf)), fmtUsd(N(r.net_debt_B))];
+      for (const c of cells) { const td = document.createElement('td'); td.textContent = c; tr.appendChild(td); }
+      tb.appendChild(tr);
+    }
+  });
+})();
+</script>
