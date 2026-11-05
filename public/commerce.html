@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="author" content="권석준"><meta property="og:title" content="에이전트 커머스 시뮬레이터"><meta property="og:description" content="빅테크 AI 설비투자를 주가·조달, 구글 연산 전략, 한국 에이전트 커머스로 나눠 보는 시나리오 시뮬레이터. 권석준(성균관대학교)."><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="canonical" href="https://aicapex.sjoonkwon.com/commerce"><meta property="og:url" content="https://aicapex.sjoonkwon.com/commerce"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}
+:root{--hb-bg:#eef2f1;--hb-ink:#1f5d73;--hb-rule:#d5dcda}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hb-bg:#172024;--hb-ink:#7cc0d6;--hb-rule:#2c3337}}
+:root[data-theme="dark"]{--hb-bg:#172024;--hb-ink:#7cc0d6;--hb-rule:#2c3337}
+.hub-back{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--hb-bg);border-bottom:1px solid var(--hb-rule);padding-block:9px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));font:500 13px "IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}
+.hub-back a{color:var(--hb-ink);text-decoration:none}.hub-back a:hover{text-decoration:underline}
+.hub-back a:focus-visible{outline:2px solid var(--hb-ink);outline-offset:2px}
+</style></head><body>
+<nav class="hub-back" aria-label="시뮬레이터 목록"><a href="/">← 빅테크 AI 투자 시뮬레이터 · 권석준</a><span><a href="/hyperscaler">주가·조달</a> · <a href="/google">구글 전략</a></span></nav>
+<title>에이전트 커머스 시뮬레이터</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: a working bench — controls column beside a stack of small charts, then a Korea ledger. */
+:root {
+  --bg: #f7f7f4; --panel: #ffffff; --ink: #161614; --ink-2: #52514e; --ink-3: #7c7b76;
+  --line: #e2e1db; --grid: #ecebe6; --axis: #b9b8b0; --accent: #2a78d6; --accent-soft: rgba(42,120,214,.16);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#6250d6;
+  --good:#1a7f37; --bad:#c2372f;
+  --narrow: "Arial Narrow", "Liberation Sans Narrow", "Roboto Condensed", sans-serif;
+  --sans: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  --serif: "Noto Serif KR", "Nanum Myeongjo", Georgia, serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg:#141413; --panel:#1c1c1a; --ink:#f0efec; --ink-2:#c3c2b7; --ink-3:#9a998f; --line:#2f2e2b; --grid:#272724; --axis:#55544e;
+  --accent:#3987e5; --accent-soft: rgba(57,135,229,.22);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --good:#4cb46a; --bad:#e66767; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg:#141413; --panel:#1c1c1a; --ink:#f0efec; --ink-2:#c3c2b7; --ink-3:#9a998f; --line:#2f2e2b; --grid:#272724; --axis:#55544e;
+  --accent:#3987e5; --accent-soft: rgba(57,135,229,.22);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --good:#4cb46a; --bad:#e66767; color-scheme: dark; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.6; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; display: grid; gap: 28px; }
+h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(1.7rem, 3.4vw, 2.4rem); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-family: var(--serif); font-weight: 600; font-size: 1.35rem; margin: 0; text-wrap: balance; }
+h3 { font-size: 1rem; margin: 0; }
+.lede { max-width: 70ch; margin: 6px 0 0; color: var(--ink-2); }
+.tag { display: inline-block; font-size: .78rem; letter-spacing: .04em; color: var(--ink-3); border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; }
+.bench { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 900px) { .bench { grid-template-columns: minmax(0, 1fr); } }
+.controls { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 14px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); }
+@media (max-width: 900px) { .controls { position: static; } }
+.ctl { display: grid; gap: 2px; }
+.ctl label { display: flex; justify-content: space-between; gap: 8px; font-size: .86rem; color: var(--ink-2); }
+.ctl label b { font-family: var(--narrow); font-size: 1rem; color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 700; }
+.ctl input[type=range] { width: 100%; accent-color: var(--accent); }
+.grp { display: grid; gap: 10px; border-top: 1px solid var(--line); padding-top: 12px; }
+.grp > span { font-size: .75rem; letter-spacing: .06em; color: var(--ink-3); }
+select { font: inherit; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; }
+button { font: inherit; font-size: .85rem; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.out { display: grid; gap: 20px; min-width: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px; }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 2px; }
+.kpi .k { font-size: .8rem; color: var(--ink-2); }
+.kpi .v { font-family: var(--narrow); font-size: 1.9rem; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.kpi .r { font-family: var(--narrow); font-size: .95rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 16px; }
+.fig { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 6px; min-width: 0; }
+.fig.wide { grid-column: 1 / -1; }
+.cap { display: flex; gap: 10px; align-items: baseline; margin: 0; }
+.lab { font-family: var(--narrow); font-weight: 700; font-size: 1.5rem; line-height: 1; }
+.note { color: var(--ink-2); font-size: .86rem; line-height: 1.5; }
+.chart { position: relative; min-height: 260px; }
+.chart svg { display: block; overflow: visible; }
+.chart text { font-family: var(--narrow); fill: var(--ink-2); font-size: 15px; }
+.chart text.strong { fill: var(--ink); font-weight: 700; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-family: var(--narrow); font-size: 15px; color: var(--ink-2); }
+.legend i { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.tt { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.12); padding: 6px 10px; font-family: var(--narrow); font-size: 15px; white-space: nowrap; z-index: 5; color: var(--ink); }
+.tt .h { color: var(--ink-3); }
+.tt i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 6px; }
+.answer { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; }
+.answer p { margin: 0; max-width: 78ch; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+th, td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: right; vertical-align: top; }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--ink-2); font-weight: 600; }
+td.num { font-family: var(--narrow); font-size: 1.02rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.txt { text-align: left; color: var(--ink-2); }
+.kor { display: grid; gap: 16px; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 16px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; }
+.card p { margin: 0; }
+.card ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; }
+.small { font-size: .84rem; color: var(--ink-2); }
+.src { font-size: .84rem; color: var(--ink-2); display: grid; gap: 3px; padding-left: 1.1em; margin: 0; }
+.src a { color: var(--accent); }
+.pill { white-space: nowrap; font-family: var(--narrow); font-size: .9rem; padding: 0 8px; border-radius: 999px; border: 1px solid var(--line); }
+.pill.d { color: var(--good); border-color: currentColor; }
+.pill.a { color: var(--ink-3); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+
+<div class="wrap">
+  <header style="display:grid;gap:8px">
+    <span class="tag">시나리오 모델 · 예측이 아님</span>
+    <h1>에이전트 커머스 시뮬레이터</h1>
+    <p class="lede">온라인 커머스의 과금이 노출당(CPM)에서 클릭당(CPC)으로, 다시 거래당(CPA·수수료)으로 옮겨 갈 때 돈이 누구에게 가는지 계산합니다. 기본값은 2025년 한국 온라인쇼핑 거래액 272조 원에서 출발합니다. 왼쪽 조절기를 움직이면 2025~2035년 결과와 불확실성 범위(몬테카를로 600회)가 바로 다시 계산됩니다.</p>
+  </header>
+
+  <div class="bench">
+    <aside class="controls" aria-label="조절기">
+      <div class="ctl">
+        <label for="preset">시나리오</label>
+        <select id="preset">
+          <option value="base">기본: 혼합형</option>
+          <option value="portal">포털 주도형(네이버·구글이 에이전트를 쥠)</option>
+          <option value="model">글로벌 모델 주도형(챗봇이 쇼핑 창구)</option>
+          <option value="market">마켓 폐쇄형(쿠팡형 자체 에이전트)</option>
+          <option value="merchant">판매자 직판형(개방 규약)</option>
+        </select>
+      </div>
+      <div class="grp"><span>에이전트 도입</span>
+        <div class="ctl"><label for="A">도입 상한(구매 중 비중) <b id="A_v"></b></label><input id="A" type="range" min="0.05" max="0.8" step="0.01"></div>
+        <div class="ctl"><label for="t0">절반에 이르는 해 <b id="t0_v"></b></label><input id="t0" type="range" min="2027" max="2035" step="0.5"></div>
+        <div class="ctl"><label for="k">확산 속도 <b id="k_v"></b></label><input id="k" type="range" min="0.3" max="1.5" step="0.05"></div>
+      </div>
+      <div class="grp"><span>과금 방식</span>
+        <div class="ctl"><label for="fee">에이전트 거래 수수료 <b id="fee_v"></b></label><input id="fee" type="range" min="0" max="0.1" step="0.005"></div>
+        <div class="ctl"><label for="sponsor">에이전트 안 유료 노출 <b id="sponsor_v"></b></label><input id="sponsor" type="range" min="0" max="0.04" step="0.0025"></div>
+        <div class="ctl"><label for="ad_resid">에이전트 구매에 남는 광고비 <b id="ad_resid_v"></b></label><input id="ad_resid" type="range" min="0" max="1" step="0.05"></div>
+        <div class="ctl"><label for="delta">가격 비교로 줄어드는 판매자 마진 <b id="delta_v"></b></label><input id="delta" type="range" min="0" max="0.08" step="0.005"></div>
+        <div class="ctl"><label for="lic">수수료 중 콘텐츠 사용료 <b id="lic_v"></b></label><input id="lic" type="range" min="0" max="0.3" step="0.01"></div>
+        <div class="ctl"><label for="inc">중개 비용 변화 중 판매자 몫 <b id="inc_v"></b></label><input id="inc" type="range" min="0" max="1" step="0.05"><span class="small">2025년 대비 중개 비용이 늘면 나머지는 값 인상으로 소비자가 내고, 줄면 나머지는 값 인하로 소비자가 가져갑니다. 경쟁 소매에서는 상당 부분이 소비자에게 전가되므로 기본값은 50%입니다.</span></div>
+      </div>
+      <div class="grp"><span>에이전트를 쥔 쪽(합이 100%가 되도록 다시 나눔)</span>
+        <div class="ctl"><label for="c_search">검색 포털 <b id="c_search_v"></b></label><input id="c_search" type="range" min="0" max="1" step="0.05"></div>
+        <div class="ctl"><label for="c_model">모델 기업 <b id="c_model_v"></b></label><input id="c_model" type="range" min="0" max="1" step="0.05"></div>
+        <div class="ctl"><label for="c_market">마켓플레이스 <b id="c_market_v"></b></label><input id="c_market" type="range" min="0" max="1" step="0.05"></div>
+        <div class="ctl"><label for="c_merchant">판매자 자체 <b id="c_merchant_v"></b></label><input id="c_merchant" type="range" min="0" max="1" step="0.05"></div>
+        <div class="ctl"><label for="rho">외부 에이전트 구매 중 마켓 경유 <b id="rho_v"></b></label><input id="rho" type="range" min="0" max="1" step="0.05"></div>
+      </div>
+      <div class="grp"><span>서버·전기료(추론 비용)</span>
+        <div class="ctl"><label for="tokens">구매 1건당 세션 토큰 <b id="tokens_v"></b></label><input id="tokens" type="range" min="4.3" max="6" step="0.05"></div>
+        <div class="ctl"><label for="sessions">구매 1건당 세션 수 <b id="sessions_v"></b></label><input id="sessions" type="range" min="1" max="30" step="1"></div>
+        <div class="ctl"><label for="price0">2026년 토큰 단가($/100만) <b id="price0_v"></b></label><input id="price0" type="range" min="0.1" max="10" step="0.1"></div>
+        <div class="ctl"><label for="price_decline">토큰 단가 연간 하락 <b id="price_decline_v"></b></label><input id="price_decline" type="range" min="0" max="0.6" step="0.05"></div>
+        <div class="ctl"><label for="tok_growth">작업당 토큰 연간 증가 <b id="tok_growth_v"></b></label><input id="tok_growth" type="range" min="0" max="1.5" step="0.05"></div>
+      </div>
+      <div class="grp"><span>불확실성</span>
+        <div class="ctl"><label for="unc">가정의 흔들림 폭 <b id="unc_v"></b></label><input id="unc" type="range" min="0" max="0.8" step="0.05"></div>
+        <label class="small" style="display:flex;gap:6px;align-items:center"><input id="real" type="checkbox"> 금액을 실질(2025년 원, 물가 연 2.3%)로 보기</label>
+        <button id="reset" type="button">시나리오 기본값으로</button>
+      </div>
+    </aside>
+
+    <section class="out" aria-label="결과">
+      <div class="kpis" id="kpis">
+        <div class="kpi"><span class="k">2035년 에이전트 경유 구매 비중(경로 중앙값)</span><span class="v" data-k="a">—</span><span class="r" data-k="a_r">—</span></div>
+        <div class="kpi"><span class="k">2035년 거래당 과금 비중(마켓 판매수수료 포함, 경로 중앙값)</span><span class="v" data-k="cpa">—</span><span class="r" data-k="cpa_r">—</span></div>
+        <div class="kpi"><span class="k">2035년 판매자 몫의 2025년 대비 변화(경로 중앙값)</span><span class="v" data-k="m">—</span><span class="r" data-k="m_r">—</span></div>
+        <div class="kpi"><span class="k">2030년 서버비 충당 배수(경로 중앙값, 토큰 단가에 크게 좌우)</span><span class="v" data-k="cov">—</span><span class="r" data-k="cov_r">—</span></div>
+      </div>
+
+      <div class="charts">
+        <figure class="fig" style="margin:0">
+          <p class="cap"><span class="lab">a</span><span class="note">에이전트를 거쳐 일어나는 구매의 비중. 선은 중앙값, 띠는 10~90% 범위입니다.</span></p>
+          <div class="chart" id="cA"></div>
+        </figure>
+        <figure class="fig" style="margin:0">
+          <p class="cap"><span class="lab">b</span><span class="note">판매자가 내는 광고비·수수료의 과금 방식 구성(%). 마켓 판매수수료는 이미 거래당 과금이므로 거래당 쪽에 넣었고, 결제수수료는 뺐습니다.</span></p>
+          <div class="legend" id="lB"></div>
+          <div class="chart" id="cB"></div>
+        </figure>
+        <figure class="fig wide" style="margin:0">
+          <p class="cap"><span class="lab">c</span><span class="note">중개 수입이 어디로 가는지(조 원, 명목 또는 실질). 조절기 값 그대로 계산한 한 경로입니다.</span></p>
+          <div class="legend" id="lC"></div>
+          <div class="chart" id="cC" style="min-height:300px"></div>
+        </figure>
+        <figure class="fig" style="margin:0">
+          <p class="cap"><span class="lab">d</span><span class="note">2035년 중개 수입에서 각 주체가 차지하는 몫. 점은 중앙값, 막대는 10~90% 범위, 회색 눈금은 2025년 값입니다.</span></p>
+          <div class="chart" id="cD"></div>
+        </figure>
+        <figure class="fig" style="margin:0">
+          <p class="cap"><span class="lab">e</span><span class="note">구매 1건에서 에이전트 운영자가 받는 돈 ÷ 그 구매에 든 추론 비용(배, 로그 눈금). 1 아래면 광고 없이 서버비를 못 댑니다. 띠는 조절기 둘레에서 뽑은 경로의 10~90% 범위입니다.</span></p>
+          <div class="chart" id="cE"></div>
+        </figure>
+        <figure class="fig" style="margin:0">
+          <p class="cap"><span class="lab">f</span><span class="note">판매자 몫의 2025년 대비 변화(%p). 판매자 몫은 매출총이익에서 판매자가 떠안는 광고비·수수료·결제비, 가격 비교로 깎인 마진, 판매자 자체 에이전트의 추론비를 뺀 값입니다. 수준 대신 변화를 보여 주는 이유는 수준의 퍼짐 대부분이 매출총이익률 가정에서 오기 때문입니다.</span></p>
+          <div class="chart" id="cF"></div>
+        </figure>
+        <figure class="fig" style="margin:0">
+          <p class="cap"><span class="lab">g</span><span class="note">소비자 순이득: 에이전트의 가격 비교로 낮아진 지출에, 중개 비용 변화 가운데 소비자에게 전가된 몫을 더하거나 뺀 값(조 원/년). 중앙값과 10~90% 범위입니다.</span></p>
+          <div class="chart" id="cG"></div>
+        </figure>
+      </div>
+
+      <div class="answer" id="ans">
+        <h3>광고·트래픽 없이 서버와 전기료를 댈 수 있나</h3>
+        <p data-a="1">—</p>
+        <p data-a="2" class="small">—</p>
+      </div>
+    </section>
+  </div>
+
+  <section class="kor">
+    <h2>한국에서는 어떻게 되나</h2>
+    <p class="lede" style="margin:0">한국은 세 가지가 특이합니다. 검색의 3분의 2를 국내 포털(네이버)이 쥐고 있습니다. 커머스는 직매입 마켓(쿠팡)과 오픈마켓·스마트스토어(네이버)가 양분합니다. 결제는 간편결제 지갑(네이버페이·카카오페이·토스)이 이미 생활화되어 있습니다. 아래 표는 모델의 기본값을 맞추는 데 쓴 실제 수치입니다.</p>
+
+    <div class="tbl">
+      <table>
+        <thead><tr><th>항목</th><th>값</th><th>기간</th><th>출처</th></tr></thead>
+        <tbody id="kdata"></tbody>
+      </table>
+    </div>
+
+    <h3>시나리오별 2035년 결과(통제권·수수료·판매수수료·유료 노출·마진 압축·도입 상한은 시나리오대로, 비용·토큰 값과 도입 시점·속도·광고 잔존·라이선스·귀착률은 조절기 그대로)</h3>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>시나리오</th><th>검색 포털</th><th>마켓플레이스</th><th>모델 기업</th><th>콘텐츠·언론</th><th>판매자 몫 (2025년 대비)</th><th>소비자 순이득</th></tr></thead>
+        <tbody id="kscen"></tbody>
+      </table>
+    </div>
+    <p class="small" style="margin:0">단위: 조 원(명목, 실질 보기를 켜면 2025년 원), 판매자 몫은 거래액 대비 %. 각 칸은 조절기의 도입·비용 가정에 시나리오별 통제권·수수료를 넣어 계산한 한 경로입니다.</p>
+
+    <div class="cols">
+      <div class="card"><h3>네이버: 검색광고(CPC)에서 거래 수수료로</h3>
+        <p>2025년 서치플랫폼 매출은 4조 1,689억 원으로 5.6% 늘었습니다. 같은 해 커머스 매출은 3조 6,884억 원으로 26.2% 늘었습니다. 즉 네이버는 이미 클릭당 광고보다 거래에서 성장을 만들고 있습니다. 2026년 2월 쇼핑 에이전트를, 6월 26일 AI탭을 내놓았습니다.</p>
+        <p>포털 주도형이면 네이버는 CPC 수입이 줄어드는 만큼 에이전트 수수료와 유료 노출로 되찾습니다. 반대로 글로벌 모델 주도형이면 검색광고가 줄고, 수수료는 해외 모델 기업으로 갑니다. 국내 검색 점유율 64.28%(2026년 상반기)는 지금의 방어선이지만, 에이전트 시대에는 "어느 에이전트가 첫 화면을 쥐느냐"가 새 점유율입니다.</p>
+      </div>
+      <div class="card"><h3>쿠팡: 마켓이 에이전트를 막을 것인가</h3>
+        <p>쿠팡의 2025년 프로덕트 커머스 순매출은 296억 달러였습니다. 2025년 평균 환율(1,421.4원)로 약 42조 원이며, 한국 온라인쇼핑 거래액의 약 15.5%입니다. 순매출 기준이라 실제 거래액 비중은 이보다 큽니다.</p>
+        <p>쿠팡은 직매입·로켓배송이라는 물류 해자를 가졌습니다. 외부 에이전트가 쿠팡 상품을 사려면 쿠팡의 문을 지나야 합니다. 따라서 마켓 폐쇄형이 가장 자연스럽습니다. 다만 외부 에이전트가 가격 비교로 다른 판매처를 고르면 쿠팡의 광고 수입(판매자 CPC)이 먼저 흔들립니다. 2026년 3분기 조정 EBITDA 마진이 1.2%로, 이 압력을 버틸 여유는 크지 않습니다.</p>
+      </div>
+      <div class="card"><h3>중소 판매자와 콘텐츠</h3>
+        <p>판매자에게 CPA는 "효과가 난 만큼만 낸다"는 점에서 CPC보다 공정합니다. 그러나 에이전트가 가격을 끝까지 비교하면 마진이 깎입니다. 그림 f에서 판매자 몫이 줄어드는 주된 이유가 이것입니다. 스마트스토어 판매자처럼 검색 노출에 기대던 사업자는 상품 정보를 기계가 읽기 좋게 만드는 일이 새 마케팅이 됩니다.</p>
+        <p>콘텐츠·언론은 가장 약한 고리입니다. 디스플레이 광고와 유입 트래픽이 함께 줄기 때문입니다. "수수료 중 콘텐츠 사용료" 조절기를 올려 보면, 사용료 계약이 없을 때 이 몫이 얼마나 줄어드는지 보입니다.</p>
+      </div>
+      <div class="card"><h3>결제와 한국어·로컬 데이터의 해자</h3>
+        <p>에이전트가 대신 결제하려면 저장된 결제수단과 본인 인증이 필요합니다. 한국은 간편결제 지갑이 이미 이 자리를 쥐고 있습니다. 네이버 핀테크 매출은 2025년 1조 6,907억 원이었습니다. 따라서 결제 몫(그림 c의 결제)은 해외 에이전트가 들어와도 국내 사업자에게 남을 가능성이 큽니다.</p>
+        <p>한국어, 지도·리뷰·재고 같은 로컬 데이터, 배송 약속(N배송, 로켓배송)은 해외 모델 기업이 쉽게 가져오지 못하는 자산입니다. 이 해자가 버티면 포털 주도형이나 마켓 폐쇄형에 가까워지고, 무너지면 글로벌 모델 주도형으로 기웁니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="kor">
+    <h2>가정과 근거</h2>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>모수</th><th>기본값</th><th>성격</th><th>근거</th></tr></thead>
+        <tbody>
+          <tr><td>2025년 온라인쇼핑 거래액</td><td class="num">272.04조 원</td><td><span class="pill d">자료</span></td><td class="txt">국가데이터처. 성장률 기본값 5%는 2025년 +4.9%, 2026년 6월 +10.7%·8월 +7.3% 사이에서 고른 가정</td></tr>
+          <tr><td>광고비 ÷ 온라인 거래액</td><td class="num">3.9%</td><td><span class="pill a">추정</span></td><td class="txt">2024년 온라인 광고비 10조 1,011억 원 ÷ 2024년 온라인쇼핑 거래액(2025년 값과 증가율로 역산 약 259조 원). 광고 전부가 커머스용은 아니므로 상한에 가까움</td></tr>
+          <tr><td>CPC 비중, 포털 대 마켓</td><td class="num">60%, 55:45</td><td><span class="pill a">가정</span></td><td class="txt">모형의 2025년 포털 검색광고는 3.50조 원입니다. 네이버 서치플랫폼 매출 4.17조 원에는 커머스와 무관한 검색·디스플레이 광고도 들어 있으므로, 그 84%를 커머스 몫으로 본 셈입니다(가정)</td></tr>
+          <tr><td>마켓 경유 거래 비중, 판매수수료</td><td class="num">45%, 10%</td><td><span class="pill a">가정</span></td><td class="txt">해외 비교: 아마존 판매수수료 15%(Marketplace Pulse 인용)</td></tr>
+          <tr><td>결제수수료</td><td class="num">2.5%</td><td><span class="pill a">가정</span></td><td class="txt">미국 카드 처리비 약 2.9% 인용 사례보다 낮게 둠</td></tr>
+          <tr><td>판매자 매출총이익률</td><td class="num">30%</td><td><span class="pill a">가정</span></td><td class="txt">쿠팡 프로덕트 커머스 매출총이익률 32.0%(2025년)를 참고</td></tr>
+          <tr><td>에이전트 수수료</td><td class="num">4%</td><td><span class="pill d">자료</span> <span class="pill a">가정</span></td><td class="txt">미국 사례이며 한국 적용은 가정입니다. ChatGPT Instant Checkout 판매자 수수료 4%(2026년 1월 26일부터, 결제비 별도). 다만 OpenAI는 2026년 3월 결제를 판매자의 ChatGPT 앱 안으로 옮기기로 했습니다("Instant Checkout is moving to Apps"). 따라서 4%가 업계 표준으로 굳은 값은 아닙니다. 마켓이 쥔 에이전트는 별도 수수료 없이 판매수수료로 받고, 판매자가 직접 운영하는 에이전트에는 수수료가 없다고 봅니다. 판매자는 자기 에이전트의 추론비가 피할 수 있는 외부 수수료(4%)보다 비싸지면 외부 에이전트로 옮깁니다.</td></tr>
+          <tr><td>시나리오별 수수료</td><td class="num">표 참조</td><td><span class="pill a">가정</span></td><td class="txt">포털 주도형 유료 노출 1.5%, 글로벌 모델 주도형 수수료 5%, 마켓 폐쇄형 판매수수료 13%·유료 노출 1.5%, 판매자 직판형 판매수수료 9%·수수료 2%. 판매수수료는 지금의 10%에서 에이전트 도입 속도에 맞춰 옮겨 갑니다. 병목을 쥔 쪽이 값을 올린다는 경쟁 병목 이론(Armstrong 2006)을 따른 가정입니다</td></tr>
+          <tr><td>평균 주문액</td><td class="num">5만 원</td><td><span class="pill a">가정</span></td><td class="txt">서버비 충당 계산에만 쓰임</td></tr>
+          <tr><td>토큰 단가</td><td class="num">$2 / 100만(2026년)</td><td><span class="pill a">가정</span></td><td class="txt">대형(Sonnet급) 모델의 공개 가격에 가까운 값입니다. 몬테카를로에서는 이 단가를 로그 척도로 약 0.3~3.3배 범위에서 흔듭니다. 2026년 10월 공개 가격의 혼합값이므로 2026년 기준으로 두고, 하락은 2027년부터 적용합니다. Claude Haiku 5.5 입력 $0.10·출력 $0.50, Sonnet 5.5 입력 $2·출력 $10(CostBench, 2026년 10월 확인). Haiku 5.5는 한 요청이 10만 토큰을 넘으면 단가가 크게 오르므로, 세션 토큰을 그 이상으로 올릴 때는 단가도 함께 올려야 합니다. 운영자의 실제 원가는 공개 가격보다 낮을 수 있음</td></tr>
+          <tr><td>작업당 토큰 증가</td><td class="num">연 50%</td><td><span class="pill a">가정</span></td><td class="txt">추론형 모델과 에이전트 루프(맥락을 되풀이해 보냄)로 작업당 토큰은 연 50~100% 늘고 있다는 검토 의견을 반영했습니다. 연 90%면 2030년 충당 배수는 1배 아래로 내려갑니다</td></tr>
+          <tr><td>중개 비용의 귀착</td><td class="num">판매자 50%</td><td><span class="pill a">가정</span></td><td class="txt">모형이 정하지 않고 조절기로 고르는 값입니다. 업계 전체의 비용 변화는 경쟁 소매에서 상당 부분 소비자에게 전가됩니다(Weyl·Fabinger 2013). 판매자 몫 변화의 대부분은 가격 압축(δ)에서 나옵니다</td></tr>
+          <tr><td>물가</td><td class="num">연 2.3%</td><td><span class="pill a">가정</span></td><td class="txt">실질값 보기에만 쓰입니다. 한국은행 2026년 8월 전망(2026년 2.7%, 2027년 2.3%)의 2027년 값을 장기에 적용했습니다</td></tr>
+          <tr><td>환율</td><td class="num">1,421.4원/달러</td><td><span class="pill d">자료</span></td><td class="txt">FRED DEXKOUS, 2025년 평균. 2026-10-30 현물은 1,334원이며, 이 값을 쓰면 충당 배수가 약 7% 높아집니다</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small" style="margin:0">불확실성 띠는 도입 상한·시점·속도, 수수료, 유료 노출, 광고 잔존, 마진 압축, 성장률, 토큰량·세션 수·단가 하락·토큰 증가, 마켓 경유율, 판매자 매출총이익률, 판매수수료율, 광고비 비율을 조절기 값 둘레에서 "흔들림 폭"만큼 고르게 뽑아 600번 계산한 결과입니다(난수 고정). 따라서 띠와 '경로 비율'은 이 뽑기 규칙 아래의 분포이며, 실제 세계의 확률이 아닙니다. 이 모델은 경쟁 반응, 마켓의 수수료 인상, 규제(배달앱 수수료 상한 법안 등), 광고 단가의 변화, 해외 모델 기업으로 나가는 원화를 내생화하지 않습니다.</p>
+    <h3>출처</h3>
+    <ul class="src">
+      <li><a href="https://www.ajunews.com/view/20260202112811329" target="_blank" rel="noopener">아주경제, 2025년 온라인쇼핑 거래액 272조 398억 원(국가데이터처, 2026-02-02)</a></li>
+      <li><a href="https://www.newsis.com/view/NISX20260803_0003733704" target="_blank" rel="noopener">뉴시스, 2026년 6월 온라인쇼핑동향(24조 6,067억 원, +10.7%, 모바일 76.9%)</a></li>
+      <li><a href="https://eiec.kdi.re.kr/policy/materialView.do?num=287670" target="_blank" rel="noopener">KDI 경제정보센터, 2026년 8월 온라인쇼핑동향(24조 2,118억 원, +7.3%, 모바일 78.1%)</a></li>
+      <li><a href="https://www.mt.co.kr/tech/2026/02/06/2026020610455040631" target="_blank" rel="noopener">머니투데이, 네이버 2025년 실적(서치플랫폼·커머스·핀테크)</a></li>
+      <li><a href="https://www.newsis.com/view/NISX20260206_0003506219" target="_blank" rel="noopener">뉴시스, 네이버 쇼핑 AI 에이전트 출시 계획(2026-02-06)</a></li>
+      <li><a href="https://www.ddaily.co.kr/page/view/2026071214223169501" target="_blank" rel="noopener">디지털데일리, 2026년 상반기 검색 점유율(인터넷트렌드: 네이버 64.28%, 구글 28.37%)</a></li>
+      <li><a href="https://ir.aboutcoupang.com/news-events/news/news-details/2026/Coupang-Announces-Results-for-Fourth-Quarter-2025/default.aspx" target="_blank" rel="noopener">Coupang, 2025년 4분기·연간 실적</a></li>
+      <li><a href="https://www.sec.gov/Archives/edgar/data/0001834584/000183458426000084/cpng-09302026ex991.htm" target="_blank" rel="noopener">Coupang, 2026년 3분기 실적(SEC 8-K)</a></li>
+      <li><a href="https://www.kakaocorp.com/page/detail/11931?lang=KOR" target="_blank" rel="noopener">카카오, 2025년 실적(커머스 거래액 10조 6,000억 원, 4분기 톡비즈 광고형 3,734억 원)</a></li>
+      <li><a href="https://www.journalist.or.kr/news/article.html?no=60072" target="_blank" rel="noopener">기자협회보, 2025 방송통신광고비 조사(2024년 온라인 광고 10조 1,011억 원)</a></li>
+      <li><a href="https://www.marketingdive.com/news/amazon-annual-ad-revenue-passes-68b-boosted-by-full-funnel-strategy/811569/" target="_blank" rel="noopener">Marketing Dive, 아마존 2025년 광고 매출 680억 달러 이상</a></li>
+      <li><a href="https://stellagent.ai/insights/chatgpt-instant-checkout-4-percent-fee-2026-01-23" target="_blank" rel="noopener">Stellagent, ChatGPT Instant Checkout 수수료 4%</a></li>
+      <li><a href="https://digitalcommerce360.com/2026/03/06/openai-shifts-checkout-plans-agentic-commerce-strategy/" target="_blank" rel="noopener">Digital Commerce 360, OpenAI가 Instant Checkout을 앱으로 옮김(2026-03-06)</a></li>
+      <li><a href="https://www.costbench.com/software/llm-api-providers/claude-api/" target="_blank" rel="noopener">CostBench, Claude API 가격표(2026-10-10 확인)</a></li>
+      <li><a href="https://fred.stlouisfed.org/series/DEXKOUS" target="_blank" rel="noopener">FRED, 원/달러 환율(DEXKOUS)</a></li>
+    </ul>
+  </section>
+</div>
+
+<script>
+(function () {
+  const YEARS = d3.range(2025, 2036);
+  const BASE = { gmv0: 272.04, g: 0.05, ad_ratio: 0.039, cpc_share: 0.60, portal_of_cpc: 0.55, pub_of_cpm: 0.30,
+    mkt_share: 0.45, take: 0.10, pay: 0.025, gm: 0.30, A: 0.35, t0: 2031, k: 0.7, fee: 0.04, sponsor: 0.01,
+    delta: 0.03, ad_resid: 0.30, lic: 0, c_search: 0.35, c_model: 0.25, c_market: 0.30, c_merchant: 0.10, rho: 0.5,
+    aov: 50000, sessions: 8, tokens: 4.778, price0: 2.0, price_decline: 0.35, tok_growth: 0.5, krw: 1421.4, unc: 0.4, inc: 0.5, cpi: 0.023 };
+  const PRESETS = {
+    base: {},
+    portal: { c_search: 0.6, c_model: 0.1, c_market: 0.2, c_merchant: 0.1, rho: 0.6, sponsor: 0.015 },
+    model: { c_search: 0.1, c_model: 0.6, c_market: 0.2, c_merchant: 0.1, rho: 0.4, A: 0.5, fee: 0.05 },
+    market: { c_search: 0.15, c_model: 0.1, c_market: 0.65, c_merchant: 0.1, rho: 0.3, take: 0.13, sponsor: 0.015 },
+    merchant: { c_search: 0.15, c_model: 0.2, c_market: 0.1, c_merchant: 0.55, rho: 0.2, fee: 0.02, delta: 0.015, take: 0.09 },
+  };
+  const SCEN_NAMES = { base: '혼합형', portal: '포털 주도형', model: '글로벌 모델 주도형', market: '마켓 폐쇄형', merchant: '판매자 직판형' };
+  const SLIDERS = ['A', 't0', 'k', 'fee', 'sponsor', 'ad_resid', 'delta', 'lic', 'inc', 'c_search', 'c_model', 'c_market', 'c_merchant', 'rho', 'tokens', 'sessions', 'price0', 'price_decline', 'tok_growth', 'unc'];
+  const pct = d3.format('.0%'), pct1 = d3.format('.1%');
+  const FMT = { A: pct, t0: (v) => d3.format('.1f')(v).replace('.0', '') + '년', k: d3.format('.2f'), fee: pct1, sponsor: pct1, ad_resid: pct,
+    delta: pct1, lic: pct, inc: pct, c_search: pct, c_model: pct, c_market: pct, c_merchant: pct, rho: pct,
+    tokens: (v) => d3.format(',')(Math.round(Math.pow(10, v) / 1000) * 1000), sessions: (v) => v + '회',
+    price0: (v) => '$' + d3.format('.1f')(v), price_decline: pct, tok_growth: pct, unc: (v) => '±' + pct(v) };
+  const ACTORS = [
+    { k: 'portal', name: '검색 포털', c: '--s1' }, { k: 'market', name: '마켓플레이스', c: '--s2' },
+    { k: 'model', name: '모델 기업', c: '--s3' }, { k: 'display', name: '피드·디스플레이', c: '--s4' },
+    { k: 'content', name: '콘텐츠·언론', c: '--s5' }, { k: 'pay', name: '결제', c: '--s6' },
+  ];
+  const REG = [{ k: 'cpm', name: '노출당(CPM)', c: '--s4' }, { k: 'cpc', name: '클릭당(CPC)', c: '--s1' }, { k: 'cpa', name: '거래당(CPA·수수료)', c: '--s3' }];
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+  let P = { ...BASE };
+
+  function run(p) {
+    const s = p.c_search + p.c_model + p.c_market + p.c_merchant || 1;
+    const c0 = { search: p.c_search / s, model: p.c_model / s, market: p.c_market / s, merchant: p.c_merchant / s };
+    const f = (y) => p.A / (1 + Math.exp(-p.k * (y - p.t0)));
+    const f0 = f(2025);
+    const tok = Math.pow(10, p.tokens);
+    let rate0 = null;
+    const rows = YEARS.map((y) => {
+      const t = y - 2025;
+      const gmv = p.gmv0 * Math.pow(1 + p.g, t);
+      const a = Math.max(0, Math.min(1, (f(y) - f0) / (1 - f0 / Math.max(p.A, 1e-9))));
+      const ag = gmv * a, nag = gmv - ag;
+      const price = p.price0 * Math.pow(1 - p.price_decline, y - 2026);
+      const cost = p.sessions * tok * Math.pow(1 + p.tok_growth, Math.max(0, y - 2026)) * price / 1e6 * p.krw;
+      // merchants run their own agent only while its inference costs less than the outside agent fee they avoid (4%); otherwise that share moves to the others
+      let c = c0;
+      const r0 = 1 - c0.merchant;
+      if (c0.merchant > 0 && r0 > 1e-9 && cost > 0.04 * p.aov) c = { search: c0.search / r0, model: c0.model / r0, market: c0.market / r0, merchant: 0 };
+      const ads = nag * p.ad_ratio + ag * p.ad_ratio * p.ad_resid;
+      const cpc = ads * p.cpc_share, cpm = ads - cpc;
+      // agent fee only on purchases through portal- or model-run agents; sponsorship on all but merchant-run agents
+      const ext = c.search + c.model, nmr = 1 - c.merchant;
+      const fee = ag * p.fee * ext, spon = ag * p.sponsor * nmr, lic = fee * p.lic, feeNet = fee - lic;
+      const share = (k) => (ext > 1e-9 ? feeNet * c[k] / ext : 0) + (nmr > 1e-9 ? spon * c[k] / nmr : 0);
+      const keep = c.market + (1 - c.market) * p.rho;
+      const takeY = 0.10 + (p.take - 0.10) * (p.A > 0 ? a / p.A : 0);   // scenario commission phases in with agent adoption from today's 10%
+      const comm = takeY * p.mkt_share * (nag + ag * keep);
+      const pools = { portal: cpc * p.portal_of_cpc + share('search'), market: cpc * (1 - p.portal_of_cpc) + comm + (nmr > 1e-9 ? spon * c.market / nmr : 0),
+        model: share('model'), display: cpm * (1 - p.pub_of_cpm), content: cpm * p.pub_of_cpm + lic, pay: gmv * p.pay };
+      const total = d3.sum(ACTORS, (x) => pools[x.k]);
+      if (rate0 === null) rate0 = total / gmv;
+      const passed = (1 - p.inc) * (total - rate0 * gmv);               // change in intermediation cost passed to consumers (either sign)
+      const compress = ag * p.delta;                                     // price compression from agent comparison
+      const ownInfer = ag * c.merchant * cost / p.aov;                   // merchants running their own agent pay its inference
+      const merchant = gmv * p.gm - (total - passed) - compress - ownInfer;
+      const rev = (p.fee + p.sponsor) * p.aov;
+      const regTot = cpm + cpc + fee + spon + comm;
+      return { y, gmv, a, pools, total, surplus: compress - passed, merchant, mshare: merchant / gmv, cover: rev / cost, cost, rev, cMerchant: c.merchant,
+        reg: { cpm: cpm / regTot, cpc: cpc / regTot, cpa: (fee + spon + comm) / regTot } };
+    });
+    for (const r of rows) r.dm = r.mshare - rows[0].mshare;
+    return rows;
+  }
+
+  // seeded RNG so bands are stable between redraws
+  function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  const N = 600;
+  function monte(p) {
+    const rnd = mulberry32(20261105), w = p.unc;
+    const jit = (v, lo, hi) => Math.max(lo, Math.min(hi, v * (1 + w * (2 * rnd() - 1))));
+    const out = [];
+    for (let i = 0; i < N; i++) {
+      const q = { ...p,
+        A: jit(p.A, 0.01, 0.95), t0: Math.max(2026, Math.min(2040, p.t0 + w * 6 * (2 * rnd() - 1))), k: jit(p.k, 0.1, 3),
+        fee: jit(p.fee, 0, 0.2), sponsor: jit(p.sponsor, 0, 0.1), ad_resid: jit(p.ad_resid, 0, 1), delta: jit(p.delta, 0, 0.15),
+        g: jit(p.g, 0, 0.12), tokens: p.tokens + w * 1.2 * (2 * rnd() - 1), sessions: jit(p.sessions, 1, 60),
+        price_decline: jit(p.price_decline, 0, 0.8), tok_growth: jit(p.tok_growth, 0, 2), rho: jit(p.rho, 0, 1),
+        gm: jit(p.gm, 0.1, 0.5), take: jit(p.take, 0.03, 0.2), ad_ratio: jit(p.ad_ratio, 0.01, 0.08),
+        price0: p.price0 * Math.exp(w * 3 * (2 * rnd() - 1)) };   // token price: x0.3 to x3.3 around the slider at the default spread
+      out.push(run(q));
+    }
+    return out;
+  }
+  const q = (arr, p) => d3.quantile(arr.slice().sort(d3.ascending), p);
+
+  // ---------- controls ----------
+  function setControls() {
+    for (const id of SLIDERS) {
+      const el = document.getElementById(id); if (!el) continue;
+      el.value = P[id];
+      const lab = document.getElementById(id + '_v'); if (lab) lab.textContent = FMT[id](+P[id]);
+    }
+  }
+  function applyPreset(name) { P = { ...BASE, ...PRESETS[name] }; setControls(); update(); }
+  document.getElementById('preset').addEventListener('change', (e) => applyPreset(e.target.value));
+  document.getElementById('reset').addEventListener('click', () => applyPreset(document.getElementById('preset').value));
+  document.getElementById('real').addEventListener('change', () => update());
+  let timer = null;
+  for (const id of SLIDERS) {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      P[id] = +el.value; document.getElementById(id + '_v').textContent = FMT[id](P[id]);
+      clearTimeout(timer); timer = setTimeout(update, 60);
+    });
+  }
+
+  // ---------- chart helpers ----------
+  function frame(el, H, m) {
+    el.replaceChildren();
+    const W = Math.max(280, el.clientWidth);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    return { svg, W, H, m };
+  }
+  function tipBox(el) { const t = document.createElement('div'); t.className = 'tt'; t.hidden = true; el.appendChild(t); return t; }
+  function fillTip(tip, head, lines) {
+    tip.replaceChildren();
+    const h = document.createElement('div'); h.className = 'h'; h.textContent = head; tip.appendChild(h);
+    for (const [color, label, value] of lines) {
+      const d = document.createElement('div');
+      if (color) { const i = document.createElement('i'); i.style.background = color; d.appendChild(i); }
+      d.appendChild(document.createTextNode(label + '  ' + value)); tip.appendChild(d);
+    }
+  }
+  function placeTip(el, tip, x, y) {
+    tip.hidden = false;
+    const W = el.clientWidth, w = tip.offsetWidth, h = tip.offsetHeight;
+    let left = x + 14; if (left + w > W) left = x - w - 14; if (left < 0) left = 0;
+    let top = y - h - 8; if (top < 0) top = y + 12;
+    tip.style.left = left + 'px'; tip.style.top = top + 'px';
+  }
+  function yAxis(g, y, x0, x1, fmt, ticks) {
+    for (const t of y.ticks(ticks || 5)) {
+      g.append('line').attr('x1', x0).attr('x2', x1).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', t === 0 ? css('--axis') : css('--grid'));
+      g.append('text').attr('x', x0 - 6).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmt(t));
+    }
+  }
+  function xYears(g, x, H) { for (const y of YEARS) if (y % 2 === 1) g.append('text').attr('x', x(y)).attr('y', H - 6).attr('text-anchor', 'middle').text(y); }
+  function legend(id, items) {
+    const el = document.getElementById(id); el.replaceChildren();
+    for (const it of items) { const s = document.createElement('span'); const i = document.createElement('i'); i.style.background = css(it.c); s.append(i, document.createTextNode(it.name)); el.appendChild(s); }
+  }
+
+  function fan(el, sims, det, get, opt) {
+    const H = 250, L = opt.left || 46, R = 14, T = 10, B = 26;
+    const { svg, W } = frame(el, H);
+    const bands = YEARS.map((y, i) => { const v = sims.map((s) => get(s[i])); return { y, lo: q(v, 0.1), md: q(v, 0.5), hi: q(v, 0.9) }; });
+    const yMax = opt.yMax != null ? opt.yMax : d3.max(bands, (b) => b.hi) * 1.05;
+    const y = opt.log ? d3.scaleLog([opt.yMin, yMax], [H - B, T]).clamp(true) : d3.scaleLinear([opt.yMin || 0, yMax], [H - B, T]).nice();
+    const x = d3.scaleLinear([2025, 2035], [L, W - R]);
+    const g = svg.append('g');
+    if (opt.log) {
+      for (const t of opt.logTicks) { if (t < opt.yMin || t > yMax) continue; g.append('line').attr('x1', L).attr('x2', W - R).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', t === 1 ? css('--axis') : css('--grid')).attr('stroke-width', t === 1 ? 1.5 : 1);
+        g.append('text').attr('x', L - 6).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text(opt.fmt(t)); }
+    } else yAxis(g, y, L, W - R, opt.fmt, 5);
+    xYears(g, x, H);
+    const col = css(opt.color || '--s1');
+    g.append('path').datum(bands).attr('fill', col).attr('opacity', 0.18)
+      .attr('d', d3.area().x((b) => x(b.y)).y0((b) => y(b.lo)).y1((b) => y(b.hi)));
+    g.append('path').datum(bands).attr('fill', 'none').attr('stroke', col).attr('stroke-width', 2)
+      .attr('d', d3.line().x((b) => x(b.y)).y((b) => y(b.md)));
+    if (det) g.append('path').datum(det).attr('fill', 'none').attr('stroke', css('--ink-2')).attr('stroke-width', 1.5).attr('stroke-dasharray', '4 3')
+      .attr('d', d3.line().x((r) => x(r.y)).y((r) => y(get(r))));
+    const last = bands[bands.length - 1];
+    g.append('circle').attr('cx', x(2035)).attr('cy', y(last.md)).attr('r', 4).attr('fill', col).attr('stroke', css('--panel')).attr('stroke-width', 2);
+    const tip = tipBox(el);
+    const rule = g.append('line').attr('y1', T).attr('y2', H - B).attr('stroke', css('--axis')).attr('opacity', 0);
+    svg.on('pointermove', (ev) => {
+      const sc = svg.node().getBoundingClientRect().width / W; const mx = d3.pointer(ev)[0];
+      const b = bands[d3.minIndex(bands, (b) => Math.abs(x(b.y) - mx))];
+      rule.attr('x1', x(b.y)).attr('x2', x(b.y)).attr('opacity', 1);
+      fillTip(tip, b.y + '년', [[col, '중앙값', opt.fmtTip(b.md)], [null, '10~90%', opt.fmtTip(b.lo) + ' ~ ' + opt.fmtTip(b.hi)]]);
+      placeTip(el, tip, x(b.y) * sc, y(b.md) * sc);
+    }).on('pointerleave', () => { tip.hidden = true; rule.attr('opacity', 0); });
+  }
+
+  function stacked(el, rows, keys, get, opt) {
+    const H = opt.H || 250, L = 46, R = 14, T = 10, B = 26;
+    const { svg, W } = frame(el, H);
+    const data = rows.map((r) => { const o = { y: r.y }; for (const k of keys) o[k.k] = get(r, k.k); return o; });
+    const st = d3.stack().keys(keys.map((k) => k.k))(data);
+    const yMax = opt.yMax || d3.max(data, (d) => d3.sum(keys, (k) => d[k.k]));
+    const y = d3.scaleLinear([0, yMax], [H - B, T]).nice();
+    const x = d3.scaleLinear([2025, 2035], [L, W - R]);
+    const g = svg.append('g');
+    yAxis(g, y, L, W - R, opt.fmt, 5); xYears(g, x, H);
+    st.forEach((layer, i) => {
+      g.append('path').datum(layer).attr('fill', css(keys[i].c)).attr('stroke', css('--panel')).attr('stroke-width', 1)
+        .attr('d', d3.area().x((d) => x(d.data.y)).y0((d) => y(d[0])).y1((d) => y(d[1])));
+    });
+    const tip = tipBox(el);
+    const rule = g.append('line').attr('y1', T).attr('y2', H - B).attr('stroke', css('--ink-3')).attr('opacity', 0);
+    svg.on('pointermove', (ev) => {
+      const sc = svg.node().getBoundingClientRect().width / W; const mx = d3.pointer(ev)[0];
+      const d = data[d3.minIndex(data, (d) => Math.abs(x(d.y) - mx))];
+      rule.attr('x1', x(d.y)).attr('x2', x(d.y)).attr('opacity', 1);
+      fillTip(tip, d.y + '년', keys.slice().reverse().map((k) => [css(k.c), k.name, opt.fmtTip(d[k.k])]));
+      placeTip(el, tip, x(d.y) * sc, T * sc);
+    }).on('pointerleave', () => { tip.hidden = true; rule.attr('opacity', 0); });
+  }
+
+  function dots(el, sims, det) {
+    const i35 = YEARS.indexOf(2035), i25 = 0;
+    const H = 34 * ACTORS.length + 34, L = 104, R = 46, T = 6, B = 24;
+    const { svg, W } = frame(el, H);
+    const stats = ACTORS.map((a) => {
+      const v = sims.map((s) => s[i35].pools[a.k] / s[i35].total);
+      return { ...a, lo: q(v, 0.1), md: q(v, 0.5), hi: q(v, 0.9), base: det[i25].pools[a.k] / det[i25].total };
+    });
+    const x = d3.scaleLinear([0, Math.max(0.1, d3.max(stats, (s) => Math.max(s.hi, s.base)) * 1.08)], [L, W - R]).nice();
+    const g = svg.append('g');
+    for (const t of x.ticks(5)) { g.append('line').attr('x1', x(t)).attr('x2', x(t)).attr('y1', T).attr('y2', H - B).attr('stroke', t === 0 ? css('--axis') : css('--grid'));
+      g.append('text').attr('x', x(t)).attr('y', H - 6).attr('text-anchor', 'middle').text(pct(t)); }
+    stats.forEach((s, i) => {
+      const yy = T + 18 + i * 34;
+      g.append('text').attr('x', L - 10).attr('y', yy).attr('dy', '0.32em').attr('text-anchor', 'end').attr('class', 'strong').text(s.name);
+      g.append('line').attr('x1', x(s.lo)).attr('x2', x(s.hi)).attr('y1', yy).attr('y2', yy).attr('stroke', css(s.c)).attr('stroke-width', 6).attr('stroke-linecap', 'round').attr('opacity', 0.45);
+      g.append('line').attr('x1', x(s.base)).attr('x2', x(s.base)).attr('y1', yy - 9).attr('y2', yy + 9).attr('stroke', css('--ink-3')).attr('stroke-width', 2);
+      g.append('circle').attr('cx', x(s.md)).attr('cy', yy).attr('r', 6).attr('fill', css(s.c)).attr('stroke', css('--panel')).attr('stroke-width', 2);
+      g.append('text').attr('x', Math.min(W - R + 40, x(s.hi) + 8)).attr('y', yy).attr('dy', '0.32em').text(pct(s.md));
+    });
+    const tip = tipBox(el);
+    svg.on('pointermove', (ev) => {
+      const sc = svg.node().getBoundingClientRect().width / W; const my = d3.pointer(ev)[1];
+      const i = Math.max(0, Math.min(stats.length - 1, Math.round((my - T - 18) / 34))); const s = stats[i];
+      fillTip(tip, s.name + ' · 2035년 몫', [[css(s.c), '중앙값', pct1(s.md)], [null, '10~90%', pct1(s.lo) + ' ~ ' + pct1(s.hi)], [null, '2025년', pct1(s.base)]]);
+      placeTip(el, tip, x(s.md) * sc, (T + 18 + i * 34) * sc);
+    }).on('pointerleave', () => { tip.hidden = true; });
+  }
+
+  const won = (v) => d3.format(',.1f')(v) + '조';
+  function update() {
+    const det = run(P);
+    const sims = monte(P);
+    const i35 = YEARS.indexOf(2035), i30 = YEARS.indexOf(2030);
+    const REAL = document.getElementById('real').checked;
+    const dfl = (r) => REAL ? Math.pow(1 + P.cpi, -(r.y - 2025)) : 1;
+    // KPIs
+    const setK = (k, v) => document.querySelectorAll(`[data-k="${k}"]`).forEach((e) => { e.textContent = v; });
+    const A35 = sims.map((s) => s[i35].a), C35 = sims.map((s) => s[i35].reg.cpa), M35 = sims.map((s) => s[i35].dm), V30 = sims.map((s) => s[i30].cover);
+    setK('a', pct(q(A35, 0.5))); setK('a_r', '10~90%: ' + pct(q(A35, 0.1)) + ' ~ ' + pct(q(A35, 0.9)));
+    setK('cpa', pct(q(C35, 0.5))); setK('cpa_r', '10~90%: ' + pct(q(C35, 0.1)) + ' ~ ' + pct(q(C35, 0.9)));
+    const pp = (v) => (v >= 0 ? '+' : '−') + d3.format('.1f')(Math.abs(v) * 100) + '%p';
+    setK('m', pp(q(M35, 0.5))); setK('m_r', '2025년 ' + pct1(det[0].mshare) + ' · 10~90%: ' + pp(q(M35, 0.1)) + ' ~ ' + pp(q(M35, 0.9)));
+    const cv = (v) => v >= 100 ? d3.format(',.0f')(v) + '배' : d3.format('.1f')(v) + '배';
+    setK('cov', cv(q(V30, 0.5))); setK('cov_r', '10~90%: ' + cv(q(V30, 0.1)) + ' ~ ' + cv(q(V30, 0.9)) + ' · 1배 미만 경로 ' + pct(d3.mean(V30, (v) => v < 1 ? 1 : 0)));
+
+    fan(document.getElementById('cA'), sims, det, (r) => r.a, { fmt: pct, fmtTip: pct1, yMax: Math.min(1, Math.max(0.2, d3.max(sims, (s) => s[i35].a) * 1.02)), color: '--s1' });
+    legend('lB', REG);
+    stacked(document.getElementById('cB'), det, REG, (r, k) => r.reg[k], { fmt: pct, fmtTip: pct1, yMax: 1 });
+    legend('lC', ACTORS);
+    stacked(document.getElementById('cC'), det, ACTORS, (r, k) => r.pools[k] * dfl(r), { fmt: (v) => d3.format(',')(v), fmtTip: won, H: 290 });
+    dots(document.getElementById('cD'), sims, det);
+    fan(document.getElementById('cE'), sims, null, (r) => r.cover, { log: true, yMin: 0.05, yMax: 1e4, logTicks: [0.1, 1, 10, 100, 1000, 10000], fmt: (v) => d3.format(',')(v) + '배', fmtTip: cv, color: '--s3', left: 64 });
+    fan(document.getElementById('cF'), sims, det, (r) => r.dm, { fmt: pp, fmtTip: pp, yMin: Math.min(-0.01, d3.min(sims, (s) => d3.min(s, (r) => r.dm)) * 1.05), yMax: Math.max(0.01, d3.max(sims, (s) => d3.max(s, (r) => r.dm)) * 1.05), color: '--s2' });
+    fan(document.getElementById('cG'), sims, det, (r) => r.surplus * dfl(r), { fmt: (v) => d3.format(',')(v), fmtTip: won, color: '--s7' });
+
+    // answer box
+    const d30 = det[i30], d26 = det[1];
+    const pr30 = P.price0 * Math.pow(1 - P.price_decline, 4);
+    const tokBE = d30.rev / (pr30 / 1e6 * P.krw);
+    const tokUse = P.sessions * Math.pow(10, P.tokens) * Math.pow(1 + P.tok_growth, 4);
+    const a1 = document.querySelector('[data-a="1"]'), a2 = document.querySelector('[data-a="2"]');
+    a1.textContent = `조절기 값대로라면 2030년에 구매 1건이 에이전트 운영자에게 ${d3.format(',')(Math.round(d30.rev))}원을 남기고, 그 구매를 위한 추론에 ${d3.format(',')(Math.round(d30.cost))}원이 듭니다. 충당 배수는 ${cv(d30.cover)}이고, 2026년에는 ${cv(d26.cover)}입니다. 조절기 둘레에서 뽑은 600개 경로로 보면 2030년 충당 배수는 ${cv(q(V30, 0.1))}~${cv(q(V30, 0.9))}(10~90%, 중앙값 ${cv(q(V30, 0.5))})이고, 1배를 넘지 못하는 경로는 ${pct(d3.mean(V30, (v) => v < 1 ? 1 : 0))}입니다. 이 비율은 뽑기 규칙에 따른 값이지 실제 확률이 아닙니다. 소형 모델 단가(100만 토큰당 약 $0.15)라면 2030년 충당 배수는 ${cv(d30.cover * P.price0 / 0.15)}입니다. 따라서 이 숫자는 어떤 등급의 모델을 쓰느냐에 가장 크게 좌우됩니다.`;
+    a2.textContent = `해석: 거래 수수료는 광고와 달리 구매가 일어날 때만 들어옵니다. 따라서 구매로 이어지지 않은 대화의 비용까지 모두 떠안습니다. 핵심 변수는 구매 1건에 드는 세션과 토큰입니다. 2030년 손익분기는 구매 1건당 약 ${d3.format(',')(Math.round(tokBE / 1000) * 1000)}토큰이고, 지금 가정은 ${d3.format(',')(Math.round(tokUse / 1000) * 1000)}토큰입니다. 단가가 해마다 내려가도, 추론형 모델이 작업당 토큰을 늘리면 이 여유는 빠르게 줄어듭니다. 이 계산은 추론 비용만 셉니다. 학습 비용, 데이터센터 감가상각, 무료 사용자 비용은 들어 있지 않습니다.`;
+
+    // Korea scenario table
+    const tb = document.getElementById('kscen'); tb.replaceChildren();
+    for (const [k, name] of Object.entries(SCEN_NAMES)) {
+      const p = { ...P };
+      for (const key of ['c_search', 'c_model', 'c_market', 'c_merchant', 'rho', 'fee', 'delta', 'A', 'take', 'sponsor']) p[key] = PRESETS[k][key] != null ? PRESETS[k][key] : BASE[key];
+      const r = run(p)[i35];
+      const tr = document.createElement('tr');
+      const z = dfl(r);
+      const ppx = (v) => (v >= 0 ? '+' : '−') + d3.format('.1f')(Math.abs(v) * 100) + '%p';
+      const cells = [name, won(r.pools.portal * z), won(r.pools.market * z), won(r.pools.model * z), won(r.pools.content * z), `${pct1(r.mshare)} (${ppx(r.dm)})`, won(r.surplus * z)];
+      cells.forEach((c, j) => { const td = document.createElement('td'); td.textContent = c; if (j) td.className = 'num'; tr.appendChild(td); });
+      tb.appendChild(tr);
+    }
+  }
+
+  // Korea data table (static facts, numbers from the cited pages)
+  const KD = [
+    ['온라인쇼핑 거래액', '272조 398억 원(+4.9%)', '2025년', '국가데이터처(아주경제)'],
+    ['모바일 거래 비중', '78.1%', '2026년 8월', '국가데이터처(KDI)'],
+    ['월간 거래액 증가율', '+10.7%(6월), +7.3%(8월)', '2026년', '국가데이터처(뉴시스, KDI)'],
+    ['검색 점유율', '네이버 64.28%, 구글 28.37%', '2026년 상반기', '인터넷트렌드(디지털데일리)'],
+    ['네이버 서치플랫폼 매출', '4조 1,689억 원(+5.6%)', '2025년', '네이버 실적(머니투데이)'],
+    ['네이버 커머스 매출', '3조 6,884억 원(+26.2%)', '2025년', '네이버 실적(머니투데이)'],
+    ['네이버 핀테크 매출', '1조 6,907억 원(+12.1%)', '2025년', '네이버 실적(머니투데이)'],
+    ['쿠팡 프로덕트 커머스 순매출', '296억 달러(+11%)', '2025년', '쿠팡 IR'],
+    ['쿠팡 프로덕트 커머스 순매출', '84억 달러(원화 기준 +8%)', '2026년 3분기', '쿠팡 8-K'],
+    ['쿠팡 조정 EBITDA 마진', '1.2%', '2026년 3분기', '쿠팡 8-K'],
+    ['카카오 커머스 거래액', '10조 6,000억 원(+6%)', '2025년', '카카오'],
+    ['온라인 광고비', '10조 1,011억 원(전체 광고비의 59%)', '2024년', '방송통신광고비 조사(기자협회보)'],
+  ];
+  const kb = document.getElementById('kdata');
+  for (const r of KD) { const tr = document.createElement('tr'); r.forEach((c, j) => { const td = document.createElement('td'); td.textContent = c; if (j === 1) td.className = 'num'; if (j === 3) td.className = 'txt'; tr.appendChild(td); }); kb.appendChild(tr); }
+
+  setControls(); update();
+  let rw = null; window.addEventListener('resize', () => { clearTimeout(rw); rw = setTimeout(update, 120); });
+  const mq = window.matchMedia('(prefers-color-scheme: dark)'); if (mq.addEventListener) mq.addEventListener('change', update);
+  new MutationObserver(update).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+</script>
+
+</body></html>

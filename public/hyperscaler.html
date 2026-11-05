@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="author" content="권석준"><meta property="og:title" content="하이퍼스케일러 주가 시뮬레이터"><meta property="og:description" content="빅테크 AI 설비투자를 주가·조달, 구글 연산 전략, 한국 에이전트 커머스로 나눠 보는 시나리오 시뮬레이터. 권석준(성균관대학교)."><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="canonical" href="https://aicapex.sjoonkwon.com/hyperscaler"><meta property="og:url" content="https://aicapex.sjoonkwon.com/hyperscaler"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}
+:root{--hb-bg:#eef2f1;--hb-ink:#1f5d73;--hb-rule:#d5dcda}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hb-bg:#172024;--hb-ink:#7cc0d6;--hb-rule:#2c3337}}
+:root[data-theme="dark"]{--hb-bg:#172024;--hb-ink:#7cc0d6;--hb-rule:#2c3337}
+.hub-back{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--hb-bg);border-bottom:1px solid var(--hb-rule);padding-block:9px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));font:500 13px "IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}
+.hub-back a{color:var(--hb-ink);text-decoration:none}.hub-back a:hover{text-decoration:underline}
+.hub-back a:focus-visible{outline:2px solid var(--hb-ink);outline-offset:2px}
+</style></head><body>
+<nav class="hub-back" aria-label="시뮬레이터 목록"><a href="/">← 빅테크 AI 투자 시뮬레이터 · 권석준</a><span><a href="/google">구글 전략</a> · <a href="/commerce">에이전트 커머스</a></span></nav>
+<title>하이퍼스케일러 주가 시뮬레이터</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Roboto+Condensed:wght@400;600;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+/* Layout: a working ledger. Controls on the left (stacked on phones), results on the right; method and sources below. */
+:root {
+  --bg: #f6f6f3; --panel: #ffffff; --ink: #16181d; --ink-2: #4b4f58; --ink-3: #7b808a; --line: #dcdcd6; --grid: #ececE7;
+  --accent: #2a63b8; --accent-soft: #e3ecf8; --warn: #b4531b; --bad: #c03a39; --good: #1f7a4d;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #c98a00;
+  --band-out: rgba(42,120,214,.14); --band-in: rgba(42,120,214,.28);
+  --f-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --f-num: "Arial Narrow", "Liberation Sans Narrow", "Roboto Condensed", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121418; --panel: #1b1e24; --ink: #eceef2; --ink-2: #b9bec8; --ink-3: #8a909b; --line: #2e333c; --grid: #262a31;
+  --accent: #6aa1ec; --accent-soft: #1f2d42; --warn: #e08a52; --bad: #e66767; --good: #4cbc85;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+  --band-out: rgba(57,135,229,.18); --band-in: rgba(57,135,229,.34); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121418; --panel: #1b1e24; --ink: #eceef2; --ink-2: #b9bec8; --ink-3: #8a909b; --line: #2e333c; --grid: #262a31;
+  --accent: #6aa1ec; --accent-soft: #1f2d42; --warn: #e08a52; --bad: #e66767; --good: #4cbc85;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+  --band-out: rgba(57,135,229,.18); --band-in: rgba(57,135,229,.34); color-scheme: dark; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.6; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 28px 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 22px; }
+h1 { font-size: clamp(1.6rem, 3.2vw, 2.2rem); font-weight: 600; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+h2 { font-size: 1.05rem; font-weight: 600; margin: 0; }
+p { margin: 0; }
+.lead { max-width: 72ch; color: var(--ink-2); }
+.note { color: var(--ink-3); font-size: 13px; }
+.warnbox { border-left: 3px solid var(--warn); padding: 8px 12px; background: var(--panel); color: var(--ink-2); font-size: 14px; max-width: 90ch; }
+.layout { display: grid; gap: 22px; grid-template-columns: minmax(0, 330px) minmax(0, 1fr); align-items: start; }
+@media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 14px; min-width: 0; }
+.controls { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); }
+@media (max-width: 900px) { .controls { position: static; } }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.presets button { font: inherit; font-size: 14px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; }
+.presets button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+.presets button:focus-visible, input:focus-visible, select:focus-visible, .tabs button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ctl { display: grid; gap: 2px; }
+.ctl label { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; color: var(--ink-2); }
+.ctl output { font-family: var(--f-num); font-size: 16px; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ctl input[type=range] { width: 100%; accent-color: var(--accent); }
+.ctl .hint { font-size: 12px; color: var(--ink-3); }
+.group { font-size: 12px; letter-spacing: .06em; color: var(--ink-3); border-top: 1px solid var(--line); padding-top: 10px; }
+.results { display: grid; gap: 22px; min-width: 0; }
+.status { font-size: 13px; color: var(--ink-3); font-family: var(--f-num); }
+.tblwrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-weight: 500; color: var(--ink-3); font-size: 13px; }
+td { font-family: var(--f-num); font-size: 16px; }
+td.name { font-family: var(--f-body); font-size: 14px; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: 0; }
+.cap { display: flex; gap: 10px; align-items: baseline; }
+.lab { font-family: var(--f-num); font-weight: 700; font-size: 22px; line-height: 1; }
+.fans { display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 640px) { .fans { grid-template-columns: minmax(0, 1fr); } }
+.chart { position: relative; min-width: 0; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { font-family: var(--f-num); fill: var(--ink-2); font-size: 15px; }
+.chart text.big { fill: var(--ink); font-size: 18px; font-weight: 700; }
+.chart text.muted { fill: var(--ink-3); font-size: 14px; }
+.tt { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; font-family: var(--f-num); font-size: 14px; color: var(--ink); white-space: nowrap; box-shadow: 0 4px 14px rgba(0,0,0,.12); z-index: 3; }
+.tt .h { color: var(--ink-3); }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tabs button { font: inherit; font-size: 14px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: var(--ink-2); cursor: pointer; }
+.tabs button[aria-selected="true"] { border-color: var(--ink); color: var(--ink); font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--ink-2); }
+.legend span i { display: inline-block; width: 14px; height: 3px; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
+details { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; }
+summary { cursor: pointer; font-weight: 600; }
+details .body { display: grid; gap: 10px; margin-top: 12px; color: var(--ink-2); max-width: 90ch; }
+.eq { font-family: var(--f-num); font-size: 16px; background: var(--bg); border-radius: 6px; padding: 8px 12px; overflow-x: auto; white-space: nowrap; color: var(--ink); }
+.src { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; font-size: 14px; color: var(--ink-2); }
+.src a { color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:10px">
+    <h1>하이퍼스케일러 주가 시뮬레이터</h1>
+    <p class="lead">마이크로소프트, 알파벳, 아마존, 메타의 현금흐름과 설비투자 계획, 이미 계약한 설비 지출, 조달 여력을 넣어 2029년 말까지의 주가 범위를 몬테카를로로 그립니다. 오른쪽 결과는 왼쪽 가정을 바꾸면 바로 다시 계산됩니다.</p>
+    <p class="warnbox">이 도구는 시나리오 시뮬레이터입니다. 예측이나 투자 권유가 아닙니다. 지금 주가가 '기준' 경로를 이미 반영한다고 가정하고, 실제 경로가 기준에서 벗어난 만큼 기업 가치(기존 사업 이익 × 배수 + AI 이익 ÷ 자본비용 + 순현금)가 달라지게 만든 모형입니다. 기준 경로는 애널리스트의 2027~2028년 매출 컨센서스에 맞췄고, 그 경로에서 주가는 연 8%의 기대수익률로 오른다고 가정했습니다. 흔들림의 크기는 1년 뒤 주가의 표준편차가 옵션시장의 180일 내재변동성과 같아지도록 맞췄습니다. 따라서 분포의 폭과 하락 확률은 대부분 옵션시장이 정하고, 이 모형이 더하는 것은 시나리오에 따른 중심의 이동입니다.</p>
+  </header>
+
+  <div class="layout">
+    <aside class="panel controls" aria-label="가정">
+      <div style="display:grid;gap:8px">
+        <h2>시나리오</h2>
+        <div class="presets" id="presets">
+          <button type="button" data-p="상방" aria-pressed="false">상방</button>
+          <button type="button" data-p="기준" aria-pressed="true">기준</button>
+          <button type="button" data-p="AI 실망" aria-pressed="false">AI 실망</button>
+          <button type="button" data-p="투자 정체" aria-pressed="false">투자 정체</button>
+          <button type="button" data-p="조달 제약" aria-pressed="false">조달 제약</button>
+          <button type="button" data-p="금리·밸류 충격" aria-pressed="false">금리·밸류 충격</button>
+        </div>
+        <p class="note">상방(AI 회수 1.25)과 AI 실망(0.8)은 로그로 대칭입니다. 투자 정체는 회수율은 그대로 두고 투자만 줄입니다. 조달 제약은 차입·발행 한도만 조이고, 금리·밸류 충격은 금리 +1%p와 시장 배수 −10%만 넣습니다. 컨센서스 수준의 회수율에서는 마이크로소프트·아마존·메타의 추가 투자가 가치를 줄입니다. 그래서 투자 정체는 이 세 회사의 2028년 중앙값을 오히려 2~5%p 올리고, 알파벳은 거의 바꾸지 않습니다. 조달 제약은 조달이 실제로 막히는 아마존(약 +4%p)과 메타(약 +1%p)만 올립니다. 다만 이 결과는 컨센서스 수준에 민감합니다. 2027~2028년 컨센서스가 마이크로소프트는 약 5%, 아마존은 약 10%, 메타는 약 17% 높으면 추가 투자가 본전이 됩니다.</p>
+      </div>
+      <div class="group">설비투자</div>
+      <div class="ctl"><label for="capex27">2027년 증액 (가정한 배율 대비) <output id="o-capex27"></output></label>
+        <input id="capex27" type="range" min="0" max="2" step="0.05"><span class="hint" id="h-capex27"></span></div>
+      <div class="ctl"><label for="capex28">2028년 증가율 <output id="o-capex28"></output></label>
+        <input id="capex28" type="range" min="-0.3" max="0.3" step="0.01"></div>
+      <div class="ctl"><label for="capex29">2029년 증가율 <output id="o-capex29"></output></label>
+        <input id="capex29" type="range" min="-0.3" max="0.3" step="0.01"></div>
+      <div class="ctl"><label for="life">서버 내용연수 조정 <output id="o-life"></output></label>
+        <input id="life" type="range" min="-2" max="1" step="0.5"><span class="hint">새로 들이는 서버(설비투자의 60%)에만 적용합니다. 짧게 잡을수록 감가상각이 커져 이익이 줄어듭니다.</span></div>
+      <div class="group">AI 수익화</div>
+      <div class="ctl"><label for="ai">AI 투자의 매출 회수 (컨센서스 = 1.0) <output id="o-ai"></output></label>
+        <input id="ai" type="range" min="0.4" max="1.6" step="0.05"><span class="hint">1.0은 기준 경로의 2027~2028년 매출 합이 애널리스트 컨센서스와 같아지는 회수율입니다(아래 표의 ρ, 연도별 오차 약 ±3%). 시장은 실제 회수를 2년에 걸쳐 알아갑니다.</span></div>
+      <div class="ctl"><label for="kappa">AI 회수에 따른 배수 재평가(서사 효과) <output id="o-kappa"></output></label>
+        <input id="kappa" type="range" min="0" max="1" step="0.1"><span class="hint">0이면 AI 회수가 실적으로만 주가에 반영됩니다. 1이면 기존 사업의 배수까지 회수율에 따라 오르내립니다(평균은 바꾸지 않도록 중심을 맞춤). 근거가 없는 가정이라 기본값은 0입니다.</span></div>
+      <div class="group">금리와 조달</div>
+      <div class="ctl"><label for="rend">2029년 말 미국 10년물 금리 <output id="o-rend"></output></label>
+        <input id="rend" type="range" min="3.5" max="6.5" step="0.05"><span class="hint">지금 4.95% (2026-11-03). 매출 성장은 금리와 무관하게 두었습니다.</span></div>
+      <div class="ctl"><label for="spread">신규 차입 가산금리 추가 <output id="o-spread"></output></label>
+        <input id="spread" type="range" min="0" max="3" step="0.1"><span class="hint">이와 별도로 리스 포함 레버리지가 1배를 넘으면 1배당 0.15%p씩 오릅니다(신용등급 간 스프레드 차이로 맞춤).</span></div>
+      <div class="ctl"><label for="debtlim">차입 한도 (리스 포함 순부채 ÷ EBITDA) <output id="o-debtlim"></output></label>
+        <input id="debtlim" type="range" min="0.5" max="3.5" step="0.1"><span class="hint">리스 부채와 메타의 잔존가치 보증(415억 달러)을 부채에 넣습니다. 지금 아마존 1.1배, 메타 0.6배입니다.</span></div>
+      <div class="ctl"><label for="eqlim">연간 주식 발행 한도 (시가총액 대비) <output id="o-eqlim"></output></label>
+        <input id="eqlim" type="range" min="0" max="0.06" step="0.005"></div>
+      <div class="ctl"><label for="shift">시장 전체 밸류에이션 변화 <output id="o-shift"></output></label>
+        <input id="shift" type="range" min="-0.3" max="0.2" step="0.01"></div>
+      <div class="ctl"><label for="npaths">경로 수 <output id="o-npaths"></output></label>
+        <select id="npaths"><option value="5000">5,000</option><option value="10000" selected>10,000</option><option value="20000">20,000</option></select></div>
+    </aside>
+
+    <section class="results" aria-label="결과">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline">
+          <h2>요약</h2><span class="status" id="status">계산 중…</span>
+        </div>
+        <div class="tblwrap">
+          <table id="summary">
+            <thead><tr><th>회사</th><th>지금</th><th>2027년 말 중앙값 (10~90%)</th><th>2028년 말 중앙값 (10~90%)</th><th>2028년 말까지 30% 넘게 하락한 경로 비율 (±표준오차, %p)</th><th>주식 발행 필요</th><th>필요한 외부 조달 누적 (중앙값)</th><th>자금 부족으로 투자 축소</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="note">하락 비율은 대부분 옵션 내재변동성에서 나옵니다. 같은 변동성과 연 8% 기대수익률의 단순 로그정규 분포로 계산해도 기준 시나리오와 거의 같은 값(29~45%)이 나옵니다. 또 분기 말 주가 기준이라 분기 중의 순간 하락은 빠집니다. 일별로 보면 39~57%로 올라갑니다. 괄호의 표준오차는 경로 수에서 오는 몬테카를로 오차일 뿐, 가정의 불확실성은 담지 않습니다. 외부 조달은 2028년 말까지 현금이 모자라 새로 빌리거나 발행해야 하는 최소 금액(십억 달러)입니다. 실제 회사들은 이보다 앞당겨 넉넉히 발행합니다.</p>
+      </div>
+
+      <div class="panel">
+        <p class="cap"><span class="lab">a</span><span class="note">주가 분포(달러). 진한 띠는 25~75%, 옅은 띠는 10~90%, 굵은 선은 중앙값, 긴 점선은 지금 주가, 촘촘한 점선은 기준 경로(평균, 연 8%)입니다. 분포가 오른쪽으로 치우쳐 있어 중앙값은 평균보다 낮습니다.</span></p>
+        <div class="fans" id="fans"></div>
+      </div>
+
+      <div class="panel">
+        <p class="cap"><span class="lab">b</span><span class="note">2028년 말 주가의 지금 대비 변화(%). 막대는 10~90%, 굵은 부분은 25~75%, 점은 중앙값입니다.</span></p>
+        <div class="chart" id="dist"></div>
+      </div>
+
+      <div class="panel">
+        <p class="cap"><span class="lab">c</span><span class="note">분기 영업현금흐름과 설비투자(십억 달러, 경로 중앙값). 계약 하한은 공시된 설비·건설 약정만 넣은 최소 지출입니다(알파벳·메타는 따로 공시하지 않아 없음).</span></p>
+        <div class="tabs" id="tabs" role="tablist"></div>
+        <div class="chart" id="fund"></div>
+        <div class="legend" id="fundlegend"></div>
+      </div>
+    </section>
+  </div>
+
+  <details>
+    <summary>출발점과 가정 (2026년 3분기 기준, 2026-11-05 검토 반영)</summary>
+    <div class="body">
+      <div class="tblwrap"><table id="calib">
+        <thead><tr><th>회사</th><th>주가 (10-30)</th><th>주식 수(억 주)</th><th>최근 4분기 매출</th><th>영업현금흐름</th><th>설비투자</th><th>2026년 설비투자 안내</th><th>2027년 배율 (근거)</th><th>2027년 설비 약정 하한</th><th>개시 전 리스</th><th>리스 부채·보증</th><th>현금성 자산</th><th>차입금</th><th>영업이익 기준 주가수익비율</th><th>기존 사업 선행 이익 배수</th><th>ρ (지난 1년 → 컨센서스 보정)</th><th>매출 컨센서스 2027 / 2028 (출처)</th><th>180일 내재변동성</th></tr></thead>
+        <tbody></tbody></table></div>
+      <p class="note">금액은 십억 달러, 주가는 모두 2026-10-30 종가입니다. 주가수익비율은 최근 4분기 영업이익에 회사별 실효세율(마이크로소프트 19.7%, 알파벳 18.1%, 아마존 22%, 메타 17%)을 적용한 값이라 GAAP 순이익 기준과 다릅니다. 알파벳은 지분증권 평가이익이 커서 GAAP 기준 배수가 훨씬 낮습니다.</p>
+      <p class="note">회사별 조정. 아마존의 설비투자는 처분·인센티브를 뺀 순액(1~3분기 1,722억 달러)이고, 감가상각은 콘텐츠·리스 상각을 뺀 설비 감가상각(최근 4분기 540억 달러)입니다. 아마존 4분기 설비투자는 안내치에서 나온 478억 달러와 3분기 속도인 759억 달러 사이에서 경로마다 고르게 뽑습니다. 메타의 영업이익에는 주 검찰총장 합의금(3분기 98.9억, 2분기 20억 달러)을 되돌려 더했습니다. 아직 지급하지 않은 이 합의금 118.9억 달러는 2027년에 나눠 낸다고 가정했습니다. 메타의 세율 17%는 정상화 가정입니다(최근 4분기 실효세율은 일회성 세금 혜택 때문에 4.6%). 아마존은 2025년 4분기와 그 전 1년 설비투자도 순액으로 맞췄고, 개시 전 리스는 10-Q가 공시한 지급 일정(2026년 4분기 26억, 2027년 124억, 2028년 115억, 2029년 122억 달러)을 따르고, 리스 부채는 개시에 맞춰 늘어납니다. 알파벳 주식 수에는 의무전환우선주가 최대 전환비율로 바뀐다고 보고 5,370만 주를 더했습니다. 지금 주가가 발행가보다 낮기 때문입니다. 우선주 배당(분기 약 3억 달러)은 배당에 들어 있습니다. 마이크로소프트의 2026년 안내치(약 1,700억 달러)는 금융리스를 포함하므로 현금 기준으로 맞췄습니다. 부품 구매를 돕기 위한 미수금(2026년 9월 말 잔액 357억 달러, 1~3분기에 259억 달러 증가)은 2027년 2분기까지 설비투자의 24%만큼 더 쌓였다가, 이미 쌓인 357억 달러와 함께 다음 네 분기에 돌아온다고 보았습니다(10-Q는 이를 유동 미수금으로 분류합니다).</p>
+      <p class="note">구매 약정은 클라우드 용량·에너지·콘텐츠 구매가 대부분이라 설비투자 하한으로 쓰지 않았습니다(알파벳 총액 9,244억 달러, 마이크로소프트 2027 회계연도 만기 1,690억 달러, 메타 2027년 만기 1,214억 달러). 이 비용은 지금의 영업비용 흐름에 들어 있다고 봅니다. 2027년 설비투자 배율은 회사가 낸 숫자가 아니라 가정이며, 알파벳만 외부 추정(약 3,000억 달러)을 따랐습니다.</p>
+      <p class="note">ρ 보정. 지난 1년 매출 증가 가운데 6%를 넘는 몫을 그 전 1년 설비투자로 나누면 화살표 왼쪽 값이 나옵니다. 그대로 쓰면 기준 경로가 컨센서스보다 높아지므로, 회사마다 ρ에 배율을 곱해 기준 경로의 2027~2028년 매출 합을 컨센서스와 같게 맞췄습니다(화살표 오른쪽). 마이크로소프트의 2027은 2027 회계연도(2026.7~2027.6), 2028은 2028년 6월 분기입니다. 컨센서스는 출처마다 2~5% 다르고(예: 아마존 2027년 902~919, 메타 297~312), 아마존은 tickflow의 분기 컨센서스를 더한 값이라 연간 컨센서스와 다를 수 있습니다. 메타는 tickflow의 연간 컨센서스입니다. 마이크로소프트·알파벳의 컨센서스는 3분기 실적 발표(10월 28일) 전 값이라, 발표 뒤 수정분은 반영되지 않았습니다. 메타(10월 21일 발표)와 아마존은 발표 뒤 값입니다. 연도별로 같은 계산을 하면 ρ는 2023년 0~0.33에서 2026년 0.5~0.8까지 크게 흔들립니다. 2016~2026년을 묶으면 0.56~1.01, 2023~2026년을 묶으면 0.49~0.59입니다. 따라서 ρ는 상수가 아니며, 주가 띠에는 이 계수의 불확실성이 들어 있지 않습니다.</p>
+      <p class="note">알파벳의 현금성 자산 2,651억 달러에는 매각이 제한된 SpaceX 주식 752억 달러를 포함한 지분증권 904억 달러가 들어 있습니다. 알파벳은 2026년 1~9월에 이미 보통주 428.7억 달러와 의무전환우선주 190.6억 달러를 발행했으므로, 표의 '필요한 외부 조달'은 최소치입니다.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>모형의 식</summary>
+    <div class="body">
+      <p>분기마다 회사별로 다음을 계산합니다. 금액은 분기 값이고, 매출 R과 설비투자 C는 연율로 바꿔 씁니다.</p>
+      <p>1. 매출. 기존 사업은 연 6%로 자랍니다. AI 매출은 4분기 전 설비투자에 비례해 붙습니다. 비례 계수 ρ는 기준 경로의 2027~2028년 매출 합이 애널리스트 컨센서스와 같아지도록 회사마다 맞췄습니다(마이크로소프트 0.30, 알파벳 0.64, 아마존 0.30, 메타 0.23). 투자가 커질수록 1달러당 회수는 줄어듭니다(지수 −0.25).</p>
+      <div class="eq">R<sup>AI</sup><sub>t</sub> = R<sup>AI</sup><sub>t−1</sub> + a·ρ·C<sub>t−4</sub>·(C<sub>t−4</sub>/C<sub>기준</sub>)<sup>−0.25</sup> / 16</div>
+      <p>2. 이익률. 기존 매출에는 지금의 EBITDA 마진을, 새 AI 매출에는 클라우드 수준의 마진(아마존 55%, 나머지 60%)을 씁니다. 아마존 전체 마진(약 20%)에는 소매가 섞여 있기 때문입니다.</p>
+      <p>3. 감가상각. 설비투자의 60%는 서버, 40%는 건물·설비로 나눕니다. 서버는 2분기 뒤부터 회사별 내용연수(5~6년)로, 건물은 6분기 뒤부터 25년으로 상각합니다. 2025년 4분기 이전 자산의 상각은 2026년 3분기 실제 값에 맞춰 그대로 둡니다.</p>
+      <p>4. 개시 전 리스. 공시된 미래 리스료를 평균 15년으로 나눠 비용으로 넣습니다. 개시 시점은 공시를 따라 마이크로소프트는 2027~2034 회계연도, 알파벳은 2026~2031년, 메타는 2026~2036년에 고르게 둡니다. 아마존은 공시된 연도별 지급액을 그대로 씁니다. 리스 부채는 리스료의 70%로 보고 레버리지에 더합니다.</p>
+      <p>5. 설비투자와 조달. 계획을 따르되 공시된 설비·건설 약정 아래로는 줄일 수 없습니다. 자금이 모자라도 진행 중인 공사(최근 4분기 평균의 60%) 아래로는 줄이지 않습니다. 조달 순서는 영업현금흐름, 연 매출 10%를 넘는 현금, 차입(리스 포함 순부채가 EBITDA×한도를 넘지 않게), 주식 발행입니다. 남는 현금이 넉넉하면 절반을 자사주 매입에 씁니다. 남는 현금으로 하는 자사주 매입은 분기마다 시가총액의 1.25%를 넘지 않습니다. 주식보상은 현금 대신 주식으로 지급한다고 보고 그만큼 주식 수를 늘립니다(아마존 방식). 자사주 매입으로 희석을 상쇄한다고 보면 외부 조달 필요액이 크게 늘어납니다(검토 계산: 아마존 약 1.4배, 메타 약 60억→660억 달러).</p>
+      <div class="eq">C<sub>t</sub> = max(약정 하한<sub>t</sub>, min(계획<sub>t</sub>, max(조달 가능액<sub>t</sub>, 0.6·최근 4분기 평균)))</div>
+      <p>6. 세금. 새 AI 이익에는 법인세를 매겨 현금흐름에 넣습니다. 서버는 2025년 법 개정으로 100% 즉시 상각됩니다. 그래서 직전 분기 서버 투자가 2025년 4분기~2026년 3분기 평균보다 많으면 그만큼 현금 세금이 줄어듭니다. </p>
+      <p>7. 가치와 주가. 다음 1년의 세후 영업이익을 기존 사업과 AI로 나눠 예상합니다. AI 이익에는 이미 집행한 설비투자가 낳을 매출과 그 상각·리스 비용이 들어 있습니다. 기존 사업에는 지금 주가에서 역산한 배수 M<sub>0</sub>을 곱하고, AI 이익은 성장 없는 영구 흐름으로 보고 자본비용 9%로 나눕니다. 기업 전체 배수를 새 투자에 곱하면 그 가치를 부풀리기 때문입니다.</p>
+      <div class="eq">V<sub>t</sub> = max[ e<sup>−0.12Δr</sup>(1+시장 배수 변화) · (M<sub>0</sub> · e<sup>κ·w<sub>t</sub>·ln a</sup> · NOPAT<sup>기존</sup><sub>t+1</sub> + NOPAT<sup>AI</sup><sub>t+1</sub> / 0.09) + 현금<sub>t</sub> − 차입<sub>t</sub>, 지금 시가총액의 2% ]  (κ는 조절기, 기본 0)</div>
+      <div class="eq">P<sub>t</sub> = P<sub>0</sub> · e<sup>0.08t</sup> · (V<sub>t</sub> / 주식 수<sub>t</sub>) ÷ (기준 경로의 같은 값) × 조달 부담 × e<sup>시장 요인 + 개별 요인 − ½분산</sup></div>
+      <p>새 주식은 그때의 모형 주가로 발행합니다. 외부 조달 누적이 시가총액의 10%를 넘으면 넘는 몫의 절반만큼 할인합니다(조달 부담, 가정). 다만 기본 설정의 범위에서는 이 할인과 레버리지 가산금리가 거의 작동하지 않습니다. 회사들이 쌓아 둔 현금을 먼저 쓰기 때문입니다.</p>
+      <p>8. 불확실성. AI 회수 a는 경로마다 한 번 뽑습니다(공통 요인 표준편차 0.20, 회사별 0.15, 로그). 시장은 이를 2년에 걸쳐 알아갑니다(w<sub>t</sub>). 배수에는 시장 공통 요인(분기 6%)과 회사별 요인이 지속성 0.97로 붙습니다. 회사별 요인의 크기는 1년 뒤 로그 주가의 표준편차가 180일 내재변동성(마이크로소프트 30.8%, 알파벳 34.7%, 아마존 35.6%, 메타 41.4%)과 같아지도록 회사마다 맞췄습니다. 금리는 분기 0.30%p, 매출은 분기 1.5%, 설비투자 계획은 경로마다 8%의 잡음을 가집니다. 모든 잡음은 평균이 기준 경로와 같아지도록 중심을 맞췄습니다.</p>
+      <p>9. 백테스트. 같은 엔진을 2023년 10월 말 시점에서 출발시키고 2023년 4분기~2026년 3분기의 실제 설비투자를 넣어 보았습니다. 그때의 자료로 맞춘 ρ는 0~0.33이라 2026년 매출을 8~34% 낮게 예측했고, 실제 주가 12개(4사 × 3시점)는 모두 분포의 중앙값 위, 절반가량은 상위 10%에 있었습니다. 한 번의 상승장이라 통계적 증거는 약하지만, 이 모형의 주가 띠가 계수 불확실성을 담지 못한다는 점은 분명합니다. 결과는 예측이 아니라 'AI 회수 가정에 조건부인 시나리오'로 읽어야 합니다.</p>
+      <p>한계. 경쟁사 사이의 상호작용, 반독점 규제, 사업부별 이익률, 분기 계절성, 이연법인세가 없습니다. 지분 투자(아마존의 OpenAI·Anthropic 투자 638억 달러 등)와 비시장성 지분증권은 가치에 넣지 않았습니다. 기준 경로도 같은 비율로 영향을 받으므로 대부분 상쇄되지만, 민감도는 조금 커집니다. 오라클은 포함하지 않았습니다. 기준 경로를 '시장 기대'로 본 것 자체가 가정입니다. 시장이 실제로 더 비관적이거나 낙관적이라면 결과 전체가 그만큼 이동합니다.</p>
+    </div>
+  </details>
+
+  <section class="panel" style="gap:8px">
+    <h2>출처</h2>
+    <ol class="src">
+      <li>회사별 매출·영업이익·영업현금흐름·설비투자·감가상각·배당: SEC EDGAR XBRL(companyfacts), 2025년 4분기~2026년 3분기 10-Q·10-K</li>
+      <li>주식 수·현금·차입금·약정: 각 사 2026년 3분기 10-Q (<a href="https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000084/goog-20260930.htm" target="_blank" rel="noopener">알파벳</a>, 마이크로소프트·아마존·메타는 같은 분기 10-Q 표지와 약정 주석)</li>
+      <li>마이크로소프트 향후 12개월 약정: 2026년 6월 10-K 계약상 의무 표(건설 298억, 구매 1,690억 달러)</li>
+      <li>메타 약정: 2026년 3분기 10-Q 주석 10(2026년 459억, 2027년 1,214억 달러 만기)</li>
+      <li>아마존 약정: 2026년 3분기 10-Q 약정 표(설비 2027년 639억 달러 등)</li>
+      <li>알파벳 약정: 2026년 3분기 10-Q(구매 약정 9,244억 달러 중 12개월 안 2,134억 달러)</li>
+      <li><a href="https://www.useluminix.com/reports/industry-analysis/hyperscaler-capex-q3-2026" target="_blank" rel="noopener">Luminix, 4사의 2026년 설비투자 안내치(2026년 10월)</a></li>
+      <li><a href="https://www.fool.com/investing/2026/11/03/alphabet-stock-tanks-after-earnings-should-investors-buy-the-dip/" target="_blank" rel="noopener">Motley Fool, 알파벳 2027년 설비투자 약 3,000억 달러 예상(2026-11-03)</a></li>
+      <li>주가: stockanalysis.com 일별 종가(4사 모두 2026-10-30)</li>
+      <li>아마존 순 설비투자·설비 감가상각, 메타 합의금, 마이크로소프트 부품 선급, 리스 부채: 각 사 2026년 3분기 10-Q(XBRL)</li>
+      <li><a href="https://fred.stlouisfed.org/series/DGS10" target="_blank" rel="noopener">FRED DGS10, 미국 10년물 국채 금리</a></li>
+      <li>매출 컨센서스: <a href="https://stockanalysis.com/stocks/msft/forecast/" target="_blank" rel="noopener">마이크로소프트 FY2027(stockanalysis, 10-27)</a>·<a href="https://www.tickflow.io/stock/MSFT/forecast" target="_blank" rel="noopener">2028년 6월 분기(tickflow)</a>, <a href="https://www.tikr.com/blog/alphabet-stock-is-up-26-5-over-the-past-year-still-a-buy-at-320" target="_blank" rel="noopener">알파벳(TIKR, 10-25)</a>, <a href="https://tickflow.io/stock/AMZN/forecast" target="_blank" rel="noopener">아마존(tickflow, 11-05)</a>, <a href="https://www.tickflow.io/stock/META/forecast" target="_blank" rel="noopener">메타(tickflow, 10-26)</a></li>
+      <li>백테스트 주가: <a href="https://www.digrin.com/stocks/detail/MSFT/price" target="_blank" rel="noopener">digrin 월말 수정주가</a></li>
+      <li>alphaquery, 180일 내재변동성(2026-11-03): <a href="https://www.alphaquery.com/stock/MSFT/volatility-option-statistics" target="_blank" rel="noopener">마이크로소프트</a>, <a href="https://www.alphaquery.com/stock/GOOGL/volatility-option-statistics" target="_blank" rel="noopener">알파벳</a>, <a href="https://www.alphaquery.com/stock/AMZN/volatility-option-statistics" target="_blank" rel="noopener">아마존</a>, <a href="https://www.alphaquery.com/stock/META/volatility-option-statistics" target="_blank" rel="noopener">메타</a></li>
+    </ol>
+  </section>
+</div>
+
+<script>
+(function () {
+'use strict';
+// ENGINE START
+// ---------- calibration: SEC filings, trailing four quarters 2025Q4..2026Q3, $B. Prices: close 2026-10-30. ----------
+const F = {
+  MSFT: { name: '마이크로소프트', eAI: 0.60, price: 521.91, shares: 7.426, rev: [81.27, 82.89, 90.01, 92.28], prev: [69.63, 70.07, 76.44, 77.67],
+    opi: [38.28, 38.40, 40.60, 45.92], dep: [7.9, 9.0, 10.3, 11.1], ocf: [35.76, 46.68, 55.44, 58.00],
+    capex: [29.88, 30.88, 35.80, 39.37], cprev: [15.80, 16.74, 17.08, 19.39],
+    cash: 64.51, debt: 35.48, divq: 6.76, capex26: 150.7, guide26: '약 170 (리스 포함)', plan27: 1.30, plan27src: '가정',
+    floor: { 2027: 14.9 }, floorNote: '건설 약정 298.5억 달러(2027 회계연도) 중 2027년 상반기 몫',
+    leaseNC: 364.6, leaseStart: 2026.75, leaseYears: 8, leaseLiab: 98.45, rvg: 0, cons: { label: 'FY2027(2026.7~2027.6)', v: 391.6, v28: 117.07, src: 'stockanalysis 10-27' }, prep0: 35.7,
+    life: 6.0, spread: 0.6, tax: 0.197, sbc: 12.55, prepay: 0.24, iv: 0.308 },
+  GOOGL: { name: '알파벳', eAI: 0.60, price: 279.84, shares: 12.294 + 0.0537, rev: [113.83, 109.90, 119.80, 127.58], prev: [96.47, 90.23, 96.43, 102.35],
+    opi: [35.93, 39.70, 40.77, 40.58], dep: [6.04, 6.48, 7.11, 8.36], ocf: [52.40, 45.79, 39.07, 42.29],
+    capex: [27.85, 35.67, 44.92, 51.36], cprev: [14.28, 17.20, 22.45, 23.95],
+    cash: 265.10, debt: 126.12, divq: 2.94, capex26: 200.0, guide26: '195~205', plan27: 1.50, plan27src: '외부 추정(약 3,000억 달러)',
+    floor: {}, floorNote: '설비·건설 약정을 따로 공시하지 않음',
+    leaseNC: 130.5, leaseStart: 2026.75, leaseYears: 5, leaseLiab: 24.22, rvg: 0, cons: { label: '2027년', v: 627, v28: 755, src: 'TIKR 10-25' },
+    life: 6.0, spread: 0.6, tax: 0.181, sbc: 30.4, prepay: 0, iv: 0.347 },
+  AMZN: { name: '아마존', eAI: 0.55, price: 240.35, shares: 10.813, rev: [213.39, 181.52, 200.61, 201.94], prev: [187.79, 155.67, 167.70, 180.17],
+    opi: [24.98, 23.85, 27.46, 28.08], dep: [12.12, 12.83, 13.87, 15.14], ocf: [54.46, 26.03, 45.39, 42.42],
+    capex: [38.47, 43.25, 53.05, 75.90], cprev: [26.05, 24.23, 31.39, 34.23], q4: [47.8, 75.9],
+    cash: 114.22, debt: 180.89, divq: 0, capex26: 220.0, guide26: '약 220 (순액)', plan27: 1.25, plan27src: '가정',
+    floor: { 2027: 63.9, 2028: 25.2, 2029: 25.4 }, floorNote: '10-Q 약정 표의 설비 항목',
+    leaseNC: 164.9, leaseStart: 2026.75, leaseYears: 1.25, leasePay: { 2026: 2.59 * 4, 2027: 12.4, 2028: 11.5, 2029: 12.2 }, leaseLiab: 114.78, rvg: 0, cons: { label: '2027년', v: 902, v28: 1078.6, src: 'tickflow 11-05(분기 합)' },
+    life: 5.0, spread: 0.8, tax: 0.22, sbc: 19.87, prepay: 0, iv: 0.356 },
+  META: { name: '메타', eAI: 0.60, price: 614.99, shares: 2.556, rev: [59.89, 56.31, 60.80, 64.60], prev: [48.38, 42.31, 47.52, 51.24],
+    opi: [24.74, 22.87, 18.77 + 2.0, 12.99 + 9.89], legal: 11.89, dep: [5.41, 6.00, 6.36, 7.15], ocf: [36.21, 32.23, 31.86, 32.78],
+    capex: [21.38, 19.00, 30.12, 33.94], cprev: [14.42, 12.94, 16.54, 18.83],
+    cash: 82.45, debt: 83.67, divq: 1.36, capex26: 137.2, guide26: '135~145', plan27: 1.30, plan27src: '가정',
+    floor: {}, floorNote: '약정 대부분이 클라우드 용량·에너지 구매',
+    leaseNC: 355.73, leaseStart: 2026.75, leaseYears: 10, leaseLiab: 32.35, rvg: 41.5, cons: { label: '2027년', v: 296.7, v28: 347.0, src: 'tickflow 10-26' },
+    life: 5.5, spread: 0.9, tax: 0.17, sbc: 26.94, prepay: 0, iv: 0.414 },
+};
+const TICK = ['MSFT', 'GOOGL', 'AMZN', 'META'];
+const GCORE = 0.06, R0 = 4.95, Q = 13, MU = 0.08;
+const SRV = 0.6, BLDG_Q = 100, LAG_S = 2, LAG_B = 6;          // server share of capex, building life in quarters, in-service lags
+const DIM = -0.25, BETA_R = 0.12, PHI = 0.97, SIG_M = 0.06, LEASE_TERM = 15, LEASE_PV = 0.7, WACC = 0.09, SPREAD_SLOPE = 0.15;
+const LABELS = Array.from({ length: Q }, (_, i) => `${2026 + Math.floor((i + 3) / 4)}Q${((i + 3) % 4) + 1}`);
+const sum = (a) => a.reduce((s, x) => s + x, 0);
+const CAL = {};
+for (const t of TICK) {
+  const f = F[t], R = sum(f.rev), Rp = sum(f.prev), g0 = R / Rp - 1, C = sum(f.capex), Cp = sum(f.cprev), opi = sum(f.opi), D = sum(f.dep);
+  const e = (opi + D) / R;
+  const rho = Math.max(0, Rp * (g0 - GCORE)) / Cp;                // next-year excess revenue per dollar of last year's capex
+  let vin = 0; for (let h = 0; h < 4; h++) { if (h + LAG_S <= 3) vin += SRV * f.capex[h] / (4 * f.life); if (h + LAG_B <= 3) vin += (1 - SRV) * f.capex[h] / BLDG_Q; }
+  const Dex = f.dep[3] - vin;                                      // depreciation of assets in service before 2025Q4, held flat
+  const q4 = f.q4 ? (f.q4[0] + f.q4[1]) / 2 : f.capex26 - sum(f.capex.slice(1));
+  const Rq0 = R / 4 * Math.pow(1 + g0, 0.375);
+  const Rf0 = 4 * Rq0 * (1 + GCORE) + rho * C * Math.pow(C / Cp, DIM);
+  const depF0 = 4 * (f.dep[3] + SRV * (f.capex[2] + f.capex[3]) / (4 * f.life));
+  const mcap = f.price * f.shares;
+  CAL[t] = { R, Rp, g0, C, Cp, e, rho, rhoTrail: rho, kCons: 1, Dex, q4, Rq0, ocfm: sum(f.ocf) / R, Cref: C / 4, mcap, M0: null, depF0,
+    pe0: mcap / (opi * (1 - f.tax)), g27: null, lev0: (f.debt - f.cash + f.leaseLiab + f.rvg) / (4 * Rq0 * e) };
+}
+// value today = M0 x core forward NOPAT + AI forward NOPAT / WACC + net cash; M0 refitted whenever rho changes
+function fitM0(t) {
+  const f = F[t], c = CAL[t];
+  const raiF0 = c.rho * c.C * Math.pow(c.C / c.Cp, DIM);
+  const coreF0 = (4 * c.Rq0 * (1 + GCORE) * c.e - 4 * c.Dex) * (1 - f.tax);
+  const aiF0 = (raiF0 * f.eAI - (c.depF0 - 4 * c.Dex)) * (1 - f.tax);
+  c.coreF0 = coreF0; c.aiF0 = aiF0;
+  c.M0 = (c.mcap - f.cash + f.debt + (f.legal || 0) - aiF0 / WACC) / coreF0;
+}
+for (const t of TICK) fitM0(t);
+const DEFAULT = { capex27: 1.0, capex28: 0.10, capex29: 0.0, ai: 1.0, kappa: 0.0, rend: 4.75, spread: 0.0, debtlim: 2.0, eqlim: 0.03, life: 0.0, shift: 0.0, npaths: 10000 };
+// AI-return presets are symmetric in logs (1.25 and 0.8); funding and rate shocks are separate and leave AI return at 1.0
+const PRESETS = {
+  '상방': { capex27: 1.3, capex28: 0.15, capex29: 0.10, ai: 1.25 },
+  '기준': {},
+  'AI 실망': { capex27: 0.6, capex28: -0.10, capex29: -0.10, ai: 0.8 },
+  '투자 정체': { capex27: 0.3, capex28: 0.0, capex29: -0.05 },
+  '조달 제약': { spread: 1.5, debtlim: 1.0, eqlim: 0.005 },
+  '금리·밸류 충격': { rend: 5.75, shift: -0.10 },
+};
+
+// ---------- random numbers: seeded so the same settings give the same picture ----------
+function mulberry32(a) { return function () { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function makeNormal(seed) { const u = mulberry32(seed); let spare = null;
+  return function (sd) { if (spare !== null) { const v = spare; spare = null; return v * sd; }
+    let a, b, s; do { a = u() * 2 - 1; b = u() * 2 - 1; s = a * a + b * b; } while (s >= 1 || s === 0);
+    const m = Math.sqrt(-2 * Math.log(s) / s); spare = b * m; return a * m * sd; }; }
+const arVar = (sd, q) => { let v = 0; for (let k = 0; k <= q; k++) v += Math.pow(PHI, 2 * k); return sd * sd * v; };
+
+// lease commencement share of a quarter [T, T+0.25) inside [start, start+years)
+function leaseShare(f, q) { const T = 2026.75 + q / 4; const lo = Math.max(T, f.leaseStart), hi = Math.min(T + 0.25, f.leaseStart + f.leaseYears); return Math.max(0, hi - lo) / f.leaseYears; }
+
+// ---------- the model ----------
+// opt: { noise, base, sigI, n, seed }
+function simulate(pIn, opt) {
+  const p = Object.assign({}, DEFAULT, pIn);
+  const noise = !!opt.noise, n = noise ? (opt.n || p.npaths) : 1, seed = opt.seed || 20261105;
+  const N = noise ? makeNormal(seed) : () => 0;
+  const U = noise ? mulberry32(seed ^ 0x5bd1e995) : () => 0.5;
+  const sigI = opt.sigI || { MSFT: 0.07, GOOGL: 0.07, AMZN: 0.07, META: 0.07 };
+  const aP = [], capN = [], q4U = [];
+  for (let i = 0; i < n; i++) {
+    const c = N(0.20);
+    aP.push(TICK.map(() => p.ai * Math.exp(c + N(0.15) - (noise ? 0.5 * (0.04 + 0.0225) : 0))));
+    capN.push(TICK.map(() => Math.exp(N(0.08) - (noise ? 0.5 * 0.0064 : 0))));
+    q4U.push(U());
+  }
+  const plan27 = {}; for (const t of TICK) plan27[t] = 1 + (F[t].plan27 - 1) * p.capex27;
+  const Lnew = {}; for (const t of TICK) Lnew[t] = Math.max(3, F[t].life + p.life);
+  const S = TICK.map((t) => { const f = F[t], c = CAL[t];
+    let sr = 0, br = 0; for (let h = 0; h < 4; h++) { if (h + LAG_S <= 3) sr += SRV * f.capex[h] / (4 * f.life); if (h + LAG_B <= 3) br += (1 - SRV) * f.capex[h] / BLDG_Q; }
+    const fill = (v) => new Float64Array(n).fill(v);
+    return { Rq: fill(c.Rq0), Rai: fill(0), sr: fill(sr), br: fill(br), cash: fill(f.cash), debt: fill(f.debt), sh: fill(f.shares), e: fill(c.e),
+      px: fill(f.price), lev: fill(c.lev0), hist: f.capex.map((x) => fill(x)), leaseCum: 0, prep: fill(f.prep0 || 0),
+      ext: new Float64Array(n), eq: new Float64Array(n), ext28: new Float64Array(n), eq28: new Float64Array(n), cut: new Uint8Array(n), fcut: new Uint8Array(n), minpx: fill(Infinity) }; });
+  const mk = () => TICK.map(() => Array.from({ length: Q }, () => new Float64Array(n)));
+  const price = mk(), ocfA = mk(), capA = mk(), wantA = mk();
+  const floorA = TICK.map(() => new Float64Array(Q));
+  const rec = { vps: TICK.map(() => new Float64Array(Q)), dist: TICK.map(() => new Float64Array(Q)), rev: TICK.map(() => new Float64Array(Q)), nopat: TICK.map(() => new Float64Array(Q)) };
+  const r = new Float64Array(n).fill(R0), mkt = new Float64Array(n), idio = TICK.map(() => new Float64Array(n));
+  for (let q = 0; q < Q; q++) {
+    const yr = 2026 + Math.floor((q + 3) / 4);
+    const rb = R0 + (DEFAULT.rend - R0) * (q + 1) / Q;
+    const w = Math.min(1, (q + 1) / 8);
+    const varM = noise ? arVar(SIG_M, q) : 0;
+    for (let i = 0; i < n; i++) { r[i] += (p.rend - R0) / Q + N(0.30); mkt[i] = PHI * mkt[i] + N(SIG_M); }
+    for (let j = 0; j < TICK.length; j++) {
+      const t = TICK[j], f = F[t], c = CAL[t], s = S[j];
+      s.leaseCum += leaseShare(f, q) * f.leaseNC;
+      const leaseQ = f.leasePay ? f.leasePay[Math.min(yr, 2029)] / 4 : s.leaseCum / LEASE_TERM / 4;
+      const leaseLiab = f.leaseLiab + f.rvg + LEASE_PV * s.leaseCum;
+      const legalPay = f.legal && yr === 2027 ? f.legal / 4 : 0;   // Meta settlement accrual paid during 2027 (timing assumed)
+      let annPlan = f.capex26 * plan27[t]; if (yr >= 2028) annPlan *= 1 + p.capex28; if (yr >= 2029) annPlan *= 1 + p.capex29;
+      const cFloor = (f.floor[yr] || 0) / 4; floorA[j][q] = cFloor;
+      const sd = sigI[t], varI = noise ? arVar(sd, q) : 0;
+      const hS = q + 2, hB = q - 2, lifeS = hS < 4 ? f.life : Lnew[t];
+      const H = s.hist, last = H.length - 1;
+      const newCap = new Float64Array(n);
+      for (let i = 0; i < n; i++) {
+        idio[j][i] = PHI * idio[j][i] + N(sd);
+        // revenue: core growth plus AI revenue from capex four quarters earlier
+        const lagA = H[q][i] * 4;
+        const aiInc = aP[i][j] * c.rho * lagA * Math.pow(lagA / c.Cp, DIM);
+        const Rc = s.Rq[i] * (1 + GCORE / 4 + N(0.015)); s.Rq[i] = Rc;   // existing business
+        const Rai = s.Rai[i] + aiInc / 16; s.Rai[i] = Rai;                  // AI revenue added since 2026Q3
+        const Rq = Rc + Rai;
+        const e = s.e[i] + N(0.004); s.e[i] = e;
+        // depreciation: vintages enter service after a lag; servers at server life, buildings over 25 years
+        if (hS >= 2) s.sr[i] += SRV * H[hS][i] / (4 * lifeS);
+        if (hB >= 0) s.br[i] += (1 - SRV) * H[hB][i] / BLDG_Q;
+        const dep = c.Dex + s.sr[i] + s.br[i];
+        // capex wanted
+        const want = yr === 2026 ? (f.q4 ? f.q4[0] + (f.q4[1] - f.q4[0]) * q4U[i] : c.q4) : annPlan / 4 * capN[i][j];
+        // MSFT component prepayments: a receivable built through 2027Q2 that comes back over the next four quarters
+        let prepay = 0;
+        if (f.prepay && q <= 2) { prepay = f.prepay * want; s.prep[i] += prepay; }
+        else if (f.prepay && q >= 3 && q <= 6) prepay = -s.prep[i] / 4;
+        prepay += legalPay;
+        // cash flow: extra borrowing pays rate + spread (+0.15pp per turn of lease-adjusted leverage above 1x); extra cash earns the base rate
+        const rate = (r[i] + f.spread + p.spread + SPREAD_SLOPE * Math.max(s.lev[i] - 1, 0)) / 100;
+        const dND = (s.debt[i] - f.debt) - (s.cash[i] - f.cash);
+        const xInt = dND * (dND > 0 ? rate : r[i] / 100) / 4;
+        const ebitdaR = Rc * e + Rai * f.eAI;        // before new leases; AI revenue at its own margin
+        const ebit = ebitdaR - dep - leaseQ;
+        let bonus = f.tax * SRV * (H[last][i] - c.Cref); bonus = Math.min(bonus, 0.8 * f.tax * Math.max(ebit, 0));
+        const ocf = Rc * (c.ocfm + e - c.e) + Rai * f.eAI * (1 - f.tax) - leaseQ * (1 - f.tax) - xInt * (1 - f.tax) + bonus;
+        const cashFloor = 0.10 * Rq * 4;
+        const spare = Math.max(s.cash[i] - cashFloor, 0);
+        const debtRoomMax = Math.max(p.debtlim * ebitdaR * 4 - (s.debt[i] - s.cash[i] + spare + leaseLiab), 0);
+        const eqRoom = p.eqlim * s.px[i] * s.sh[i] / 4;
+        const avail = ocf - f.divq - prepay + spare + debtRoomMax + eqRoom;
+        const inflight = 0.6 * (H[last][i] + H[last - 1][i] + H[last - 2][i] + H[last - 3][i]) / 4;
+        const capex = Math.max(cFloor, Math.min(want, Math.max(avail, inflight)));
+        if (q <= 8 && capex < want * 0.98) { s.cut[i] = 1; if (capex <= inflight + 1e-9 && avail < inflight) s.fcut[i] = 1; }
+        // funding: spare cash, then debt within the lease-adjusted limit, then equity
+        const gap = capex + f.divq + prepay - ocf;
+        const useCash = Math.min(Math.max(gap, 0), spare);
+        const gap2 = Math.max(gap - useCash, 0);
+        const room2 = Math.max(p.debtlim * ebitdaR * 4 - (s.debt[i] - s.cash[i] + useCash + leaseLiab), 0);
+        const newDebt = Math.min(gap2, room2), eq = gap2 - newDebt;
+        const surplus = Math.max(-gap, 0);
+        const buyback = s.cash[i] > 2 * cashFloor ? Math.min(0.5 * surplus, 0.0125 * s.px[i] * s.sh[i]) : 0;
+        s.cash[i] += -useCash + surplus - buyback; s.debt[i] += newDebt;
+        s.ext[i] += newDebt + eq; s.eq[i] += eq; if (q <= 8) { s.ext28[i] += newDebt + eq; s.eq28[i] += eq; }
+        s.sh[i] += (eq - buyback + f.sbc / 4) / Math.max(s.px[i], 0.05 * f.price);   // stock pay is paid in shares (cash flow keeps the add-back)
+        s.lev[i] = (s.debt[i] - s.cash[i] + leaseLiab) / (ebitdaR * 4);
+        newCap[i] = capex;
+        // value: core forward NOPAT x M0 + AI forward NOPAT / WACC + net cash (market learns the AI return over two years)
+        const C4 = H[last][i] + H[last - 1][i] + H[last - 2][i] + capex;
+        const aHat = Math.exp(w * Math.log(aP[i][j]));
+        const RaiF = 4 * Rai + aHat * c.rho * C4 * Math.pow(C4 / c.Cp, DIM);
+        const depF = 4 * (dep + SRV * (H[last][i] + capex) / (4 * Lnew[t]));
+        const coreF = (4 * Rc * (1 + GCORE) * e - 4 * c.Dex) * (1 - f.tax);
+        const aiF = (RaiF * f.eAI - (depF - 4 * c.Dex) - 4 * leaseQ) * (1 - f.tax);
+        const rateAdj = Math.exp(-BETA_R * (r[i] - rb)) * (1 + p.shift);
+        const kw = p.kappa * w, s2 = 0.0625;
+        const narr = Math.exp(kw * Math.log(aP[i][j]) - (noise ? -kw * s2 / 2 + kw * kw * s2 / 2 : 0));
+        const V = Math.max(c.M0 * narr * rateAdj * coreF + rateAdj * aiF / WACC + s.cash[i] - s.debt[i], 0.02 * c.mcap);
+        const vps = V / s.sh[i];
+        const dist = Math.exp(-0.5 * Math.max(s.ext[i] / c.mcap - 0.10, 0));
+        if (!noise) { rec.vps[j][q] = vps; rec.dist[j][q] = dist; rec.rev[j][q] = Rq; rec.nopat[j][q] = coreF + aiF; s.px[i] = f.price * Math.exp(MU * (q + 1) / 4); }
+        else s.px[i] = f.price * Math.exp(MU * (q + 1) / 4) * (vps / opt.base.vps[j][q]) * (dist / opt.base.dist[j][q]) * Math.exp(mkt[i] + idio[j][i] - 0.5 * (varM + varI));
+        if (q <= 8) s.minpx[i] = Math.min(s.minpx[i], s.px[i]);
+        price[j][q][i] = s.px[i]; ocfA[j][q][i] = ocf; capA[j][q][i] = capex; wantA[j][q][i] = want;
+      }
+      H.push(newCap);
+    }
+  }
+  if (!noise) return rec;
+  return { price, ocfA, capA, wantA, floorA, st: S, n };
+}
+// model revenue over the consensus window (MSFT fiscal 2027 = 2026Q3 actual + 2026Q4..2027Q2; others calendar 2027)
+const consWindow = (t, rv) => t === 'MSFT' ? F[t].rev[3] + rv[0] + rv[1] + rv[2] : rv[1] + rv[2] + rv[3] + rv[4];
+const consWindow28 = (t, rv) => t === 'MSFT' ? rv[6] : rv[5] + rv[6] + rv[7] + rv[8];        // MSFT: June-2028 quarter only
+const consTarget = (t) => F[t].cons.v + F[t].cons.v28;
+// scale rho per firm so the no-shock base path matches sell-side consensus revenue: "AI return 1.0" = consensus
+(function fitConsensus() {
+  const lo = {}, hi = {}; for (const t of TICK) { lo[t] = 0; hi[t] = 2.5; }
+  for (let it = 0; it < 40; it++) {
+    for (const t of TICK) { const c = CAL[t]; c.kCons = (lo[t] + hi[t]) / 2; c.rho = c.rhoTrail * c.kCons; fitM0(t); }
+    const b = simulate({}, { noise: false });
+    TICK.forEach((t, j) => { if (consWindow(t, b.rev[j]) + consWindow28(t, b.rev[j]) > consTarget(t)) hi[t] = CAL[t].kCons; else lo[t] = CAL[t].kCons; });
+  }
+})();
+const BASE = simulate({}, { noise: false });
+for (const t of TICK) { const j = TICK.indexOf(t), rv = BASE.rev[j], f = F[t]; CAL[t].consModel = consWindow(t, rv); CAL[t].consModel28 = consWindow28(t, rv); CAL[t].g27 = (rv[1] + rv[2] + rv[3] + rv[4]) / (f.rev[1] + f.rev[2] + f.rev[3] + rv[0]) - 1; }
+
+// company-specific noise chosen so the one-year log-price s.d. matches 180-day implied volatility
+function calibrateSig() {
+  const sig = { MSFT: 0.07, GOOGL: 0.07, AMZN: 0.07, META: 0.07 };
+  for (let pass = 0; pass < 2; pass++) {
+    const res = simulate({}, { noise: true, base: BASE, sigI: sig, n: 12000, seed: 77 });
+    TICK.forEach((t, j) => {
+      const x = Array.from(res.price[j][3], (v) => Math.log(v / F[t].price)); const m = sum(x) / x.length;
+      const v = x.reduce((s, y) => s + (y - m) ** 2, 0) / (x.length - 1);
+      const k = arVar(1, 3), other = Math.max(v - sig[t] ** 2 * k, 0);
+      sig[t] = Math.sqrt(Math.max(F[t].iv ** 2 - other, 0.0004) / k);
+    });
+  }
+  return sig;
+}
+const SIGI = calibrateSig();
+// ENGINE END
+
+// ---------- statistics ----------
+function pct(arr, ps) { const a = Float64Array.from(arr).sort(); return ps.map((p) => { const x = (a.length - 1) * p, lo = Math.floor(x), hi = Math.ceil(x); return a[lo] + (a[hi] - a[lo]) * (x - lo); }); }
+const median = (arr) => pct(arr, [0.5])[0];
+
+// ---------- controls ----------
+const ids = ['capex27', 'capex28', 'capex29', 'life', 'ai', 'kappa', 'rend', 'spread', 'debtlim', 'eqlim', 'shift'];
+const fmtPct0 = (x) => (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(Math.round(x * 100)) + '%';
+const fmts = {
+  capex27: (v) => Math.round(v * 100) + '%', capex28: fmtPct0, capex29: fmtPct0,
+  life: (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v) + '년', ai: (v) => v.toFixed(2), kappa: (v) => v.toFixed(1),
+  rend: (v) => v.toFixed(2) + '%', spread: (v) => '+' + v.toFixed(1) + '%p', debtlim: (v) => v.toFixed(1) + '배',
+  eqlim: (v) => (v * 100).toFixed(1) + '%', shift: fmtPct0,
+};
+let state = Object.assign({}, DEFAULT);
+function setControls() {
+  for (const id of ids) { document.getElementById(id).value = state[id]; document.getElementById('o-' + id).textContent = fmts[id](state[id]); }
+  document.getElementById('npaths').value = String(state.npaths);
+  document.getElementById('o-npaths').textContent = '';
+  const tot = TICK.reduce((s, t) => s + F[t].capex26 * (1 + (F[t].plan27 - 1) * state.capex27), 0);
+  const tot26 = TICK.reduce((s, t) => s + F[t].capex26, 0);
+  document.getElementById('h-capex27').textContent = `4사 2027년 현금 설비투자 약 ${(Math.round(tot) * 10).toLocaleString()}억 달러 (2026년 약 ${(Math.round(tot26) * 10).toLocaleString()}억 달러). 100%는 아래 표의 2027년 배율(가정)을 그대로 쓰는 경우입니다.`;
+}
+function markPreset(name) { for (const b of document.querySelectorAll('#presets button')) b.setAttribute('aria-pressed', String(b.dataset.p === name)); }
+for (const id of ids) document.getElementById(id).addEventListener('input', (ev) => { state[id] = Number(ev.target.value); markPreset(null); setControls(); schedule(); });
+document.getElementById('npaths').addEventListener('change', (ev) => { state.npaths = Number(ev.target.value); schedule(); });
+for (const b of document.querySelectorAll('#presets button')) b.addEventListener('click', () => { state = Object.assign({}, DEFAULT, PRESETS[b.dataset.p], { npaths: state.npaths }); markPreset(b.dataset.p); setControls(); schedule(); });
+
+// ---------- drawing ----------
+const COLOR = { MSFT: 'var(--s1)', GOOGL: 'var(--s2)', AMZN: 'var(--s3)', META: 'var(--s4)' };
+const fmtUSD = (x) => '$' + d3.format(',.0f')(x);
+const fmtB = (x) => d3.format(',.0f')(x);
+let RES = null, fundFirm = 'GOOGL';
+function tipBox(el) { let t = el.querySelector(':scope > .tt'); if (!t) { t = document.createElement('div'); t.className = 'tt'; t.hidden = true; el.appendChild(t); } return t; }
+function placeTip(el, tip, x, y) { tip.hidden = false; const W = el.clientWidth, w = tip.offsetWidth, h = tip.offsetHeight; let L = x + 14; if (L + w > W) L = x - w - 14; if (L < 0) L = 0; let T = y - h - 10; if (T < 0) T = y + 12; tip.style.left = L + 'px'; tip.style.top = T + 'px'; }
+function fillTip(tip, head, rows) { tip.replaceChildren(); const h = document.createElement('div'); h.className = 'h'; h.textContent = head; tip.appendChild(h); for (const r of rows) { const d = document.createElement('div'); d.textContent = r; tip.appendChild(d); } }
+
+function drawFans() {
+  const box = document.getElementById('fans'); box.replaceChildren();
+  for (const t of TICK) {
+    const j = TICK.indexOf(t);
+    const el = document.createElement('div'); el.className = 'chart'; box.appendChild(el);
+    const qs = RES.bands[t];
+    const W = Math.max(el.clientWidth, 280), H = 250, left = 52, right = 12, top = 30, bottom = 26;
+    const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', `${F[t].name} 주가 분포`);
+    const x = d3.scalePoint(['now', ...LABELS], [left, W - right]);
+    const ymax = d3.max(qs, (d) => d[4]) * 1.04;
+    const y = d3.scaleLinear([0, Math.max(ymax, F[t].price * 1.2)], [H - bottom, top]).nice();
+    for (const tk of y.ticks(4)) {
+      svg.append('line').attr('x1', left).attr('x2', W - right).attr('y1', y(tk)).attr('y2', y(tk)).attr('stroke', tk === 0 ? 'var(--ink-3)' : 'var(--grid)');
+      svg.append('text').attr('x', left - 6).attr('y', y(tk)).attr('dy', '0.32em').attr('text-anchor', 'end').text(d3.format(',')(tk));
+    }
+    for (const lab of ['2027Q4', '2028Q4', '2029Q4']) svg.append('text').attr('x', x(lab)).attr('y', H - 6).attr('text-anchor', lab === '2029Q4' ? 'end' : 'middle').text(lab.slice(0, 4) + '년 말');
+    const pts = [{ k: 'now', v: [F[t].price, F[t].price, F[t].price, F[t].price, F[t].price] }, ...LABELS.map((l, q) => ({ k: l, v: qs[q] }))];
+    const area = (lo, hi) => d3.area().x((d) => x(d.k)).y0((d) => y(d.v[lo])).y1((d) => y(d.v[hi])).curve(d3.curveMonotoneX);
+    svg.append('path').datum(pts).attr('d', area(0, 4)).attr('fill', COLOR[t]).attr('fill-opacity', 0.16);
+    svg.append('path').datum(pts).attr('d', area(1, 3)).attr('fill', COLOR[t]).attr('fill-opacity', 0.32);
+    svg.append('line').attr('x1', left).attr('x2', W - right).attr('y1', y(F[t].price)).attr('y2', y(F[t].price)).attr('stroke', 'var(--ink-2)').attr('stroke-dasharray', '4 4');
+    const meanPts = [{ k: 'now', v: F[t].price }, ...LABELS.map((l, q) => ({ k: l, v: F[t].price * Math.exp(MU * (q + 1) / 4) }))];
+    svg.append('path').datum(meanPts).attr('d', d3.line().x((d) => x(d.k)).y((d) => y(d.v))).attr('fill', 'none').attr('stroke', 'var(--ink-3)').attr('stroke-width', 1.2).attr('stroke-dasharray', '1 3');
+    svg.append('path').datum(pts).attr('d', d3.line().x((d) => x(d.k)).y((d) => y(d.v[2])).curve(d3.curveMonotoneX)).attr('fill', 'none').attr('stroke', COLOR[t]).attr('stroke-width', 2);
+    svg.append('text').attr('class', 'big').attr('x', left).attr('y', 16).text(F[t].name);
+    svg.append('text').attr('class', 'muted').attr('x', W - right).attr('y', 16).attr('text-anchor', 'end').text(`지금 ${fmtUSD(F[t].price)}`);
+    const last = qs[Q - 1];
+    svg.append('circle').attr('cx', x(LABELS[Q - 1])).attr('cy', y(last[2])).attr('r', 4).attr('fill', COLOR[t]).attr('stroke', 'var(--panel)').attr('stroke-width', 2);
+    const tip = tipBox(el);
+    const rule = svg.append('line').attr('y1', top).attr('y2', H - bottom).attr('stroke', 'var(--ink-3)').attr('opacity', 0);
+    svg.on('pointermove', (ev) => {
+      const sc = svg.node().getBoundingClientRect().width / W; const mx = d3.pointer(ev)[0];
+      const q = d3.minIndex(LABELS, (l) => Math.abs(x(l) - mx)); const v = qs[q];
+      rule.attr('x1', x(LABELS[q])).attr('x2', x(LABELS[q])).attr('opacity', 1);
+      fillTip(tip, `${F[t].name} ${LABELS[q]}`, [`90%  ${fmtUSD(v[4])}`, `75%  ${fmtUSD(v[3])}`, `중앙값  ${fmtUSD(v[2])}`, `25%  ${fmtUSD(v[1])}`, `10%  ${fmtUSD(v[0])}`]);
+      placeTip(el, tip, x(LABELS[q]) * sc, y(v[2]) * sc);
+    }).on('pointerleave', () => { tip.hidden = true; rule.attr('opacity', 0); });
+  }
+}
+
+function drawDist() {
+  const el = document.getElementById('dist'); el.replaceChildren();
+  const W = Math.max(el.clientWidth, 300), rowH = 46, top = 10, bottom = 30, left = 112, right = 18, H = top + bottom + rowH * TICK.length;
+  const q8 = LABELS.indexOf('2028Q4');
+  const rows = TICK.map((t) => ({ t, v: RES.bands[t][q8].map((p) => p / F[t].price - 1) }));
+  const lo = Math.min(-0.6, d3.min(rows, (r) => r.v[0])), hi = Math.max(1.0, d3.max(rows, (r) => r.v[4]));
+  const x = d3.scaleLinear([lo, hi], [left, W - right]).nice();
+  const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', '2028년 말 주가 변화 분포');
+  for (const tk of x.ticks(6)) {
+    svg.append('line').attr('x1', x(tk)).attr('x2', x(tk)).attr('y1', top).attr('y2', H - bottom).attr('stroke', tk === 0 ? 'var(--ink-3)' : 'var(--grid)');
+    svg.append('text').attr('x', x(tk)).attr('y', H - 8).attr('text-anchor', 'middle').text((tk > 0 ? '+' : tk < 0 ? '−' : '') + Math.abs(Math.round(tk * 100)) + '%');
+  }
+  const tip = tipBox(el);
+  rows.forEach((r, i) => {
+    const yc = top + rowH * i + rowH / 2;
+    svg.append('text').attr('class', 'big').attr('x', 0).attr('y', yc).attr('dy', '0.32em').style('font-size', '16px').text(F[r.t].name);
+    svg.append('rect').attr('x', x(r.v[0])).attr('width', Math.max(1, x(r.v[4]) - x(r.v[0]))).attr('y', yc - 5).attr('height', 10).attr('rx', 3).attr('fill', COLOR[r.t]).attr('fill-opacity', 0.3);
+    svg.append('rect').attr('x', x(r.v[1])).attr('width', Math.max(1, x(r.v[3]) - x(r.v[1]))).attr('y', yc - 9).attr('height', 18).attr('rx', 4).attr('fill', COLOR[r.t]).attr('fill-opacity', 0.75);
+    svg.append('circle').attr('cx', x(r.v[2])).attr('cy', yc).attr('r', 6).attr('fill', 'var(--panel)').attr('stroke', 'var(--ink)').attr('stroke-width', 2);
+    svg.append('rect').attr('x', left).attr('width', W - left - right).attr('y', yc - rowH / 2).attr('height', rowH).attr('fill', 'transparent')
+      .on('pointermove', (ev) => { const sc = svg.node().getBoundingClientRect().width / W; const f = (v) => (v > 0 ? '+' : '') + Math.round(v * 100) + '%';
+        fillTip(tip, `${F[r.t].name} 2028년 말`, [`90%  ${f(r.v[4])}`, `75%  ${f(r.v[3])}`, `중앙값  ${f(r.v[2])}`, `25%  ${f(r.v[1])}`, `10%  ${f(r.v[0])}`]);
+        placeTip(el, tip, x(r.v[2]) * sc, yc * sc); })
+      .on('pointerleave', () => { tip.hidden = true; });
+  });
+}
+
+function drawTabs() {
+  const tabs = document.getElementById('tabs'); tabs.replaceChildren();
+  for (const t of TICK) { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', String(t === fundFirm)); b.textContent = F[t].name;
+    b.addEventListener('click', () => { fundFirm = t; drawTabs(); drawFund(); }); tabs.appendChild(b); }
+}
+function drawFund() {
+  const el = document.getElementById('fund'); el.replaceChildren();
+  const t = fundFirm, j = TICK.indexOf(t), S = RES.fund[t];
+  const series = [
+    { k: 'ocf', name: '영업현금흐름', color: 'var(--s1)', dash: null },
+    { k: 'cap', name: '설비투자(실행)', color: 'var(--s2)', dash: null },
+    { k: 'want', name: '설비투자(계획)', color: 'var(--s2)', dash: '5 4' },
+    { k: 'floor', name: '계약 하한', color: 'var(--ink-3)', dash: '2 4' },
+  ];
+  const W = Math.max(el.clientWidth, 300), H = 280, left = 46, right = 120, top = 14, bottom = 26;
+  const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', `${F[t].name} 현금흐름과 설비투자`);
+  const x = d3.scalePoint(LABELS, [left, W - right]);
+  const ymax = d3.max(series, (s) => d3.max(S[s.k]));
+  const y = d3.scaleLinear([0, ymax * 1.08], [H - bottom, top]).nice();
+  for (const tk of y.ticks(5)) { svg.append('line').attr('x1', left).attr('x2', W - right).attr('y1', y(tk)).attr('y2', y(tk)).attr('stroke', tk === 0 ? 'var(--ink-3)' : 'var(--grid)');
+    svg.append('text').attr('x', left - 6).attr('y', y(tk)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmtB(tk)); }
+  for (const lab of LABELS) if (lab.endsWith('Q1') || lab === LABELS[0]) svg.append('text').attr('x', x(lab)).attr('y', H - 6).attr('text-anchor', 'middle').text(lab === LABELS[0] ? "26Q4" : lab.slice(2, 4) + '년');
+  const labs = [];
+  for (const s of series) {
+    const p = svg.append('path').datum(S[s.k]).attr('d', d3.line().x((d, i) => x(LABELS[i])).y((d) => y(d))).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', 2);
+    if (s.dash) p.attr('stroke-dasharray', s.dash);
+    labs.push({ s, y: y(S[s.k][Q - 1]) });
+  }
+  labs.sort((a, b) => a.y - b.y); for (let i = 1; i < labs.length; i++) if (labs[i].y - labs[i - 1].y < 17) labs[i].y = labs[i - 1].y + 17;
+  for (const l of labs) svg.append('text').attr('x', x(LABELS[Q - 1]) + 8).attr('y', l.y).attr('dy', '0.32em').style('fill', 'var(--ink-2)').text(l.s.name);
+  const leg = document.getElementById('fundlegend'); leg.replaceChildren();
+  for (const s of series) { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = s.color; if (s.dash) i.style.background = `repeating-linear-gradient(90deg, ${s.color} 0 5px, transparent 5px 9px)`; sp.append(i, document.createTextNode(s.name)); leg.appendChild(sp); }
+  const tip = tipBox(el);
+  const rule = svg.append('line').attr('y1', top).attr('y2', H - bottom).attr('stroke', 'var(--ink-3)').attr('opacity', 0);
+  svg.on('pointermove', (ev) => { const sc = svg.node().getBoundingClientRect().width / W; const mx = d3.pointer(ev)[0];
+    const q = d3.minIndex(LABELS, (l) => Math.abs(x(l) - mx)); rule.attr('x1', x(LABELS[q])).attr('x2', x(LABELS[q])).attr('opacity', 1);
+    fillTip(tip, `${F[t].name} ${LABELS[q]} (십억 달러)`, series.map((s) => `${s.name}  ${d3.format(',.1f')(S[s.k][q])}`));
+    placeTip(el, tip, x(LABELS[q]) * sc, y(S.cap[q]) * sc); }).on('pointerleave', () => { tip.hidden = true; rule.attr('opacity', 0); });
+}
+
+function drawSummary() {
+  const tb = document.querySelector('#summary tbody'); tb.replaceChildren();
+  const q7 = LABELS.indexOf('2027Q4'), q8 = LABELS.indexOf('2028Q4');
+  for (const t of TICK) {
+    const b = RES.bands[t], st = RES.stats[t];
+    const se = (p) => (100 * Math.sqrt(p * (1 - p) / RES.n)).toFixed(1);
+    const cells = [F[t].name, fmtUSD(F[t].price), `${fmtUSD(b[q7][2])} (${fmtB(b[q7][0])}~${fmtB(b[q7][4])})`, `${fmtUSD(b[q8][2])} (${fmtB(b[q8][0])}~${fmtB(b[q8][4])})`,
+      `${Math.round(st.dd * 100)}% (±${se(st.dd)})`, Math.round(st.eq * 100) + '%', fmtB(st.ext), Math.round(st.cut * 100) + '%'];
+    const tr = document.createElement('tr');
+    cells.forEach((c, i) => { const td = document.createElement('td'); if (i === 0) { td.className = 'name'; const sw = document.createElement('span'); sw.className = 'sw'; sw.style.background = COLOR[t]; td.append(sw, document.createTextNode(c)); } else td.textContent = c; tr.appendChild(td); });
+    tb.appendChild(tr);
+  }
+}
+function drawCalib() {
+  const tb = document.querySelector('#calib tbody'); tb.replaceChildren();
+  for (const t of TICK) { const f = F[t], c = CAL[t];
+    const pc = (x) => Math.round(x * 100) + '%';
+    const cells = [f.name, fmtUSD(f.price), d3.format(',.1f')(f.shares * 10), d3.format(',.0f')(c.R), d3.format(',.0f')(sum(f.ocf)), d3.format(',.0f')(c.C), f.guide26,
+      `×${f.plan27.toFixed(2)} (${f.plan27src})`, f.floor[2027] ? d3.format(',.1f')(f.floor[2027]) : '없음', d3.format(',.0f')(f.leaseNC), d3.format(',.0f')(f.leaseLiab + f.rvg),
+      d3.format(',.0f')(f.cash), d3.format(',.0f')(f.debt), d3.format('.1f')(c.pe0), d3.format('.1f')(c.M0), `${c.rhoTrail.toFixed(2)} → ${c.rho.toFixed(2)}`, `${d3.format(',.0f')(f.cons.v)} / ${d3.format(',.0f')(f.cons.v28)} (${f.cons.src})`, pc(f.iv)];
+    const tr = document.createElement('tr'); cells.forEach((v, i) => { const td = document.createElement('td'); if (i === 0) td.className = 'name'; td.textContent = v; tr.appendChild(td); }); tb.appendChild(tr); }
+}
+
+function run() {
+  const t0 = performance.now();
+  const res = simulate(state, { noise: true, base: BASE, sigI: SIGI });
+  const bands = {}, stats = {}, fund = {};
+  TICK.forEach((t, j) => {
+    bands[t] = res.price[j].map((arr) => pct(arr, [0.1, 0.25, 0.5, 0.75, 0.9]));
+    const s = res.st[j]; let dd = 0, eq = 0, cut = 0; for (let i = 0; i < res.n; i++) { if (s.minpx[i] <= 0.7 * F[t].price) dd++; if (s.eq28[i] > 0.5) eq++; if (s.cut[i]) cut++; }
+    stats[t] = { dd: dd / res.n, eq: eq / res.n, cut: cut / res.n, ext: median(s.ext28) };
+    fund[t] = { ocf: res.ocfA[j].map(median), cap: res.capA[j].map(median), want: res.wantA[j].map(median), floor: Array.from(res.floorA[j]) };
+  });
+  RES = { bands, stats, fund, n: res.n };
+  drawSummary(); drawFans(); drawDist(); drawTabs(); drawFund();
+  document.getElementById('status').textContent = `${res.n.toLocaleString()}개 경로, ${Math.round(performance.now() - t0)}ms`;
+}
+let timer = null;
+function schedule() { clearTimeout(timer); document.getElementById('status').textContent = '계산 중…'; timer = setTimeout(run, 120); }
+let lastW = 0; window.addEventListener('resize', () => { const w = document.querySelector('.results').clientWidth; if (RES && Math.abs(w - lastW) > 20) { lastW = w; drawFans(); drawDist(); drawFund(); } });
+setControls(); drawCalib(); run(); lastW = document.querySelector('.results').clientWidth;
+window.__sim = { simulate, BASE, F, CAL, LABELS, SIGI };
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="빅테크 AI 설비투자를 주가·조달, 구글 연산 전략, 한국 에이전트 커머스로 나눠 보는 시나리오 시뮬레이터. 권석준(성균관대학교)."><meta name="author" content="권석준">
+<meta property="og:type" content="website"><meta property="og:title" content="빅테크 AI 투자 시뮬레이터"><meta property="og:description" content="빅테크 AI 설비투자를 주가·조달, 구글 연산 전략, 한국 에이전트 커머스로 나눠 보는 시나리오 시뮬레이터. 권석준(성균관대학교)."><meta property="og:locale" content="ko_KR">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="canonical" href="https://aicapex.sjoonkwon.com/"><meta property="og:url" content="https://aicapex.sjoonkwon.com/">
+</head><body>
+<title>빅테크 AI 투자 시뮬레이터</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column. A short masthead, then three model rows read like an index of exhibits, then the companion dashboard, citation notes and review record. */
+:root {
+  --bg: #f5f6f4; --panel: #ffffff; --ink: #15191c; --ink-2: #4a5157; --ink-3: #6f777d;
+  --rule: #dde1dd; --accent: #1f5d73; --accent-soft: #e2eef1; --warn: #8a5300; --warn-soft: #f8efdf;
+  --sans: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121618; --panel: #1a1f22; --ink: #e8ecec; --ink-2: #b2babd; --ink-3: #8b9498;
+  --rule: #2c3337; --accent: #7cc0d6; --accent-soft: #1d3138; --warn: #e2b46a; --warn-soft: #2e2618; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121618; --panel: #1a1f22; --ink: #e8ecec; --ink-2: #b2babd; --ink-3: #8b9498;
+  --rule: #2c3337; --accent: #7cc0d6; --accent-soft: #1d3138; --warn: #e2b46a; --warn-soft: #2e2618; color-scheme: dark; }
+
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.65; }
+.wrap > * { min-width: 0; }
+.wrap { max-width: 860px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 56px; display: grid; gap: 40px; }
+header { display: grid; gap: 12px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; color: var(--ink-3); text-transform: uppercase; }
+h1 { font-size: clamp(26px, 4.4vw, 36px); line-height: 1.25; font-weight: 700; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+.byline { margin: 0; font-size: 14px; color: var(--ink-2); }
+.byline strong { color: var(--ink); font-weight: 600; }
+.cite { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px; margin: 10px 0 0; max-width: 66ch; overflow-wrap: anywhere; }
+.lead { margin: 0; max-width: 62ch; color: var(--ink-2); font-size: 16px; }
+h2 { font-size: 13px; font-weight: 600; letter-spacing: .08em; color: var(--ink-3); margin: 0 0 12px; text-transform: uppercase; }
+
+.models { display: grid; gap: 0; border-top: 1px solid var(--rule); }
+.model { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr) auto; gap: 8px 24px; padding-block: 22px; border-bottom: 1px solid var(--rule); align-items: start; }
+.tag { font-family: var(--mono); font-size: 12px; color: var(--accent); padding-top: 4px; letter-spacing: .02em; }
+.model h3 { margin: 0; font-size: 19px; font-weight: 600; line-height: 1.35; text-wrap: balance; }
+.model h3 a { color: inherit; text-decoration: none; }
+.model h3 a:hover { color: var(--accent); }
+.q { margin: 6px 0 10px; color: var(--ink-2); max-width: 60ch; }
+.facts { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 14px; font-size: 13.5px; }
+.facts dt { color: var(--ink-3); }
+.facts dd { margin: 0; color: var(--ink); }
+.num { font-variant-numeric: tabular-nums; }
+.open { align-self: center; display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 6px; background: var(--accent); color: var(--bg); font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; }
+.open:hover { filter: brightness(1.08); }
+.open:focus-visible, .model h3 a:focus-visible, .side a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.side { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 20px; align-items: center; padding: 18px 20px; background: var(--accent-soft); border-radius: 8px; }
+.side p { margin: 0; color: var(--ink-2); font-size: 14px; }
+.side strong { color: var(--ink); font-weight: 600; }
+.side a { color: var(--accent); font-weight: 600; text-decoration: none; white-space: nowrap; }
+
+.notes { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.notes li { padding-left: 16px; position: relative; color: var(--ink-2); max-width: 66ch; }
+.notes li::before { content: ""; position: absolute; left: 0; top: .72em; width: 6px; height: 6px; border-radius: 50%; background: var(--warn); }
+.quote { margin: 4px 0 0; padding: 14px 16px; background: var(--warn-soft); border-radius: 6px; color: var(--ink); font-size: 14px; max-width: 66ch; }
+
+.review { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 520px; }
+th, td { text-align: left; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 600; color: var(--ink-3); font-size: 12.5px; white-space: nowrap; }
+td:first-child { font-family: var(--mono); color: var(--accent); white-space: nowrap; }
+.small { font-size: 13px; color: var(--ink-3); margin: 10px 0 0; max-width: 66ch; }
+footer { font-size: 13px; color: var(--ink-3); border-top: 1px solid var(--rule); padding-top: 16px; }
+
+@media (max-width: 640px) {
+  .model { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .tag { padding-top: 0; }
+  .open { justify-self: start; margin-top: 6px; }
+  .side { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">2026년 11월 5일 기준 · 시나리오 모형 3종</div>
+    <h1>빅테크 AI 투자 시뮬레이터</h1>
+    <p class="byline"><strong>권석준</strong> · 성균관대학교</p>
+    <p class="lead">마이크로소프트·알파벳·아마존·메타는 2026년에만 설비투자로 7천억 달러 넘게 쓰겠다고 안내했습니다. 이 돈이 어디로 흘러가는지 세 갈래로 나눠 따져 보는 모형입니다. 첫째는 4사의 주가와 조달이고, 둘째는 구글의 연산 배분 전략입니다. 셋째는 AI 에이전트가 바꿀 한국 온라인 쇼핑의 수익 구조입니다. 모든 조절기는 바꿀 수 있고, 결과는 브라우저 안에서 바로 다시 계산됩니다.</p>
+  </header>
+
+  <section>
+    <h2>모형</h2>
+    <div class="models">
+      <article class="model">
+        <div class="tag">주가 · 조달</div>
+        <div>
+          <h3><a href="/hyperscaler">하이퍼스케일러 주가 시뮬레이터</a></h3>
+          <p class="q">마이크로소프트·알파벳·아마존·메타가 AI 설비투자를 늘리거나 줄이면, 2028년까지 주가 분포와 외부 조달 필요액은 어떻게 달라질까요?</p>
+          <dl class="facts">
+            <dt>기준</dt><dd>2027~2028년 매출 컨센서스, 180일 옵션 내재변동성, 10-Q의 리스·구매 약정</dd>
+            <dt>경로</dt><dd class="num">회사별 10,000개 몬테카를로 경로, 프리셋 6개</dd>
+            <dt>눈여겨볼 결과</dt><dd>컨센서스 수준의 회수율에서는 추가 투자가 MSFT·AMZN·META의 가치를 줄입니다. 다만 컨센서스에 민감해서, MSFT는 컨센서스가 약 5% 높으면 본전이 됩니다. 조달에 가장 민감한 곳은 아마존입니다.</dd>
+          </dl>
+        </div>
+        <a class="open" href="/hyperscaler">열기 →</a>
+      </article>
+
+      <article class="model">
+        <div class="tag">전략</div>
+        <div>
+          <h3><a href="/google">구글 양다리 전략 시뮬레이터</a></h3>
+          <p class="q">구글은 TPU 연산을 클라우드 고객에게 팔 수도 있고, 제미나이에 남겨 둘 수도 있습니다. 바깥에 얼마나 팔아야 주당 가치가 가장 클까요?</p>
+          <dl class="facts">
+            <dt>기준</dt><dd>2026년 3분기 실적, 고정된 달러 일정의 외부 계약, 현재 주가에 맞춰 역산한 성장 배수</dd>
+            <dt>경로</dt><dd>시나리오 5개(제미나이 승리, 대등, 무기상 승리, 설비 과잉, 에이전트 급전환)의 확률 가중</dd>
+            <dt>눈여겨볼 결과</dt><dd class="num">외부 판매 비중 0.25~0.40에서는 주당 가치 차이가 5달러 이내입니다. 한 점을 고를 근거는 약합니다.</dd>
+          </dl>
+        </div>
+        <a class="open" href="/google">열기 →</a>
+      </article>
+
+      <article class="model">
+        <div class="tag">한국 산업</div>
+        <div>
+          <h3><a href="/commerce">에이전트 커머스 시뮬레이터</a></h3>
+          <p class="q">AI 에이전트가 대신 쇼핑하게 되면, 2035년 한국 온라인 쇼핑의 광고·수수료 수익은 포털·글로벌 모델·마켓·판매자 가운데 누구에게 갈까요?</p>
+          <dl class="facts">
+            <dt>기준</dt><dd>2025년 한국 온라인쇼핑 거래액 272조 원, 과금 방식의 이동(노출당 → 클릭당 → 거래당), 추론 비용과 토큰 사용량 추세</dd>
+            <dt>경로</dt><dd class="num">통제권 시나리오 5개, 몬테카를로 600회</dd>
+            <dt>눈여겨볼 결과</dt><dd class="num">구매 1건의 수익이 추론비를 덮는 배수는 2030년 중앙값 2.2배입니다. 다만 10~90분위가 0.5~8.9배로 넓습니다.</dd>
+          </dl>
+        </div>
+        <a class="open" href="/commerce">열기 →</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="side" aria-label="함께 보는 자료">
+    <p><strong>빅테크 설비투자 대시보드</strong>는 4사의 분기 설비투자와 한국 메모리의 목적지별 수출을 나란히 보여 줍니다. 매달 SEC 공시로 갱신됩니다.</p>
+    <a href="https://claude.ai/artifact/9JwmVMUqKiQcERRYw9rizW" target="_blank" rel="noopener">대시보드 열기 ↗</a>
+  </section>
+
+  <section>
+    <h2>인용할 때</h2>
+    <ul class="notes">
+      <li>세 모형 모두 예측이 아니라 시나리오입니다. 결과는 AI 투자가 매출로 얼마나 회수되는지에 대한 가정에 따라 달라집니다.</li>
+      <li>주가 분포의 폭과 하락 확률은 대부분 옵션 내재변동성에서 나옵니다. 모형 고유의 정보는 시나리오 사이의 차이에 있습니다.</li>
+      <li>마이크로소프트·알파벳의 매출 컨센서스는 3분기 실적 발표(10월 28일) 전 값입니다. 메타와 아마존은 발표 뒤 값입니다. 컨센서스는 출처마다 2~5% 다릅니다.</li>
+      <li>2023년부터 되짚어 본 백테스트에서 투자 회수율은 시기에 따라 0에서 0.8까지 흔들렸습니다. 실제 주가는 모두 모의 분포의 위쪽 꼬리에 떨어졌습니다.</li>
+    </ul>
+    <p class="cite">인용: 권석준 (2026). 빅테크 AI 투자 시뮬레이터, 2026년 11월 5일판.</p>
+    <p class="quote">권장 문구: “기준 경로는 2027~2028년 매출 컨센서스에 맞춘 가정이며, 주가 분포의 폭과 하락 확률은 대부분 옵션 내재변동성에서 나온다. 결과는 예측이 아니라 AI 회수 가정에 조건부인 시나리오다.”</p>
+  </section>
+
+  <section>
+    <h2>검토 이력</h2>
+    <div class="review">
+      <table>
+        <thead><tr><th>차수</th><th>범위</th><th>주요 수정</th></tr></thead>
+        <tbody>
+          <tr><td>1차</td><td>세 모형 전체, 관점별 검토자 9명</td><td>구글 모형의 최적점이 하한에 붙는 구조를 고쳤습니다. 계약은 고정 일정으로 바꾸고 부족분 구매를 넣었습니다.</td></tr>
+          <tr><td>2차</td><td>정밀 검토 6명, 2023년 기점 백테스트</td><td>컨센서스 값과 시점을 다시 확인했습니다. 리스·미수금·법률 비용을 공시에 맞췄습니다.</td></tr>
+          <tr><td>3차</td><td>2차 수정분, 검토자 3명</td><td>컨센서스 보정을 2027~2028년 합으로 바꿨습니다. 프리셋을 대칭으로 다시 짰습니다.</td></tr>
+          <tr><td>4차</td><td>3차 이후 변경분</td><td>아마존 리스 개시 시점을 10-Q에 맞췄고, 페이지 설명을 엔진 출력과 맞췄습니다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">검토는 서로의 결과를 보지 않은 Claude 하위 에이전트들이 수행했습니다. 사람 전문가의 검토를 대신하지 않습니다. 숫자는 가능한 한 1차 공시(SEC 10-Q·XBRL)로 확인했습니다.</p>
+  </section>
+
+  <footer>모형 설계와 해석은 권석준이 했고, 코드 구현과 교차 검토에는 AI(Claude)를 활용했습니다. 각 시뮬레이터는 브라우저 안에서만 계산하며, 입력값은 저장되거나 전송되지 않습니다.</footer>
+</div>
+
+</body></html>

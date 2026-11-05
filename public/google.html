@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="author" content="권석준"><meta property="og:title" content="구글 양다리 전략 시뮬레이터"><meta property="og:description" content="빅테크 AI 설비투자를 주가·조달, 구글 연산 전략, 한국 에이전트 커머스로 나눠 보는 시나리오 시뮬레이터. 권석준(성균관대학교)."><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="canonical" href="https://aicapex.sjoonkwon.com/google"><meta property="og:url" content="https://aicapex.sjoonkwon.com/google"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}
+:root{--hb-bg:#eef2f1;--hb-ink:#1f5d73;--hb-rule:#d5dcda}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hb-bg:#172024;--hb-ink:#7cc0d6;--hb-rule:#2c3337}}
+:root[data-theme="dark"]{--hb-bg:#172024;--hb-ink:#7cc0d6;--hb-rule:#2c3337}
+.hub-back{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--hb-bg);border-bottom:1px solid var(--hb-rule);padding-block:9px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));font:500 13px "IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}
+.hub-back a{color:var(--hb-ink);text-decoration:none}.hub-back a:hover{text-decoration:underline}
+.hub-back a:focus-visible{outline:2px solid var(--hb-ink);outline-offset:2px}
+</style></head><body>
+<nav class="hub-back" aria-label="시뮬레이터 목록"><a href="/">← 빅테크 AI 투자 시뮬레이터 · 권석준</a><span><a href="/hyperscaler">주가·조달</a> · <a href="/commerce">에이전트 커머스</a></span></nav>
+<title>구글 양다리 전략 시뮬레이터</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: one reading column for text, a two-column control-plus-chart grid on wide screens, single column on phones. */
+:root {
+  --bg: #f4f6f8; --panel: #ffffff; --ink: #141a22; --ink-2: #4a5462; --ink-3: #6b7685; --rule: #d9dfe6; --accent: #1d5a8c; --accent-soft: #e3edf6;
+  --warn: #9a5b00; --warn-soft: #fbf1e1;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --mix: #141a22;
+  --f-display: "IBM Plex Sans KR", "Noto Sans KR", system-ui, sans-serif;
+  --f-body: "Noto Sans KR", "Apple SD Gothic Neo", system-ui, sans-serif;
+  --f-data: "Arial Narrow", "Liberation Sans Narrow", "Roboto Condensed", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12161b; --panel: #1a2028; --ink: #eef1f4; --ink-2: #b9c2cd; --ink-3: #8d98a6; --rule: #2e3742; --accent: #7fb3e3; --accent-soft: #1f2d3b;
+  --warn: #e0a64a; --warn-soft: #2d2416;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --mix: #eef1f4; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12161b; --panel: #1a2028; --ink: #eef1f4; --ink-2: #b9c2cd; --ink-3: #8d98a6; --rule: #2e3742; --accent: #7fb3e3; --accent-soft: #1f2d3b;
+  --warn: #e0a64a; --warn-soft: #2d2416;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --mix: #eef1f4; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.65; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 28px; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.7rem, 3.2vw, 2.4rem); line-height: 1.25; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h2 { font-family: var(--f-display); font-weight: 600; font-size: 1.3rem; margin: 0; text-wrap: balance; }
+h3 { font-family: var(--f-display); font-weight: 600; font-size: 1.05rem; margin: 0; }
+p { margin: 0; }
+.lead { max-width: 68ch; color: var(--ink-2); font-size: 1.05rem; }
+.eyebrow { font-family: var(--f-data); font-size: 0.95rem; letter-spacing: 0.06em; color: var(--accent); text-transform: uppercase; }
+.note { color: var(--ink-3); font-size: 0.9rem; line-height: 1.55; }
+.disclose { background: var(--warn-soft); border-left: 3px solid var(--warn); padding: 12px 16px; font-size: 0.95rem; max-width: 80ch; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px; }
+.kpi { background: var(--panel); border: 1px solid var(--rule); padding: 14px 16px; display: grid; gap: 4px; min-width: 0; }
+.kpi .v { font-family: var(--f-data); font-size: 2rem; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.kpi .k { font-size: 0.9rem; color: var(--ink-2); }
+.main { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .main { grid-template-columns: minmax(0, 1fr); } }
+.controls { background: var(--panel); border: 1px solid var(--rule); padding: 16px; display: grid; gap: 14px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); }
+@media (max-width: 860px) { .controls { position: static; } }
+.controls fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; }
+.controls legend { font-family: var(--f-display); font-weight: 600; font-size: 0.98rem; margin-bottom: 4px; }
+.ctl { display: grid; gap: 2px; }
+.ctl label { display: flex; justify-content: space-between; gap: 8px; font-size: 0.9rem; color: var(--ink-2); }
+.ctl output { font-family: var(--f-data); font-size: 1rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+.ctl input[type=range] { width: 100%; accent-color: var(--accent); }
+.chk { display: flex; gap: 8px; align-items: flex-start; font-size: 0.9rem; color: var(--ink-2); }
+.btn { font: inherit; font-size: 0.9rem; padding: 6px 12px; border: 1px solid var(--accent); background: var(--accent-soft); color: var(--ink); cursor: pointer; }
+.btn:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: 0; }
+.charts { display: grid; gap: 18px; min-width: 0; }
+.fig { background: var(--panel); border: 1px solid var(--rule); padding: 16px; display: grid; gap: 8px; min-width: 0; position: relative; }
+.cap { display: flex; gap: 10px; align-items: baseline; }
+.lab { font-family: var(--f-data); font-weight: 700; font-size: 1.5rem; line-height: 1; }
+.chart { position: relative; min-height: 300px; }
+.chart svg { display: block; overflow: visible; }
+.chart text { font-family: var(--f-data); fill: var(--ink-2); font-size: 15px; }
+.chart text.strong { fill: var(--ink); font-size: 16px; font-weight: 700; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--f-data); font-size: 15px; color: var(--ink-2); }
+.tt { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--rule); box-shadow: 0 4px 16px rgba(0,0,0,.12); padding: 6px 10px; font-family: var(--f-data); font-size: 15px; color: var(--ink); white-space: nowrap; z-index: 5; }
+.tt .h { color: var(--ink-3); }
+.tblwrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-family: var(--f-data); font-size: 16px; font-variant-numeric: tabular-nums; }
+th, td { padding: 7px 10px; border-bottom: 1px solid var(--rule); text-align: right; white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--ink-3); font-weight: 600; }
+td.txt { text-align: left; white-space: normal; min-width: 24ch; font-family: var(--f-body); font-size: 0.9rem; }
+.tag { display: inline-block; font-size: 0.8rem; padding: 1px 6px; border: 1px solid var(--rule); color: var(--ink-2); }
+.tag.data { border-color: var(--accent); color: var(--accent); }
+section.text { display: grid; gap: 12px; max-width: 80ch; }
+section.text ol, section.text ul { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+.busy { font-family: var(--f-data); color: var(--ink-3); font-size: 0.95rem; min-height: 1.4em; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+<div class="wrap">
+  <header style="display:grid;gap:12px">
+    <p class="eyebrow">Alphabet · 연산 설비 배분 · 시나리오 몬테카를로</p>
+    <h1>구글 양다리 전략 시뮬레이터</h1>
+    <p class="lead">구글은 2026년에만 1,950억~2,050억 달러(회사 안내치)를 들여 짓는 연산 설비를 두 곳에 나눠 씁니다. 한쪽은 제미나이·검색·유튜브 같은 자사 서비스입니다. 다른 쪽은 구글 클라우드를 통해 다른 모델 회사와 기업에 빌려주는 것입니다. 이 페이지는 외부에 빌려주는 비중 <b>a</b>를 0.05에서 0.85까지 바꿔 가며, 다섯 시나리오에서 주당 가치가 어떻게 달라지는지 계산합니다.</p>
+    <p class="disclose">이 페이지를 만든 Claude는 Anthropic의 모델입니다. Anthropic은 구글 클라우드에서 연산을 사는 고객이면서 제미나이와 경쟁합니다. 해석할 때 이 이해관계를 감안해 주세요. 또 이 페이지는 가정에 기대는 시나리오 모형이며, 투자 조언이 아닙니다.</p>
+  </header>
+
+  <div class="kpis" aria-live="polite">
+    <div class="kpi"><span class="k">현재 주가(2026-10-30 종가)</span><span class="v">$279.84</span><span class="note">모형의 기준점입니다. 주가 시뮬레이터와 같은 날짜입니다.</span></div>
+    <div class="kpi"><span class="k">시장 가격이 요구하는 AI 수요 성장</span><span class="v" id="kpi-km">—</span><span class="note">기준 시나리오 수요 증가율의 몇 배여야 현재 주가가 나오는지(역산). <span id="kpi-kmr"></span></span></div>
+    <div class="kpi"><span class="k">시나리오 가중 기대 가치가 거의 같은 외부 비중</span><span class="v" id="kpi-amix">—</span><span class="note" id="kpi-amix-n">현재 비중은 0.40으로 가정했습니다.</span></div>
+    <div class="kpi"><span class="k">정보의 가치 상한(EVPI, 주당)</span><span class="v" id="kpi-flex">—</span><span class="note">어느 시나리오인지 미리 알고 비중을 고를 수 있다면 더 얻는 가치의 상한입니다. 시나리오마다 최적 비중이 크게 다르기 때문에 생깁니다. 비중을 실제로 바꾸는 데 드는 시간과 비용은 빠져 있습니다.</span></div>
+    <div class="kpi"><span class="k">가정 분산(최적 비중, 주당)</span><span class="v" id="kpi-pool">—</span><span class="note" id="kpi-pool-n">다섯 시나리오의 가정을 확률로 섞은 분포입니다.</span></div>
+  </div>
+
+  <div class="main">
+    <form class="controls" id="controls" aria-label="시뮬레이션 조건">
+      <fieldset>
+        <legend>시나리오 확률</legend>
+        <div class="ctl"><label for="pA"><span><i class="swatch" style="background:var(--s1)"></i>A 제미나이 승리</span><output id="pA-o"></output></label><input id="pA" type="range" min="0" max="100" step="5" value="20"></div>
+        <div class="ctl"><label for="pB"><span><i class="swatch" style="background:var(--s2)"></i>B 대등</span><output id="pB-o"></output></label><input id="pB" type="range" min="0" max="100" step="5" value="30"></div>
+        <div class="ctl"><label for="pC"><span><i class="swatch" style="background:var(--s3)"></i>C 무기상 승리</span><output id="pC-o"></output></label><input id="pC" type="range" min="0" max="100" step="5" value="20"></div>
+        <div class="ctl"><label for="pD"><span><i class="swatch" style="background:var(--s4)"></i>D 설비 과잉</span><output id="pD-o"></output></label><input id="pD" type="range" min="0" max="100" step="5" value="15"></div>
+        <div class="ctl"><label for="pE"><span><i class="swatch" style="background:var(--s5)"></i>E 에이전트 급전환</span><output id="pE-o"></output></label><input id="pE" type="range" min="0" max="100" step="5" value="15"></div>
+        <p class="note">합이 100이 아니어도 비율로 다시 나눕니다.</p>
+      </fieldset>
+      <fieldset>
+        <legend>공통 가정</legend>
+        <div class="ctl"><label for="kMul">에이전트 전환 속도(배)<output id="kMul-o"></output></label><input id="kMul" type="range" min="0.5" max="2" step="0.1" value="1"></div>
+        <div class="ctl"><label for="tauMul">TPU 비용 경쟁력 변화(지금 대비 배)<output id="tauMul-o"></output></label><input id="tauMul" type="range" min="0.8" max="1.3" step="0.05" value="1"></div>
+        <div class="ctl"><label for="uMul">자사 연산 수요 증가(시나리오 대비 배)<output id="uMul-o"></output></label><input id="uMul" type="range" min="0.5" max="2" step="0.1" value="1"></div>
+        <div class="ctl"><label for="decay">연산 설비의 가치 감소(연)<output id="decay-o"></output></label><input id="decay" type="range" min="15" max="40" step="5" value="25"></div>
+        <div class="ctl"><label for="prem">자사 부족분을 시장에서 살 때의 웃돈<output id="prem-o"></output></label><input id="prem" type="range" min="0" max="100" step="10" value="30"></div>
+        <label class="chk" for="buy"><input id="buy" type="checkbox" checked> 자사 연산이 모자라면 시장에서 사 온다(끄면 모자란 만큼 서비스 품질이 떨어짐)</label>
+        <div class="ctl"><label for="aref">경쟁사 강화가 시작되는 외부 비중<output id="aref-o"></output></label><input id="aref" type="range" min="25" max="55" step="5" value="40"></div>
+        <div class="ctl"><label for="psi">외부 판매를 줄일 때의 반사 이익(경쟁사 강화 대비)<output id="psi-o"></output></label><input id="psi" type="range" min="0" max="1" step="0.1" value="0.1"></div>
+        <div class="ctl"><label for="mceShift">클라우드 현금 마진 조정(%p)<output id="mceShift-o"></output></label><input id="mceShift" type="range" min="-15" max="10" step="1" value="0"></div>
+        <div class="ctl"><label for="phi">경쟁사 강화 효과<output id="phi-o"></output></label><input id="phi" type="range" min="0" max="1.2" step="0.1" value="0.6"></div>
+        <div class="ctl"><label for="r">할인율<output id="r-o"></output></label><input id="r" type="range" min="7" max="12" step="0.5" value="9"></div>
+        <div class="ctl"><label for="lam">위험 회피 강도 λ<output id="lam-o"></output></label><input id="lam" type="range" min="0" max="1.5" step="0.1" value="0.5"></div>
+        <label class="chk" for="calib"><input id="calib" type="checkbox" checked> 조건을 바꿀 때마다 현재 주가에 맞춰 AI 수요 수준을 다시 역산</label>
+      </fieldset>
+      <button class="btn" type="button" id="reset">기본값으로</button>
+      <p class="busy" id="busy"></p>
+    </form>
+
+    <div class="charts">
+      <section class="fig" id="fig-a">
+        <p class="cap"><span class="lab">a</span><span class="note">시나리오별 최적 외부 판매 비중. 채운 점은 기대 가치를 최대로 하는 비중, 빈 원은 기대 가치 − λ×표준편차를 최대로 하는 비중입니다. 세로 실선은 현재 비중(0.40, 가정), 점선은 시나리오 가중 최적입니다. 계약 물량은 비중과 상관없이 먼저 공급하므로, 작은 비중은 '계약분만 공급'을 뜻합니다.</span></p>
+        <div class="chart" id="chartA" style="min-height:260px"></div>
+      </section>
+      <section class="fig" id="fig-b">
+        <p class="cap"><span class="lab">b</span><span class="note">외부 판매 비중에 따른 주당 기대 가치(달러). 검은 굵은 선은 시나리오 가중 평균, 가로 점선은 현재 주가입니다.</span></p>
+        <div class="legend" id="legB"></div>
+        <div class="chart" id="chartB"></div>
+      </section>
+      <section class="fig" id="fig-c">
+        <p class="cap"><span class="lab">c</span><span class="note">위험과 기대 가치의 경계. 각 선은 비중을 0.05에서 0.85로 옮길 때의 (표준편차, 기대 가치) 경로이고, 점은 위험 조정 최적입니다.</span></p>
+        <div class="chart" id="chartC"></div>
+      </section>
+      <section class="fig" id="fig-d">
+        <p class="cap"><span class="lab">d</span><span class="note">위험 조정 최적 비중에서의 주당 가치 분포. 선은 10~90분위, 상자는 25~75분위, 굵은 눈금은 중앙값입니다. 회색 눈금은 현재 비중(0.40)일 때의 중앙값, 세로 점선은 현재 주가입니다.</span></p>
+        <div class="chart" id="chartD"></div>
+      </section>
+    </div>
+  </div>
+
+  <section class="fig">
+    <h2>시나리오별 결과</h2>
+    <div class="tblwrap"><table id="tbl"><thead><tr><th>시나리오</th><th>확률</th><th>기대 가치 최적 a</th><th>위험 조정 최적 a</th><th>주당 기대 가치</th><th>10분위</th><th>90분위</th><th>가정 분산(연율)</th><th>잔존가치 비중</th></tr></thead><tbody></tbody></table></div>
+    <p class="note">10·90분위와 가정 분산은 한 시나리오 안에서 가정(점유율, 수요, 가격, 마진)을 흔들어 얻은 주당 가치의 퍼짐입니다. 주가 변동성이나 확률이 아닙니다. 가정 분산은 로그 가치의 표준편차를 √3으로 나눈 값입니다. 비교하자면, 최근 49거래일(2026-08-21~10-30) GOOG 종가의 실현 변동성은 연율 36.8%이고, 실적 발표 다음 날(단순 수익률 −12.3%, 로그 수익률 −13.1%)을 빼면 22.4%입니다. 잔존가치 비중은 2033년 이후 가치가 전체에서 차지하는 몫입니다. 80%를 넘으면 결론이 장기 가정에 크게 기댄다는 뜻입니다.</p>
+  </section>
+
+  <section class="fig">
+    <h2>시나리오 정의</h2>
+    <div class="tblwrap"><table><thead><tr><th>시나리오</th><th>제미나이 위치(점유율)</th><th>외부 연산 수요 증가</th><th>자사 AI 제품 수요 증가</th><th>연산 가격 하락(연)</th><th>TPU 배수</th><th>2027~2032 설비투자</th><th>뜻</th></tr></thead><tbody>
+      <tr><td>A 제미나이 승리</td><td>45%</td><td>30%</td><td>90%</td><td>5%</td><td>1.00</td><td>3,000~3,400억 달러</td><td class="txt">제미나이가 소비자 AI에서 이깁니다. 자사 연산이 가장 값집니다.</td></tr>
+      <tr><td>B 대등</td><td>30%</td><td>40%</td><td>70%</td><td>5%</td><td>1.00</td><td>3,000~3,400억 달러</td><td class="txt">지금의 구도가 이어집니다.</td></tr>
+      <tr><td>C 무기상 승리</td><td>18%</td><td>55%</td><td>40%</td><td>0%</td><td>1.20</td><td>3,000~3,600억 달러</td><td class="txt">제미나이는 밀리지만, TPU와 클라우드가 다른 모델 회사의 공급자로 이깁니다.</td></tr>
+      <tr><td>D 설비 과잉</td><td>30%</td><td>8%</td><td>35%</td><td>25%</td><td>0.90</td><td>2,400억에서 1,100억 달러로 축소</td><td class="txt">업계 전체가 과잉 설비를 떠안아 연산 값이 떨어집니다.</td></tr>
+      <tr><td>E 에이전트 급전환</td><td>30%</td><td>40%</td><td>85%</td><td>5%</td><td>1.00</td><td>3,000~3,400억 달러</td><td class="txt">검색 광고가 에이전트 거래로 빠르게 옮겨 갑니다(전환 중간점 2028년 하반기).</td></tr>
+    </tbody></table></div>
+    <p class="note">2033년 이후 잔존가치에 쓰는 신규 투자 수익률은 A 20%, B·C·E 15%이고, D는 할인율 +0.5%p로 두어 성장이 가치를 거의 더하지 않습니다. 수요 증가율은 첫해 값이고 해마다 20%씩 줄어듭니다. 위 수요 증가율에는 화면 위쪽의 역산 배수가 곱해집니다. 모든 수치는 가정이며, 각 표본마다 정규분포로 흔듭니다(점유율 ±5%p, 수요 증가 ±12~15%p, 가격 하락 ±4%p, 마진 ±6%p, 광고시장 성장 ±2%p).</p>
+  </section>
+
+  <section class="text">
+    <h2>모형이 하는 일</h2>
+    <ol>
+      <li><b>연산 용량.</b> 설비투자(2017~2026년 실적, 2027년 이후 시나리오 값) 가운데 서버 몫 60%만 연산 용량이 됩니다. 집행 반년 뒤부터 가동하고, 해마다 일정 비율(기본 25%)씩 가치가 줄어드는 빈티지로 쌓습니다. 건물 몫은 감가상각에만 들어갑니다.</li>
+      <li><b>배분.</b> 용량의 a는 외부에 빌려주고, 1−a는 자사 서비스에 씁니다.</li>
+      <li><b>외부 판매.</b> 이미 맺은 장기 계약은 비중과 상관없이 먼저 공급합니다. 계약 물량은 시나리오와 무관한 달러 일정입니다. 구글 클라우드 잔여 이행 의무 5,608억 달러 가운데 외부 연산 몫(45%, 가정)을 공시대로 55%는 24개월 안에(2027~2028년 연 694억 달러), 나머지는 2029~2033년에 나눠 인식한다고 보았습니다. 계약 밖 몫은 시장 가격으로 외부 수요까지만 팔립니다. 팔리지 않은 외부 용량은 자사 서비스로 돌립니다. 외부가 실제로 쓰는 비중이 기준점(기본 0.40)을 넘으면 그 연산으로 경쟁 모델이 강해져 제미나이의 위치가 깎이고, 기준점보다 낮으면 그 효과의 일부(기본 10%)만큼 득을 봅니다.</li>
+      <li><b>자사 사용.</b> 자사 연산이 필요량에 못 미치면 모자란 만큼을 시장에서 웃돈(기본 30%)을 얹어 사 옵니다. 이 기능을 끄면 검색의 AI 답변을 다 처리하지 못하고, 제미나이의 품질도 떨어집니다. 쓰고도 남는 자사 용량은 헐값(정가의 15%)에만 팔립니다. 제미나이의 위치는 검색 점유율, 에이전트 거래에서 가져가는 몫, 자사 AI 제품 매출을 함께 움직입니다.</li>
+      <li><b>에이전트 전환.</b> 상거래 질의 가운데 에이전트가 처리하는 몫이 S자로 늘어 최대 60%가 됩니다. 그 몫에서 구글은 제미나이의 위치만큼, 클릭당 광고보다 낮은 거래당 과금(55~75%)으로 수익을 얻습니다.</li>
+      <li><b>가치.</b> 2027~2032년 잉여현금흐름과 2033년 이후 잔존가치(성장 3%, 신규 투자 수익률은 시나리오별)를 할인합니다. 여기에 현금성 자산 2,651억 달러에서 차입금 1,261억 달러와 지분 평가이익의 이연법인세 278억 달러를 빼고, 비시장성 지분증권 1,282억 달러를 더한 2,393억 달러를 더합니다. 이를 주식 수 123.5억 주(의무전환우선주를 최대 전환비율로 바꾼 5,370만 주 포함)로 나눕니다. 본사 비용과 기타 사업 손실은 3분기 값(77억 + 21억 달러)의 4배인 388억 달러에서 시작해 연 5%씩 늘립니다(가정, 실제로는 최근 1년에 40~70% 늘었습니다). 법인세율은 18.1%(최근 4분기 실효세율)입니다.</li>
+      <li><b>시장가 보정.</b> 현재 비중 0.40에서 시나리오 가중 기대 가치가 현재 주가와 같아지도록 AI 수요 증가율 전체에 곱하는 배수를 역산합니다. 그래서 절대 수준보다 시나리오 사이의 차이와 비중에 따른 변화를 읽는 모형입니다. 이 배수는 할인율에 따라 달라지므로 위쪽에 할인율 8~10%의 범위를 함께 적었습니다.</li>
+    </ol>
+  </section>
+
+  <section class="fig">
+    <h2>자료와 가정</h2>
+    <div class="tblwrap"><table><thead><tr><th>항목</th><th>값</th><th>구분</th><th>출처</th></tr></thead><tbody>
+      <tr><td>검색·기타 매출(2026년 3분기)</td><td>633.5억 달러(+12%)</td><td><span class="tag data">자료</span></td><td class="txt">Data Studios, 실적 발표 요약</td></tr>
+      <tr><td>유튜브 광고 매출</td><td>112.1억 달러(+9.2%)</td><td><span class="tag data">자료</span></td><td class="txt">Data Studios, XTB</td></tr>
+      <tr><td>구독·플랫폼·기기 매출</td><td>142.9억 달러</td><td><span class="tag data">자료</span></td><td class="txt">Data Studios</td></tr>
+      <tr><td>구글 클라우드 매출·영업이익</td><td>307.1억 달러(+103%), 111.2억 달러</td><td><span class="tag data">자료</span></td><td class="txt">PPC Land, Data Studios</td></tr>
+      <tr><td>전사 영업이익·감가상각(분기)</td><td>405.8억 달러, 83.7억 달러</td><td><span class="tag data">자료</span></td><td class="txt">SEC XBRL(10-Q)</td></tr>
+      <tr><td>설비투자(분기), 2026년 안내치</td><td>513.6억 달러, 1,950~2,050억 달러</td><td><span class="tag data">자료</span></td><td class="txt">SEC XBRL, PPC Land</td></tr>
+      <tr><td>현금성 자산·차입금·비시장성 지분증권(9월 말)</td><td>2,651억, 1,261억, 1,282억 달러</td><td><span class="tag data">자료</span></td><td class="txt">SEC XBRL</td></tr>
+      <tr><td>주식 수</td><td>122.94억 주 + 의무전환우선주 0.537억 주</td><td><span class="tag data">자료</span></td><td class="txt">SEC XBRL. 지금 주가가 발행가보다 낮아 최대 전환비율(1,000달러당 약 2.82주)을 적용했습니다.</td></tr>
+      <tr><td>본사 비용·기타 사업 손실(분기)</td><td>77억 + 21억 달러</td><td><span class="tag data">자료</span></td><td class="txt">Alphabet 2026년 3분기 부문 표</td></tr>
+      <tr><td>클라우드 잔여 이행 의무</td><td>5,608억 달러, 24개월 안 인식 55%</td><td><span class="tag data">자료</span> <span class="tag">가정</span></td><td class="txt">Alphabet 2026년 3분기 10-Q. 그 가운데 외부 연산 몫 45%와 2029년 이후 배분은 가정입니다.</td></tr>
+      <tr><td>지분 평가이익 이연법인세</td><td>278억 달러</td><td><span class="tag data">자료</span></td><td class="txt">Alphabet 2026년 3분기 10-Q. 신용파생 보증(명목 480억 달러), 지분 출자 약정 211억 달러, Crux 보증(최대 100억 달러)은 넣지 않았습니다.</td></tr>
+      <tr><td>클라우드 매출 구성</td><td>외부 연산 45%, 자사 AI 제품 20%, 기타 35%</td><td><span class="tag">가정</span></td><td class="txt">구글은 이 구분을 공시하지 않습니다.</td></tr>
+      <tr><td>현재 외부 판매 비중</td><td>0.40</td><td><span class="tag">가정</span></td><td class="txt">공시되지 않습니다. 비중과 상관없이 계약 물량은 먼저 공급합니다.</td></tr>
+      <tr><td>현금 마진(감가상각 전)</td><td>외부 연산 60%, 자사 AI 제품 55%, 광고·구독 50%(보정값)</td><td><span class="tag">가정</span></td><td class="txt">광고·구독 마진은 3분기 영업이익을 맞추도록 역산했습니다.</td></tr>
+      <tr><td>설비 내용연수</td><td>서버(60%) 6년, 건물·설비(40%) 25년</td><td><span class="tag">가정</span></td><td class="txt">주가 시뮬레이터와 같은 가정입니다. 3분기 감가상각에 맞춰 수준을 보정했습니다.</td></tr>
+      <tr><td>자사 연산 수요 증가</td><td>첫해 40~80%, 해마다 25%씩 둔화</td><td><span class="tag">가정</span></td><td class="txt">토큰 처리량 증가에서 모델·하드웨어 효율 개선을 뺀 연산 수요로 해석합니다. 조절기로 배수를 바꿀 수 있습니다.</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section class="text">
+    <h2>한계</h2>
+    <ul>
+      <li>배분 비중 a, 클라우드 매출 구성, 마진은 공시되지 않아 모두 가정입니다. 결론은 이 가정에 민감합니다.</li>
+      <li>설비투자 경로는 a와 무관하게 시나리오마다 고정했습니다. 실제로는 배분과 투자 규모를 함께 정합니다.</li>
+      <li>경쟁사 강화 효과는 한 줄의 비례식입니다. 앤트로픽 같은 고객이 엔비디아나 다른 클라우드로 옮겨 갈 수 있다는 점은 비중을 낮출 때 효과가 작다는 비대칭으로만 넣었습니다.</li>
+      <li>시장가 보정은 현재 주가가 시나리오 가중 기대 가치와 같다고 가정합니다. 시장이 틀렸을 가능성은 이 모형 밖에 있습니다.</li>
+      <li>규제(검색 독점 소송의 처분), 금리 경로, 자사주 매입 재개 같은 변수는 넣지 않았습니다.</li>
+      <li>클라우드 매출에는 TPU 시스템 판매가 섞여 있습니다. 이는 빌려주는 용량이 아니라 재고에서 한 번에 인식하는 판매이고, 재매입 조건이 붙기도 합니다. 규모가 공시되지 않아 따로 모형화하지 않았습니다.</li>
+      <li>주요 시나리오에서 잔존가치가 전체 가치의 대부분을 차지합니다(표의 잔존가치 비중). 2033년 이후 가정이 결론을 크게 좌우한다는 뜻입니다.</li>
+      <li>최적 비중은 자사 연산 수요의 증가 속도에 가장 민감합니다. 이 값은 토큰 처리량 공시만으로 정할 수 없습니다(연산당 토큰 효율의 개선 속도가 공시되지 않기 때문입니다).</li>
+      <li>구글이 최대 100억 달러까지 보증하는 관계사 Crux의 AI 수주(168억 달러)는 넣지 않았습니다.</li>
+    </ul>
+  </section>
+
+  <section class="text">
+    <h2>출처</h2>
+    <ul class="note">
+      <li><a href="https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json">SEC EDGAR XBRL companyfacts, Alphabet(분기 재무, 주식 수, 현금, 부채, 감가상각)</a></li>
+      <li><a href="https://ppc.land/alphabets-free-cash-flow-drops-to-negative-9-1bn-despite-26-2bn-profit/">PPC Land, Alphabet 3분기 잉여현금흐름 −91억 달러</a></li>
+      <li><a href="https://www.datastudios.org/post/alphabet-q3-2026-results-google-cloud-doubles-30-7-billion-capex-51-billion">Data Studios, Alphabet 2026년 3분기 부문별 매출</a></li>
+      <li><a href="https://www.xtb.com/en/market-analysis/news-and-research/alphabet-disappoints-wall-street-despite-record-results-shares-plunge-over-8-and-test-300">XTB, 실적 발표와 주가 반응(2026-10-28)</a></li>
+      <li><a href="https://stockanalysis.com/stocks/googl/history/">StockAnalysis, GOOGL 일별 종가(2026-10-30 $279.84)</a></li>
+      <li><a href="https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000084/goog-20260930.htm">Alphabet 2026년 3분기 10-Q(잔여 이행 의무, 의무전환우선주, 비시장성 지분증권)</a></li>
+      <li><a href="https://www.alphaquery.com/stock/GOOGL/volatility-option-statistics">alphaquery, GOOGL 180일 내재변동성(2026-11-03)</a></li>
+      <li><a href="https://stockanalysis.com/stocks/goog/history/">StockAnalysis, GOOG 일별 종가(실현 변동성 계산)</a></li>
+      <li><a href="https://www.useluminix.com/reports/industry-analysis/hyperscaler-capex-q3-2026">Luminix, 하이퍼스케일러 2026년 설비투자 안내치</a></li>
+    </ul>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+// ---- engine v2 (shared by node test and page; model3.py is the Python twin, checked by parity.js) ----
+const ENG = (() => {
+  // Alphabet 2026Q3, $B annualized (x4). Sources on the page.
+  const A0 = (63.35 + 11.207) * 4, S0 = 14.29 * 4, CLOUD0 = 30.709 * 4;
+  const EXT0 = CLOUD0 * 0.45, AIP0 = CLOUD0 * 0.20, OC0 = CLOUD0 - EXT0 - AIP0;
+  const OI0 = 40.576 * 4, D0 = 8.369 * 4;
+  const CORP0 = (7.66 + 2.05) * 4;                       // Alphabet-level costs + Other Bets loss, 2026Q3 x4
+  const HIST = {2017: 13.2, 2018: 25.1, 2019: 23.5, 2020: 22.3, 2021: 24.6, 2022: 31.5, 2023: 32.3, 2024: 52.5, 2025: 91.4, 2026: 200.0};
+  const CASH = 265.10, DEBT = 126.12, NONMKT = 128.17;  // 10-Q 2026-09-30: cash+ST investments, total debt, non-marketable equity securities
+  const DTL = 27.8;                                       // deferred tax liability on unrealized equity gains (10-Q)
+  const NETCASH = CASH - DEBT + NONMKT - DTL, SHARES = 12.294 + 0.0537, P0 = 279.84;
+  const A_NOW = 0.40, S_REF = 0.30, LIFE_S = 6, LIFE_B = 25, SRV = 0.6, TAX = 0.181, M_OC = 0.25, M_CE0 = 0.60, M_AI = 0.55, DUMP = 0.15;
+  // contracted outside compute, $B at today's price, 2027..2033: compute share (45%) of Cloud RPO $560.8B, 55% recognized within 24 months (10-Q); the rest spread 2029-33 (assumption)
+  const CONTRACT = [69.4, 69.4, 40, 30, 22, 14, 7.6];
+  const YEARS = [2027, 2028, 2029, 2030, 2031, 2032];
+  // capacity: server share of capex, online half a year after spend (1/8 of the spend year counts), losing W of its value each year
+  const potential = (c, t, W) => { let s = 0; for (const v in c) { const k = t - v; if (k === 0) s += SRV * c[v] * 0.125; else if (k >= 1 && k <= 9) s += SRV * c[v] * Math.pow(1 - W, k - 0.5); } return s; };
+  // depreciation: servers over 6 years, buildings over 25 years, from the year after spend (same lives as the stock-price simulator)
+  const dep = (c, t) => { let s = 0; for (const v in c) { const k = t - v; if (k >= 1 && k <= LIFE_S) s += SRV * c[v] / LIFE_S; if (k >= 1 && k <= LIFE_B) s += (1 - SRV) * c[v] / LIFE_B; } return s; };
+  const D_SCALE = D0 / dep(HIST, 2026);
+  const M_S = (OI0 + D0 + CORP0 - M_CE0 * EXT0 - M_OC * OC0 - M_AI * AIP0) / (A0 + S0);
+  const SCN = [
+    {id: 'A', name: '제미나이 승리', s: 0.45, gd: 0.30, ga: 0.90, u: 0.80, d: 0.05, k: 0.9, tm: 2030, tau: 1.00, mce: 0.60, g: 0.07, rho: 0.75, roic: 0.20, capex: [300, 330, 340, 330, 320, 310]},
+    {id: 'B', name: '대등', s: 0.30, gd: 0.40, ga: 0.70, u: 0.60, d: 0.05, k: 0.9, tm: 2030, tau: 1.00, mce: 0.60, g: 0.07, rho: 0.70, roic: 0.15, capex: [300, 330, 340, 330, 320, 310]},
+    {id: 'C', name: '무기상 승리', s: 0.18, gd: 0.55, ga: 0.40, u: 0.40, d: 0.00, k: 0.9, tm: 2030, tau: 1.20, mce: 0.65, g: 0.06, rho: 0.70, roic: 0.15, capex: [300, 340, 360, 360, 350, 340]},
+    {id: 'D', name: '설비 과잉', s: 0.30, gd: 0.08, ga: 0.35, u: 0.50, d: 0.25, k: 0.9, tm: 2030, tau: 0.90, mce: 0.45, g: 0.06, rho: 0.70, roic: 0, capex: [240, 160, 120, 110, 110, 110]},
+    {id: 'E', name: '에이전트 급전환', s: 0.30, gd: 0.40, ga: 0.85, u: 0.70, d: 0.05, k: 1.6, tm: 2028.5, tau: 1.00, mce: 0.60, g: 0.07, rho: 0.55, roic: 0.15, capex: [300, 330, 340, 330, 320, 310]},
+  ];
+  for (const sc of SCN) { const cap = Object.assign({}, HIST); YEARS.forEach((y, i) => cap[y] = sc.capex[i]); sc.cap = cap; sc.dep = {}; for (let y = 2027; y <= 2033; y++) sc.dep[y] = dep(cap, y) * D_SCALE; }
+  // capacity tables depend on the decay rate W; cache per W
+  const potCache = {};
+  function prep(W) {
+    const key = W.toFixed(3); if (potCache[key]) return potCache[key];
+    const Y = EXT0 / A_NOW / potential(HIST, 2026, W), out = {Y, POT26: potential(HIST, 2026, W) * Y, pot: {}};
+    for (const sc of SCN) { out.pot[sc.id] = {}; for (let y = 2027; y <= 2033; y++) out.pot[sc.id][y] = potential(sc.cap, y, W) * Y; }
+    return (potCache[key] = out);
+  }
+  function grid(lo) { const g = []; for (let a = lo; a <= 0.8501; a += 0.025) g.push(Math.round(a * 1000) / 1000); return g; }
+  function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function normalGen(r) { return () => { let u = 0, v = 0; while (u === 0) u = r(); v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }; }
+  function makeDraws(n, seed) { const nr = normalGen(rng(seed)); const out = {}; for (const sc of SCN) { const z = []; for (let i = 0; i < n; i++) z.push([nr(), nr(), nr(), nr(), nr(), nr(), nr()]); out[sc.id] = z; } return out; }
+  // one Monte Carlo path -> value per share ($); with detail=true also returns the terminal-value share
+  function run(sc, a, z, p, detail) {
+    const T = prep(p.decay);
+    const s0 = sc.s + 0.05 * z[0], dd = sc.d + 0.04 * z[1], kk = Math.max(0.2, sc.k + 0.25 * z[2]) * p.kMul,
+      mce = sc.mce + p.mceShift + 0.06 * z[3], g = sc.g + 0.02 * z[4], gd = sc.gd + 0.12 * z[5], ga = sc.ga + 0.15 * z[6];
+    const tau = sc.tau * p.tauMul, roic = Math.max(sc.roic, p.r + 0.005);
+    let price = 1, pv = 0, tv = 0, qsum = 0, extg = 1, aipg = 1, need = (1 - A_NOW) * T.POT26, ext30 = 0;
+    for (let y = 2027; y <= 2033; y++) {
+      const n = y - 2026;
+      extg *= 1 + p.km * gd * Math.pow(0.8, n - 1); aipg *= 1 + p.km * ga * Math.pow(0.8, n - 1);
+      need *= 1 + sc.u * p.uMul * Math.pow(0.75, n - 1);
+      const pot = T.pot[sc.id][y] * tau;
+      price = Math.pow(1 - dd, n);                       // market price of compute
+      // outside: contracts must be delivered first; the rest of the outside share sells at market price up to demand
+      const K = Math.min(CONTRACT[n - 1], pot), dem = EXT0 * extg * tau;
+      const sold = Math.min(pot, Math.max(a * pot, K)), rest = sold - K, spot = Math.max(dem - K, 0);
+      const restSold = Math.min(rest, spot), unsold = rest - restSold;
+      // in-house: own share plus unsold outside capacity; a shortfall can be bought on the market at a premium
+      const own = pot - sold + unsold;
+      const short = Math.max(need - own, 0);
+      const bought = p.buy ? short : 0;
+      const ratio = (own + bought) / need;
+      const spare = Math.max(own - need, 0);            // in-house surplus still unsold: dumped at 15%
+      const q = ratio < 1 ? Math.pow(ratio, 0.8) : 1;         // surplus capacity is sold (dumped), so it adds no quality
+      qsum += q; const qbar = qsum / n;
+      const aEff = (K + restSold) / pot;                 // share of capacity actually used by outsiders
+      const fb = 1 - p.phi * Math.max(0, aEff - p.aref) + p.psi * p.phi * Math.max(0, p.aref - aEff);
+      const sEff = Math.min(0.9, Math.max(0.02, s0 * qbar * fb));
+      const sG = S_REF + (sEff - S_REF) * Math.min(1, n / 3);
+      const x = 0.6 / (1 + Math.exp(-kk * (y - sc.tm)));
+      const h = Math.min(1.3, Math.max(0.3, 1 - (S_REF - sG)));
+      const serve = Math.pow(Math.min(1, ratio), 0.7), aiq = Math.min(0.85, 0.30 + 0.12 * n);
+      const ads = A0 * Math.pow(1 + g, n) * ((1 - x) * h + x * sc.rho * sG / S_REF) * (1 - aiq * (1 - serve));
+      const subs = S0 * Math.pow(1.10, n) * (0.7 + 0.3 * sG / S_REF);
+      const ext = K + price * (restSold + DUMP * spare);
+      const buyCost = bought * price * (1 + p.prem);
+      const aip = AIP0 * aipg * (sG / S_REF) * serve * price;
+      const oc = OC0 * Math.pow(1.15, n), D = sc.dep[y];
+      const oi = M_S * (ads + subs) + mce * ext + M_AI * aip + M_OC * oc - D - CORP0 * Math.pow(1.05, n) - buyCost;
+      const nopat = oi * (1 - TAX);
+      if (y === 2030) ext30 = ext;
+      if (y <= 2032) pv += (nopat + D - sc.cap[y]) / Math.pow(1 + p.r, n);
+      else { tv = nopat * (1 - 0.03 / roic) / (p.r - 0.03) / Math.pow(1 + p.r, n - 1); pv += tv; }
+    }
+    const v = (pv + NETCASH) / SHARES;
+    return detail ? {v, tvShare: tv / (pv + NETCASH), ext30} : v;
+  }
+  const mean = (v) => v.reduce((s, x) => s + x, 0) / v.length;
+  const sd = (v) => { const m = mean(v); return Math.sqrt(v.reduce((s, x) => s + (x - m) * (x - m), 0) / v.length); };
+  const pct = (v, q) => { const s = [...v].sort((a, b) => a - b); const i = (s.length - 1) * q, lo = Math.floor(i), hi = Math.ceil(i); return s[lo] + (s[hi] - s[lo]) * (i - lo); };
+  function mixAt(a, draws, p, prior) { let t = 0; for (const sc of SCN) { const z = draws[sc.id]; let s = 0; for (const zz of z) s += run(sc, a, zz, p); t += prior[sc.id] * s / z.length; } return t; }
+  // reverse DCF: demand-growth multiplier km that makes the prior-weighted value at today's share equal today's price
+  function calibrate(draws, p, prior) {
+    let lo = 0.2, hi = 4.0;
+    for (let i = 0; i < 26; i++) { const mid = (lo + hi) / 2; if (mixAt(A_NOW, draws, Object.assign({}, p, {km: mid}), prior) < P0) lo = mid; else hi = mid; }
+    return (lo + hi) / 2;
+  }
+  function solve(draws, p, prior) {
+    const G = grid(0.05), res = {};
+    for (const sc of SCN) {
+      const z = draws[sc.id];
+      const rows = G.map((a) => { const v = z.map((zz) => run(sc, a, zz, p)); return {a, v, m: mean(v), s: sd(v)}; });
+      let iEV = 0, iRA = 0;
+      rows.forEach((r, i) => { if (r.m > rows[iEV].m) iEV = i; if (r.m - p.lam * r.s > rows[iRA].m - p.lam * rows[iRA].s) iRA = i; });
+      res[sc.id] = {rows, iEV, iRA};
+    }
+    const mix = G.map((a, i) => SCN.reduce((t, sc) => t + prior[sc.id] * res[sc.id].rows[i].m, 0));
+    let iMix = 0; mix.forEach((m, i) => { if (m > mix[iMix]) iMix = i; });
+    return {G, res, mix, iMix};
+  }
+  // pooled distribution over scenarios at share index i (each draw weighted by its scenario prior)
+  function pooled(sol, i, prior) {
+    const pts = []; for (const sc of SCN) { const v = sol.res[sc.id].rows[i].v; for (const x of v) pts.push([x, prior[sc.id] / v.length]); }
+    pts.sort((a, b) => a[0] - b[0]); const W = pts.reduce((s, p) => s + p[1], 0);
+    const q = (t) => { let c = 0; for (const [x, w] of pts) { c += w; if (c >= t * W) return x; } return pts[pts.length - 1][0]; };
+    let m = 0, m2 = 0; for (const [x, w] of pts) { if (x > 0) { const l = Math.log(x); m += w * l; m2 += w * l * l; } }
+    m /= W; m2 /= W; const below = pts.reduce((s, [x, w]) => s + (x < P0 ? w : 0), 0) / W;
+    return {p10: q(0.1), p50: q(0.5), p90: q(0.9), vol: Math.sqrt(Math.max(m2 - m * m, 0)) / Math.sqrt(3), below};
+  }
+  function vol(v) { const l = v.filter((x) => x > 0).map(Math.log); return sd(l) / Math.sqrt(3); }
+  return {SCN, A_NOW, S_REF, P0, NETCASH, SHARES, CORP0, M_S, D_SCALE, CONTRACT, prep, grid, makeDraws, run, calibrate, solve, pooled, mean, sd, pct, vol, mixAt};
+})();
+if (typeof module !== 'undefined') module.exports = ENG;
+</script>
+<script>
+(function () {
+  const E = ENG, SCN = E.SCN;
+  const COL = {A: 'var(--s1)', B: 'var(--s2)', C: 'var(--s3)', D: 'var(--s4)', E: 'var(--s5)'};
+  const N = 240, DRAWS = E.makeDraws(N, 7);
+  const DEF = {pA: 20, pB: 30, pC: 20, pD: 15, pE: 15, kMul: 1, tauMul: 1, uMul: 1, decay: 25, prem: 30, aref: 40, psi: 0.1, mceShift: 0, phi: 0.6, r: 9, lam: 0.5};
+  const DRAWS_K = E.makeDraws(120, 9);
+  const $ = (id) => document.getElementById(id);
+  const fmt$ = (v) => '$' + d3.format(',.0f')(v);
+  const fmtA = d3.format('.2f');
+  let state = null;
+
+  function readParams() {
+    const raw = {}; for (const k of Object.keys(DEF)) raw[k] = Number($(k).value); const buy = $('buy').checked;
+    const tot = raw.pA + raw.pB + raw.pC + raw.pD + raw.pE || 1;
+    const prior = {A: raw.pA / tot, B: raw.pB / tot, C: raw.pC / tot, D: raw.pD / tot, E: raw.pE / tot};
+    const p = {km: state ? state.p.km : 1.8, kMul: raw.kMul, tauMul: raw.tauMul, uMul: raw.uMul, decay: raw.decay / 100, prem: raw.prem / 100, buy, aref: raw.aref / 100, psi: raw.psi,
+      mceShift: raw.mceShift / 100, phi: raw.phi, r: raw.r / 100, lam: raw.lam};
+    for (const k of ['A', 'B', 'C', 'D', 'E']) $('p' + k + '-o').textContent = Math.round(prior[k] * 100) + '%';
+    $('kMul-o').textContent = raw.kMul.toFixed(1) + '배';
+    $('tauMul-o').textContent = raw.tauMul.toFixed(2) + '배';
+    $('uMul-o').textContent = raw.uMul.toFixed(1) + '배';
+    $('decay-o').textContent = raw.decay + '%';
+    $('prem-o').textContent = raw.prem + '%';
+    $('aref-o').textContent = (raw.aref / 100).toFixed(2);
+    $('psi-o').textContent = raw.psi.toFixed(1);
+    $('mceShift-o').textContent = (raw.mceShift > 0 ? '+' : '') + raw.mceShift + '%p';
+    $('phi-o').textContent = raw.phi.toFixed(1);
+    $('r-o').textContent = raw.r.toFixed(1) + '%';
+    $('lam-o').textContent = raw.lam.toFixed(1);
+    return {p, prior};
+  }
+
+  function compute() {
+    const {p, prior} = readParams();
+    if ($('calib').checked || !state) p.km = E.calibrate(DRAWS, p, prior);
+    const kmr = [0.08, 0.10].map((r) => E.calibrate(DRAWS_K, Object.assign({}, p, {r}), prior));
+    const uSens = [0.7, 1.3].map((u) => { const q = Object.assign({}, p, {uMul: p.uMul * u}); q.km = E.calibrate(DRAWS_K, q, prior); const so = E.solve(DRAWS_K, q, prior); return so.G[so.iMix]; });
+    const z0 = [0, 0, 0, 0, 0, 0, 0], ext30 = E.run(SCN[1], E.A_NOW, z0, p, true).ext30;
+    const sol = E.solve(DRAWS, p, prior), GRID = sol.G;
+    const i0 = Math.max(0, GRID.indexOf(E.A_NOW));
+    const rows = SCN.map((sc) => {
+      const r = sol.res[sc.id]; const ra = r.rows[r.iRA], ev = r.rows[r.iEV], cur = r.rows[i0];
+      return {sc, prior: prior[sc.id], aEV: ev.a, aRA: ra.a, m: ra.m, s: ra.s, v: ra.v,
+        p10: E.pct(ra.v, .1), p25: E.pct(ra.v, .25), p50: E.pct(ra.v, .5), p75: E.pct(ra.v, .75), p90: E.pct(ra.v, .9),
+        below: ra.v.filter((x) => x < E.P0).length / ra.v.length, vol: E.vol(ra.v), curMed: E.pct(cur.v, .5), curM: cur.m, bestEV: ev.m,
+        tv: E.mean(DRAWS[sc.id].slice(0, 40).map((z) => E.run(sc, ra.a, z, p, true).tvShare))};
+    });
+    const flex = rows.reduce((t, r) => t + r.prior * r.bestEV, 0) - sol.mix[sol.iMix];
+    const pool = E.pooled(sol, sol.iMix, prior);
+    const gain = sol.mix[sol.iMix] - sol.mix[i0];
+    state = {p, prior, sol, rows, flex, kmr, pool, GRID, uSens, ext30, gain};
+  }
+
+  function render() {
+    const {p, sol, rows, flex, kmr, pool, GRID, uSens, ext30, gain} = state;
+    $('kpi-km').textContent = p.km.toFixed(2) + '배';
+    $('kpi-kmr').textContent = `할인율 8%면 ${kmr[0].toFixed(2)}배, 10%면 ${kmr[1].toFixed(2)}배입니다. 대등 시나리오로 옮기면 2030년 외부 연산 매출이 약 ${d3.format(',')(Math.round(ext30 * 10))}억 달러라는 뜻입니다(2026년 3분기 연율 553억 달러).`;
+    const flat = GRID.filter((a, i) => sol.mix[i] >= sol.mix[sol.iMix] - 5);
+    const fA = (a) => a <= 0.05 + 1e-9 ? '0.05(계약분만)' : fmtA(a);
+    $('kpi-amix').textContent = `${fA(flat[0])}~${fA(flat[flat.length - 1])}`;
+    $('kpi-amix-n').textContent = `이 범위 안에서는 주당 가치 차이가 5달러 이내라 한 점을 고를 근거가 약합니다(최댓값 ${fmtA(GRID[sol.iMix])}, 현재 0.40 대비 ${fmt$(gain)}). 자사 연산 수요가 30% 느리게 늘면 최적이 ${fA(uSens[0])} 안팎, 30% 빠르게 늘면 ${fA(uSens[1])} 안팎으로 옮겨 갑니다.${p.km > 3.95 || p.km < 0.25 ? ' 주의: 역산 배수가 범위 끝(0.2~4.0)에 닿아 현재 주가에 맞추지 못했습니다.' : ''}`;
+    $('kpi-flex').textContent = fmt$(flex);
+    $('kpi-pool').textContent = `${fmt$(pool.p10)}~${fmt$(pool.p90)}`;
+    $('kpi-pool-n').textContent = `10~90분위, 중앙값 약 ${fmt$(Math.round(pool.p50 / 10) * 10)}. 다섯 시나리오의 가정을 확률로 섞은 분포입니다. ${p.km > 3.95 || p.km < 0.25 ? '역산 배수가 범위 끝에 닿아 0.40에서의 평균이 현재 주가와 다릅니다.' : '현재 비중 0.40에서 평균이 현재 주가와 같도록 맞췄고,'} 분포가 오른쪽으로 치우쳐 중앙값이 더 낮습니다. 주가 전망이 아닙니다.`;
+    const tb = document.querySelector('#tbl tbody'); tb.replaceChildren();
+    for (const r of rows) {
+      const tr = document.createElement('tr');
+      const cells = [r.sc.id + ' ' + r.sc.name, Math.round(r.prior * 100) + '%', fmtA(r.aEV), fmtA(r.aRA), fmt$(r.m), fmt$(r.p10), fmt$(r.p90), Math.round(r.vol * 100) + '%', Math.round(r.tv * 100) + '%'];
+      cells.forEach((c, i) => { const td = document.createElement('td'); if (i === 0) { const sw = document.createElement('i'); sw.className = 'swatch'; sw.style.background = COL[r.sc.id]; td.appendChild(sw); } td.appendChild(document.createTextNode(c)); tr.appendChild(td); });
+      tb.appendChild(tr);
+    }
+    drawA(); drawB(); drawC(); drawD();
+  }
+
+  // ---------- helpers ----------
+  function tipBox(el) { let t = el.querySelector(':scope > .tt'); if (!t) { t = document.createElement('div'); t.className = 'tt'; t.hidden = true; el.appendChild(t); } return t; }
+  function showTip(el, tip, x, y, head, lines) {
+    tip.replaceChildren(); const h = document.createElement('div'); h.className = 'h'; h.textContent = head; tip.appendChild(h);
+    for (const [c, t] of lines) { const d = document.createElement('div'); if (c) { const i = document.createElement('i'); i.className = 'swatch'; i.style.background = c; d.appendChild(i); } d.appendChild(document.createTextNode(t)); tip.appendChild(d); }
+    tip.hidden = false; const W = el.clientWidth; let l = x + 14; if (l + tip.offsetWidth > W) l = x - tip.offsetWidth - 14; if (l < 0) l = 0;
+    let t = y - tip.offsetHeight - 8; if (t < 0) t = y + 12; tip.style.left = l + 'px'; tip.style.top = t + 'px';
+  }
+  function svgFor(el, H) { el.querySelectorAll('svg').forEach((s) => s.remove()); const W = Math.max(280, el.clientWidth); const svg = d3.select(el).insert('svg', ':first-child').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`); return {svg, W}; }
+  const scaleOf = (svg, W) => svg.node().getBoundingClientRect().width / W;
+  function grid(g, y, x0, x1, ticks, f) { for (const t of ticks) { g.append('line').attr('x1', x0).attr('x2', x1).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', 'var(--rule)'); g.append('text').attr('x', x0 - 8).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text(f(t)); } }
+
+  // ---------- a: optimal shares ----------
+  function drawA() {
+    const el = $('chartA'); const H = 272; const {svg, W} = svgFor(el, H);
+    const left = 150, right = 16, top = 10, bottom = 52;
+    const x = d3.scaleLinear([0, 0.9], [left, W - right]);
+    const y = d3.scaleBand(state.rows.map((r) => r.sc.id), [top, H - bottom]).padding(0.3);
+    const g = svg.append('g');
+    for (const t of [0.2, 0.4, 0.6, 0.8]) { g.append('line').attr('x1', x(t)).attr('x2', x(t)).attr('y1', top).attr('y2', H - bottom).attr('stroke', 'var(--rule)'); g.append('text').attr('x', x(t)).attr('y', H - bottom + 20).attr('text-anchor', 'middle').text(t.toFixed(1)); }
+    g.append('text').attr('x', W - right).attr('y', H - 4).attr('text-anchor', 'end').text('외부 판매 비중 a');
+    g.append('line').attr('x1', x(E.A_NOW)).attr('x2', x(E.A_NOW)).attr('y1', top - 4).attr('y2', H - bottom).attr('stroke', 'var(--ink)').attr('stroke-width', 1.5);
+    const am = state.GRID[state.sol.iMix];
+    g.append('line').attr('x1', x(am)).attr('x2', x(am)).attr('y1', top - 4).attr('y2', H - bottom).attr('stroke', 'var(--ink)').attr('stroke-dasharray', '4 4');
+    const tip = tipBox(el);
+    for (const r of state.rows) {
+      const cy = y(r.sc.id) + y.bandwidth() / 2, c = COL[r.sc.id];
+      g.append('text').attr('x', left - 12).attr('y', cy).attr('dy', '0.32em').attr('text-anchor', 'end').attr('class', 'strong').text(r.sc.id + ' ' + r.sc.name);
+      g.append('line').attr('x1', x(Math.min(r.aEV, r.aRA))).attr('x2', x(Math.max(r.aEV, r.aRA))).attr('y1', cy).attr('y2', cy).attr('stroke', c).attr('stroke-width', 2);
+      g.append('circle').attr('cx', x(r.aRA)).attr('cy', cy).attr('r', 8).attr('fill', 'var(--panel)').attr('stroke', c).attr('stroke-width', 2.5);
+      g.append('circle').attr('cx', x(r.aEV)).attr('cy', cy).attr('r', 5.5).attr('fill', c).attr('stroke', 'var(--panel)').attr('stroke-width', 2);
+      g.append('rect').attr('x', left).attr('y', y(r.sc.id)).attr('width', W - right - left).attr('height', y.bandwidth()).attr('fill', 'transparent')
+        .on('pointermove', (ev) => { const [mx, my] = d3.pointer(ev, svg.node()); const s = scaleOf(svg, W); showTip(el, tip, mx * s, my * s, r.sc.id + ' ' + r.sc.name, [[c, '기대 가치 최적 a ' + fmtA(r.aEV)], [c, '위험 조정 최적 a ' + fmtA(r.aRA)], [null, '현재 0.40일 때 기대 가치 ' + fmt$(r.curM)], [null, '잔존가치 비중 ' + Math.round(r.tv * 100) + '%']]); })
+        .on('pointerleave', () => { tip.hidden = true; });
+    }
+  }
+
+  // ---------- b: value curves ----------
+  function drawB() {
+    const el = $('chartB'); const H = 340; const {svg, W} = svgFor(el, H);
+    const leg = $('legB'); leg.replaceChildren();
+    for (const sc of SCN) { const s = document.createElement('span'); const i = document.createElement('i'); i.className = 'swatch'; i.style.background = COL[sc.id]; s.append(i, document.createTextNode(sc.id + ' ' + sc.name)); leg.appendChild(s); }
+    { const s = document.createElement('span'); const i = document.createElement('i'); i.className = 'swatch'; i.style.background = 'var(--mix)'; s.append(i, document.createTextNode('시나리오 가중')); leg.appendChild(s); }
+    const series = SCN.map((sc) => ({id: sc.id, c: COL[sc.id], pts: state.sol.res[sc.id].rows.map((r) => [r.a, r.m])}));
+    const GRID = state.GRID;
+    series.push({id: 'mix', c: 'var(--mix)', pts: GRID.map((a, i) => [a, state.sol.mix[i]]), w: 3.5});
+    const ymax = d3.max(series, (s) => d3.max(s.pts, (p) => p[1])), ymin = Math.min(0, d3.min(series, (s) => d3.min(s.pts, (p) => p[1])));
+    const y = d3.scaleLinear([ymin, ymax], [H - 34, 10]).nice();
+    const left = 56, right = 40; const x = d3.scaleLinear([GRID[0], 0.85], [left, W - right]);
+    const g = svg.append('g'); grid(g, y, left, W - right, y.ticks(5), (t) => '$' + d3.format(',')(t));
+    for (const t of [0.2, 0.4, 0.6, 0.8].filter((t) => t >= GRID[0])) g.append('text').attr('x', x(t)).attr('y', H - 10).attr('text-anchor', 'middle').text('a=' + t.toFixed(1));
+    g.append('line').attr('x1', left).attr('x2', W - right).attr('y1', y(E.P0)).attr('y2', y(E.P0)).attr('stroke', 'var(--ink)').attr('stroke-dasharray', '5 4');
+    g.append('text').attr('x', W - right).attr('y', y(E.P0) - 6).attr('text-anchor', 'end').text('현재가 $279.84');
+    for (const s of series) g.append('path').datum(s.pts).attr('fill', 'none').attr('stroke', s.c).attr('stroke-width', s.w || 2).attr('stroke-linejoin', 'round').attr('d', d3.line().x((p) => x(p[0])).y((p) => y(p[1])));
+    const rule = g.append('line').attr('y1', 10).attr('y2', H - 34).attr('stroke', 'var(--ink-3)').attr('opacity', 0);
+    const tip = tipBox(el);
+    svg.on('pointermove', (ev) => { const [mx] = d3.pointer(ev); const i = d3.minIndex(GRID, (a) => Math.abs(x(a) - mx)); const a = GRID[i]; rule.attr('x1', x(a)).attr('x2', x(a)).attr('opacity', 1); const s = scaleOf(svg, W);
+      showTip(el, tip, x(a) * s, y(state.sol.mix[i]) * s, '외부 판매 비중 a = ' + fmtA(a), [...SCN.map((sc) => [COL[sc.id], sc.id + ' ' + sc.name + '  ' + fmt$(state.sol.res[sc.id].rows[i].m)]), ['var(--mix)', '시나리오 가중  ' + fmt$(state.sol.mix[i])]]); })
+      .on('pointerleave', () => { tip.hidden = true; rule.attr('opacity', 0); });
+  }
+
+  // ---------- c: frontier ----------
+  function drawC() {
+    const el = $('chartC'); const H = 340; const {svg, W} = svgFor(el, H);
+    const all = SCN.flatMap((sc) => state.sol.res[sc.id].rows.map((r) => ({id: sc.id, a: r.a, m: r.m, s: r.s})));
+    const left = 56, right = 110;
+    const x = d3.scaleLinear([0, d3.max(all, (d) => d.s)], [left, W - right]).nice();
+    const y = d3.scaleLinear([Math.min(0, d3.min(all, (d) => d.m)), d3.max(all, (d) => d.m)], [H - 34, 10]).nice();
+    const g = svg.append('g'); grid(g, y, left, W - right, y.ticks(5), (t) => '$' + d3.format(',')(t));
+    for (const t of x.ticks(5)) g.append('text').attr('x', x(t)).attr('y', H - 10).attr('text-anchor', 'middle').text('$' + d3.format(',')(t));
+    g.append('text').attr('x', W - right).attr('y', H - 10).attr('text-anchor', 'start').attr('dx', 8).text('표준편차');
+    const labs = [];
+    for (const sc of SCN) {
+      const r = state.sol.res[sc.id]; const pts = r.rows; const c = COL[sc.id];
+      g.append('path').datum(pts).attr('fill', 'none').attr('stroke', c).attr('stroke-width', 2).attr('d', d3.line().x((d) => x(d.s)).y((d) => y(d.m)));
+      g.append('circle').attr('cx', x(pts[0].s)).attr('cy', y(pts[0].m)).attr('r', 3).attr('fill', c);
+      const o = pts[r.iRA]; g.append('circle').attr('cx', x(o.s)).attr('cy', y(o.m)).attr('r', 7).attr('fill', c).attr('stroke', 'var(--panel)').attr('stroke-width', 2);
+      labs.push({c, t: sc.id + ' ' + sc.name, y: y(o.m), x: x(o.s)});
+    }
+    labs.sort((a, b) => a.y - b.y); for (let i = 1; i < labs.length; i++) if (labs[i].y - labs[i - 1].y < 18) labs[i].y = labs[i - 1].y + 18;
+    for (const l of labs) g.append('text').attr('class', 'strong').attr('x', W - right + 8).attr('y', l.y).attr('dy', '0.32em').text(l.t);
+    for (const l of labs) g.append('line').attr('x1', l.x + 8).attr('x2', W - right + 4).attr('y1', l.y).attr('y2', l.y).attr('stroke', l.c).attr('stroke-width', 1).attr('opacity', 0.6);
+    const tip = tipBox(el);
+    svg.on('pointermove', (ev) => { const [mx, my] = d3.pointer(ev); const d = all[d3.minIndex(all, (d) => (x(d.s) - mx) ** 2 + (y(d.m) - my) ** 2)]; const s = scaleOf(svg, W);
+      showTip(el, tip, x(d.s) * s, y(d.m) * s, d.id + ' · a = ' + fmtA(d.a), [[COL[d.id], '기대 가치 ' + fmt$(d.m)], [COL[d.id], '표준편차 ' + fmt$(d.s)]]); })
+      .on('pointerleave', () => { tip.hidden = true; });
+  }
+
+  // ---------- d: distributions ----------
+  function drawD() {
+    const el = $('chartD'); const H = 300; const {svg, W} = svgFor(el, H);
+    const left = 150, right = 20, top = 10, bottom = 36;
+    const rows = state.rows;
+    const x = d3.scaleLinear([0, d3.max(rows, (r) => r.p90) * 1.05], [left, W - right]).nice();
+    const y = d3.scaleBand(rows.map((r) => r.sc.id), [top, H - bottom]).padding(0.35);
+    const g = svg.append('g');
+    for (const t of x.ticks(6)) { g.append('line').attr('x1', x(t)).attr('x2', x(t)).attr('y1', top).attr('y2', H - bottom).attr('stroke', 'var(--rule)'); g.append('text').attr('x', x(t)).attr('y', H - bottom + 20).attr('text-anchor', 'middle').text('$' + d3.format(',')(t)); }
+    g.append('line').attr('x1', x(E.P0)).attr('x2', x(E.P0)).attr('y1', top - 4).attr('y2', H - bottom).attr('stroke', 'var(--ink)').attr('stroke-dasharray', '5 4');
+    const tip = tipBox(el);
+    for (const r of rows) {
+      const y0 = y(r.sc.id), bh = y.bandwidth(), cy = y0 + bh / 2, c = COL[r.sc.id];
+      g.append('text').attr('x', left - 12).attr('y', cy).attr('dy', '0.32em').attr('text-anchor', 'end').attr('class', 'strong').text(r.sc.id + ' ' + r.sc.name);
+      g.append('line').attr('x1', x(r.p10)).attr('x2', x(r.p90)).attr('y1', cy).attr('y2', cy).attr('stroke', c).attr('stroke-width', 2);
+      g.append('rect').attr('x', x(r.p25)).attr('y', y0).attr('width', Math.max(2, x(r.p75) - x(r.p25))).attr('height', bh).attr('rx', 4).attr('fill', c).attr('opacity', 0.35).attr('stroke', c).attr('stroke-width', 1.5);
+      g.append('line').attr('x1', x(r.p50)).attr('x2', x(r.p50)).attr('y1', y0 - 3).attr('y2', y0 + bh + 3).attr('stroke', 'var(--ink)').attr('stroke-width', 3);
+      g.append('line').attr('x1', x(r.curMed)).attr('x2', x(r.curMed)).attr('y1', y0 + 2).attr('y2', y0 + bh - 2).attr('stroke', 'var(--ink-3)').attr('stroke-width', 2);
+      g.append('rect').attr('x', left).attr('y', y0 - 4).attr('width', W - right - left).attr('height', bh + 8).attr('fill', 'transparent')
+        .on('pointermove', (ev) => { const [mx, my] = d3.pointer(ev, svg.node()); const s = scaleOf(svg, W); showTip(el, tip, mx * s, my * s, r.sc.id + ' ' + r.sc.name + ' · a = ' + fmtA(r.aRA),
+          [[c, '10~90분위 ' + fmt$(r.p10) + ' ~ ' + fmt$(r.p90)], [c, '중앙값 ' + fmt$(r.p50)], [null, '현재 비중 중앙값 ' + fmt$(r.curMed)], [null, '연율 변동성 ' + Math.round(r.vol * 100) + '%']]); })
+        .on('pointerleave', () => { tip.hidden = true; });
+    }
+  }
+
+  // ---------- wiring ----------
+  let timer = null;
+  function schedule() { $('busy').textContent = '다시 계산하는 중…'; clearTimeout(timer); timer = setTimeout(() => { compute(); render(); $('busy').textContent = ''; }, 120); }
+  $('controls').addEventListener('input', schedule);
+  $('controls').addEventListener('submit', (e) => e.preventDefault());
+  $('reset').addEventListener('click', () => { for (const [k, v] of Object.entries(DEF)) $(k).value = v; $('calib').checked = true; $('buy').checked = true; schedule(); });
+  let lastW = 0; window.addEventListener('resize', () => { const w = document.body.clientWidth; if (Math.abs(w - lastW) > 30 && state) { lastW = w; render(); } });
+  compute(); render(); lastW = document.body.clientWidth;
+})();
+</script>
+
+</body></html>

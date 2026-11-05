@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aicapex.sjoonkwon.com/sitemap.xml
