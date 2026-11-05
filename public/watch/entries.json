@@ -3,18 +3,73 @@
   "entries": [
     {
       "date": "2026-11-05",
+      "title": "10월 반도체 수출 564.4억 달러(+259.4%), DDR5 고정가 50.0달러",
+      "body": "산업통상부 11월 1일 발표에 따르면 10월 반도체 수출은 564.4억 달러로 전년 같은 달보다 259.4% 늘었다. 2개월 연속 500억 달러를 넘었고, 월 기준 역대 2위(1위는 9월 603억 달러)다. 같은 자료의 메모리 고정가격은 DDR5 16Gb가 6월 40.0달러에서 10월 50.0달러로, NAND 128Gb는 28.8달러에서 30.6달러로 올랐다. 메모리 품목별 수출액은 본문에 없다.",
+      "sites": [
+        "capex",
+        "memsim"
+      ],
+      "sources": [
+        {
+          "title": "산업통상부, 2026년 10월 수출입 동향(2026-11-01)",
+          "url": "https://www.motir.go.kr/kor/article/ATCL3f49a5a8c/172360/view"
+        }
+      ],
+      "decision": false
+    },
+    {
+      "date": "2026-11-05",
+      "title": "메타, 2026년 설비투자 안내치를 1,350억~1,450억 달러로 좁혀",
+      "body": "메타는 10월 21일 3분기 실적에서 2026년 설비투자(금융리스 원금 상환 포함) 안내치를 1,300억~1,450억 달러에서 1,350억~1,450억 달러로 좁혔다. 3분기 설비투자는 349.1억 달러, 매출은 646.0억 달러(+26%)였다. 2027년에 대해서는 금액 없이 계속 공격적으로 투자한다고만 밝혔다.",
+      "sites": [
+        "capex",
+        "hyperscaler"
+      ],
+      "sources": [
+        {
+          "title": "Meta Reports Third Quarter 2026 Results (2026-10-21)",
+          "url": "https://investor.atmeta.com/investor-news/press-release-details/2026/Meta-Reports-Third-Quarter-2026-Results/default.aspx"
+        }
+      ],
+      "decision": false
+    },
+    {
+      "date": "2026-11-05",
       "title": "2026년 1~9월 한국 메모리 수출 증가분의 절반은 범용 D램 값",
       "body": "관세청 10자리 품목으로 나누면 1~9월 메모리 수출은 629억 달러에서 2,222억 달러로 늘었다. 증가분 1,593억 달러 가운데 범용 D램이 49%, 복합구조칩(HBM 추정)이 34%다. 범용 D램은 중량이 6% 느는 사이 kg당 값이 4.6배가 되었다. 2025년까지 대만행 증가를 이끈 것은 HBM 단가였지만, 2026년에는 범용 가격 국면이 더 큰 몫을 차지한다.",
-      "sites": ["capex", "memsim"],
-      "sources": [{"title": "관세청 품목별 수출입실적(공공데이터포털)", "url": "https://www.data.go.kr/"}],
+      "sites": [
+        "capex",
+        "memsim"
+      ],
+      "sources": [
+        {
+          "title": "관세청 품목별 수출입실적(공공데이터포털)",
+          "url": "https://www.data.go.kr/"
+        }
+      ],
       "decision": false
     },
     {
       "date": "2026-11-05",
       "title": "추가 설비투자의 손익분기: 컨센서스가 MSFT 5%, AMZN 10%, META 17% 더 높아야",
       "body": "하이퍼스케일러 시뮬레이터 기준으로, 2027~2028년 매출 컨센서스가 지금보다 마이크로소프트 약 5%, 아마존 약 10%, 메타 약 17% 높으면 2027년 추가 설비투자가 본전이 된다. 알파벳은 지금 수준이면 이미 본전이다. 이때의 회수율은 0.57~0.66으로 지난 1년 실적과 비슷하다. 마이크로소프트·알파벳 컨센서스는 3분기 실적 발표(10월 28일) 전 값이며, 발표 뒤 값은 11월 중 다시 확인한다.",
-      "sites": ["hyperscaler"],
-      "sources": [{"title": "stockanalysis MSFT forecast", "url": "https://stockanalysis.com/stocks/msft/forecast/"}, {"title": "TIKR, Alphabet (2026-10-25)", "url": "https://www.tikr.com/blog/alphabet-stock-is-up-26-5-over-the-past-year-still-a-buy-at-320"}, {"title": "tickflow META forecast", "url": "https://www.tickflow.io/stock/META/forecast"}],
+      "sites": [
+        "hyperscaler"
+      ],
+      "sources": [
+        {
+          "title": "stockanalysis MSFT forecast",
+          "url": "https://stockanalysis.com/stocks/msft/forecast/"
+        },
+        {
+          "title": "TIKR, Alphabet (2026-10-25)",
+          "url": "https://www.tikr.com/blog/alphabet-stock-is-up-26-5-over-the-past-year-still-a-buy-at-320"
+        },
+        {
+          "title": "tickflow META forecast",
+          "url": "https://www.tickflow.io/stock/META/forecast"
+        }
+      ],
       "decision": false
     }
   ]
