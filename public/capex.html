@@ -993,7 +993,7 @@ body { margin: 0; background: var(--bg); color: var(--color-fg); font: 15px/1.6 
     const inc = d3.sum(rows, (r) => r.b - r.a), share = (c) => { const x = rows.find((r) => r.code === c); return x && inc > 0 ? d3.format('.0%')((x.b - x.a) / inc) : '—'; };
     const setN = (k, v) => document.querySelectorAll(`[data-n="${k}"]`).forEach((e) => { e.textContent = v; });
     setN('period', `${LA}과 ${LB}`); setN('dram_share', share('8542321010')); setN('hbm_share', share('8542323000'));
-    setN('src', g.from === 'live' ? '매일 갱신됩니다.' : '2026년 11월 5일 기준 고정 값입니다.');
+    setN('src', g.from === 'live' ? '관세청 월별 통계가 새로 나오면 다음 날 반영됩니다.' : '2026년 11월 5일 기준 고정 값입니다.');
     el.replaceChildren();
     const W = el.clientWidth, rowH = 46, M = { t: 28, r: 64, b: 24, l: Math.min(170, W * 0.36) };
     const H = M.t + rows.length * rowH + M.b;
