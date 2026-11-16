@@ -1,6 +1,26 @@
 {
-  "updated": "2026-11-13",
+  "updated": "2026-11-16",
   "entries": [
+    {
+      "date": "2026-11-16",
+      "title": "모건스탠리, 미국 데이터센터 2028년 신규 증설 전망 24.9GW→19.9GW, 2029년 22.7GW→27.6GW",
+      "body": "토큰포스트 11월 10일 보도에 따르면 모건스탠리는 11월 8일 전망에서 미국 데이터센터 IT 용량의 2028년 신규 증설을 24.9GW에서 19.9GW로 낮췄다. 2029년은 22.7GW에서 27.6GW로 올렸다. 약 5GW가 2028년에서 2029년으로 밀린 것으로, 텍사스·오하이오에 몰려 있다고 했다. 같은 보도에서 세계 2028년 전망은 224GW에서 219GW로 낮아졌다. 모건스탠리 원문은 확인하지 못했다.",
+      "sites": [
+        "aicapex",
+        "capex"
+      ],
+      "sources": [
+        {
+          "title": "TokenPost, Morgan Stanley Sees 5 GW of U.S. Data Center IT Capacity Delayed to 2029 (2026-11-10)",
+          "url": "https://www.tokenpost.com/news/technology/53506"
+        },
+        {
+          "title": "EconoTimes, Morgan Stanley Sees Five Gigawatts of U.S. Data Center Capacity Moving to 2029 (2026-11-11)",
+          "url": "https://econotimes.com/Morgan-Stanley-Sees-Five-Gigawatts-of-U-S-Data-Center-Capacity-Moving-to-2029-1775108"
+        }
+      ],
+      "decision": false
+    },
     {
       "date": "2026-11-13",
       "title": "11월 1~10일 반도체 수출 166.3억 달러(+331.2%), 수출의 49.7%",
