@@ -1,0 +1,6 @@
+param,low,high,basis,url
+f0,0.2,0.4,share of contract built out and equipped at energization; assessment (Stack Santa Clara 12 of 48 MW = 0.25; phased energization),https://www.datacenterknowledge.com/energy-power-supply/data-centers-in-nvidia-s-hometown-stand-empty-awaiting-power
+ramp_years,2.5,4.0,calibrated: with 2-3 yr ramps the contract-schedule baseline matches PJM utility load forecasts (VA/OH/PA/IN; mean log error ~0); Dominion states 5 yr to maturity so upper end kept at 4,https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5ai---dominion_energy.pdf
+load_factor,0.6,0.72,mature demand / contract: Dominion 0.63; PPL ESA 0.70,https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5e---ppl.pdf
+pue,1.2,1.35,contract MW sized to facility peak; IT = facility / PUE; assessment for new AI campuses,
+us_share,0.58,0.68,9 states share of DCMap US pipeline (TX 85.4; VA 29.5; PA 19.6; UT 18.7; GA 14.3; OH 9.8; AZ ~8 of 318.6 GW) plus IN/WI unknown,https://www.nextmsc.com/industry-deep-dive/us-data-center-pipeline-deliverability

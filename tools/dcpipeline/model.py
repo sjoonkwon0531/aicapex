@@ -38,6 +38,7 @@ FACTOR = {"generation": "power", "interconnect": "power", "equipment": "power",
 LOADING = {"equipment": 0.3}   # equipment lead times mostly independent of the grid shock
 DEFAULT_W = 0.6
 YEARS = np.arange(2026, 2036)
+LAST = {}  # per-draw state x year cumulative arrays from the latest simulate() call
 
 
 def load():
@@ -140,6 +141,7 @@ def simulate(tr, co, n=20000, rho=0.5, alpha=0.5, seed=7):
                      "add_base_p50": np.median(b - bp), "add_delay_p50": np.median(d - dp),
                      "add_delay_p10": np.percentile(d - dp, 10), "add_delay_p90": np.percentile(d - dp, 90)})
     agg_tab = pd.DataFrame(rows)
+    LAST.update(base=online_base, delay=online_delay, states=list(tr.state.unique()), n=n)
     return stage_tab, year_tab, agg_tab, agg
 
 

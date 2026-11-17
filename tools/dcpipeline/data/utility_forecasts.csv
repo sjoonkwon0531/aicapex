@@ -1,0 +1,9 @@
+state,utility,basis,from_year,to_year,increment_gw,derivation,url
+VA,Dominion,contract,2027,2030,5.98,forecast contract capacity 11.59 GW (2027) to 17.57 GW (2030),https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5ai---dominion_energy.pdf
+VA,Dominion,load,2027,2030,2.70,data center demand 5.075 GW (2027) to 7.777 GW (2030),https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5ai---dominion_energy.pdf
+OH,AEP Ohio,load,2027,2028,2.48,PJM large-load adjustment (summer peak) 4.980 to 7.459 GW,https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5f---aep.pdf
+OH,AEP Ohio,load,2027,2030,8.92,PJM large-load adjustment (summer peak) 4.980 to 13.900 GW,https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5f---aep.pdf
+PA,PPL,load,2027,2028,1.04,forecast demand 0.539 to 1.579 GW (ESA at 70%),https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5e---ppl.pdf
+PA,PPL,load,2027,2029,4.05,forecast demand 0.539 to 4.591 GW,https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5e---ppl.pdf
+IN,I&M,load,2027,2029,1.37,I&M cumulative additions 1.813 to 3.186 GW (model IN also includes NIPSCO),https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5f---aep.pdf
+IN,I&M,load,2027,2031,2.52,I&M cumulative additions 1.813 to 4.330 GW (model IN also includes NIPSCO),https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5f---aep.pdf
