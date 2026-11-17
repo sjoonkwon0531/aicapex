@@ -1,6 +1,31 @@
 {
-  "updated": "2026-11-16",
+  "updated": "2026-11-17",
   "entries": [
+    {
+      "date": "2026-11-17",
+      "title": "미국 데이터센터 병목 모형: 2028년 신규 IT 용량 16GW 안팎, 모건스탠리 19.9GW보다 낮아",
+      "body": "SJ 연구 노트의 9개 주 단계별 병목 모형(관측 지연률로 보정)은 미국 연간 신규 IT 용량을 2028년 16.3GW(P10~P90 12.5~20.7), 2029년 20.0GW(13.9~28.1)로 추정한다. 모건스탠리 11월 수정치(19.9GW, 27.6GW)보다 낮고, 차이는 대부분 발전·계통접속 제약에서 나온다. 정치 제약의 효과는 대개 전력 제약에 가려지며, 지연이 길어지면 2029년 이후 해마다 2GW 안팎이 취소로 사라진다. 미국 신규 설치 HBM으로 바꾸면 2028년 약 2.0EB, 2029년 약 2.9EB로 모건스탠리 경로보다 0.4EB, 1.1EB 적다(모형 추정이며 투자 판단이 아니다).",
+      "sites": [
+        "capex",
+        "hyperscaler",
+        "memsim"
+      ],
+      "sources": [
+        {
+          "title": "연구 노트: 미국 데이터센터 주별·단계별 병목 추적 (aicapex 저장소 tools/dcpipeline, 6판)",
+          "url": "https://github.com/sjoonkwon0531/aicapex/tree/main/tools/dcpipeline"
+        },
+        {
+          "title": "Morgan Stanley, Midterms Could Delay the AI Buildout, Not Derail It (2026-11-11)",
+          "url": "https://www.morganstanley.com/insights/podcasts/thoughts-on-the-market/ai-data-centers-midterm-elections-ariana-salvatore"
+        },
+        {
+          "title": "ERCOT Monthly Operational Overview, September 2026",
+          "url": "https://www.ercot.com/files/docs/2026/10/16/ERCOT-Monthly-Operational-Overview-September.pdf"
+        }
+      ],
+      "decision": false
+    },
     {
       "date": "2026-11-16",
       "title": "모건스탠리, 미국 데이터센터 2028년 신규 증설 전망 24.9GW→19.9GW, 2029년 22.7GW→27.6GW",
