@@ -24,6 +24,10 @@ fig, (ax1, ax2) = sjfig.figure("note", width="double", aspect=0.46, ncols=2,
 # a: heatmap of median total added delay (months)
 M = np.full((len(STATES), len(STAGES)), np.nan)
 B = [["" for _ in STAGES] for _ in STATES]
+st = (st.assign(w=st.gw_mid, wd=st.gw_mid * st.total_delay_p50)
+        .sort_values("gw_mid").groupby(["state", "stage"], as_index=False)
+        .agg(total_delay_p50=("wd", "sum"), w=("w", "sum"), binding_top=("binding_top", "last")))
+st["total_delay_p50"] = st.total_delay_p50 / st.w
 for r in st.itertuples():
     i, j = STATES.index(r.state), STAGES.index(r.stage)
     M[i, j] = r.total_delay_p50

@@ -13,11 +13,13 @@ GA,S3,4.0,7.1,2028.8,0.05,0.15,PSC committed 12.4 + 3.2 GW minus broken ground 8
 GA,S4,12.0,23.6,2029.8,0.24,0.45,PSC near-term pipeline 23.6 GW; historic removal ~24%
 OH,S1,0.2,0.8,2026.9,0.0,0.02,assessment: AEP 2027 revisions mostly load already online; short gaps
 OH,S2,2.5,5.0,2027.3,0.02,0.08,PJM AEP Ohio adjustment 4.98 GW by 2027 (includes some operating)
-OH,S3,9.0,12.9,2029.0,0.05,0.15,AEP Ohio ESAs 17.9 GW minus S2; PJM schedule 2028-2030
+OH,S3,3.0,4.0,2028.3,0.05,0.15,AEP Ohio ESAs; first tranche shaped to PJM AEP Ohio adjustment step 2027->2028 (+2.5 GW load)
+OH,S3,6.0,8.9,2029.8,0.05,0.15,AEP Ohio ESAs remainder; PJM adjustment steps 2028->2030 (+6.4 GW load)
 OH,S4,3.0,9.8,2030.5,0.3,0.55,DCMap 9.8 GW; 13 GW study requests pre-tariff
 PA,S1,0.0,0.3,2026.9,0.0,0.02,assessment: most builds timed to 2028-30 energization
 PA,S2,2.3,8.5,2027.8,0.02,0.08,PJM PPL 2.26 GW by 2028 (70% util.) to PPL-reported 8.5 GW under construction
-PA,S3,4.3,8.6,2029.5,0.05,0.15,PJM PPL ESA-backed 10.9 GW plateau minus S2
+PA,S3,3.0,4.3,2028.8,0.05,0.15,PPL ESA-backed; first tranche shaped to PJM PPL demand step 2028->2029 (+3.0 GW at 70%)
+PA,S3,1.3,4.3,2030.0,0.05,0.15,PPL ESA-backed remainder to 10.9 GW plateau
 PA,S4,5.0,21.0,2031.0,0.3,0.55,PPL LOA load 21.2 GW (PJM gives 0% in first 3 years)
 IN,S1,0.1,0.4,2026.9,0.0,0.02,assessment: I&M ramp revisions
 IN,S2,1.0,1.8,2027.0,0.02,0.05,I&M cumulative 1.81 GW by 2027

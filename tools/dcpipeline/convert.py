@@ -98,6 +98,32 @@ def main():
     print(show.to_string(index=False))
     print(pdf.to_string(index=False))
     print("MS US IT additions revised:", MS["rev"], "previous:", MS["prev"])
+    # severity scenarios (data/severity.csv): US IT additions and the 2027 slip share
+    sev = pd.read_csv(HERE / "data/severity.csv").iloc[0]
+    tr_raw, co_raw = model.load(raw=True)
+    sc = []
+    for name, kn, kf in (("optimistic", sev.k_near_low, sev.k_far_low), ("near_only", sev.k_near, 1.0),
+                         ("central", sev.k_near, sev.k_far), ("same_bias", sev.k_near, sev.k_far_low),
+                         ("pessimistic", sev.k_near_high, sev.k_far_high), ("uncalibrated", 1.0, 1.0)):
+        c = co_raw.copy()
+        near = c.stage.isin(["S1", "S2"])
+        for col in ("delay_low", "delay_high"):
+            c.loc[near, col] *= kn
+            c.loc[~near, col] *= kf
+        model.simulate(tr_raw, c, 6000, 0.5, 0.5, seed=11)
+        L = dict(model.LAST)
+        it, _, sh = convert(L["delay"], L["states"], L["n"])
+        num = den = 0.0
+        for _, _, yb, yd, gw in L["tranches"]:
+            m = yb == 2027
+            den += gw[m].sum(); num += gw[m & (yd > 2027)].sum()
+        row = {"scenario": name, "k_near": kn, "k_far": kf, "slip2027": num / den}
+        for y in (2027, 2028, 2029, 2030):
+            row[f"us_it_add_{y}_p50"] = np.median((it[y] - it[y - 1]) / sh)
+        sc.append(row)
+    scd = pd.DataFrame(sc).round(2)
+    scd.to_csv(HERE / "out/severity_scenarios.csv", index=False)
+    print(scd.to_string(index=False))
 
 
 if __name__ == "__main__":

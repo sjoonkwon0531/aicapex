@@ -41,9 +41,19 @@ YEARS = np.arange(2026, 2036)
 LAST = {}  # per-draw state x year cumulative arrays from the latest simulate() call
 
 
-def load():
+def load(raw=False, k_far=None):
+    """Tranches and constraints. Unless raw=True, delay ranges are scaled by the
+    severity calibration in data/severity.csv (k_near for S1-S2, k_far for S3-S4)."""
     tr = pd.read_csv(HERE / "data/tranches.csv")
-    co = pd.read_csv(HERE / "data/constraints.csv")
+    co = pd.read_csv(HERE / "data/constraints.csv").astype({"delay_low": float, "delay_high": float})
+    sev = HERE / "data/severity.csv"
+    if not raw and sev.exists():
+        s = pd.read_csv(sev).iloc[0]
+        kf = s.k_far if k_far is None else k_far
+        near = co.stage.isin(["S1", "S2"])
+        for col in ("delay_low", "delay_high"):
+            co.loc[near, col] *= s.k_near
+            co.loc[~near, col] *= kf
     return tr, co
 
 
@@ -71,6 +81,7 @@ def simulate(tr, co, n=20000, rho=0.5, alpha=0.5, seed=7):
         return dmax, names
 
     recs, online_base, online_delay = [], {}, {}
+    tranche_log = []
     for t in tr.itertuples():
         k = STAGES.index(t.stage)
         own, own_bind = stage_delay(t.state, t.stage)
@@ -84,6 +95,7 @@ def simulate(tr, co, n=20000, rho=0.5, alpha=0.5, seed=7):
         b0 = t.base_year + rng.uniform(-0.5, 0.5, n)
         yb = np.floor(b0).astype(int)
         yd = np.floor(b0 + total / 12.0).astype(int)
+        tranche_log.append((t.state, t.stage, yb, yd, gw))
         for y in YEARS:
             online_base.setdefault((t.state, y), np.zeros(n))
             online_delay.setdefault((t.state, y), np.zeros(n))
@@ -141,7 +153,7 @@ def simulate(tr, co, n=20000, rho=0.5, alpha=0.5, seed=7):
                      "add_base_p50": np.median(b - bp), "add_delay_p50": np.median(d - dp),
                      "add_delay_p10": np.percentile(d - dp, 10), "add_delay_p90": np.percentile(d - dp, 90)})
     agg_tab = pd.DataFrame(rows)
-    LAST.update(base=online_base, delay=online_delay, states=list(tr.state.unique()), n=n)
+    LAST.update(base=online_base, delay=online_delay, tranches=tranche_log, states=list(tr.state.unique()), n=n)
     return stage_tab, year_tab, agg_tab, agg
 
 
