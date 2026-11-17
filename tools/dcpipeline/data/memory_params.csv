@@ -1,0 +1,12 @@
+item,key,low,high,unit,basis,tier,url
+rack,GB200_hbm_tb_per_mw,95,107,TB/MW,~13.4 TB HBM3e (72 x 186 GB) / 125-135 kW rack,S/derived,https://www.supermicro.com/datasheet/datasheet_SuperCluster_GB200_NVL72.pdf
+rack,GB300_hbm_tb_per_mw,141,152,TB/MW,20 TB HBM3e / 132-142 kW nominal rack,P+S/derived,https://www.nvidia.com/en-gb/data-center/gb300-nvl72
+rack,VR_hbm_tb_per_mw,91,111,TB/MW,20.7 TB HBM4 / 187 (Max-Q) - 227 (Max-P) kW rack,P+S/derived,https://lenovopress.lenovo.com/lp2527.pdf
+rack,KY_hbm_tb_per_mw,170,240,TB/MW,Rubin Ultra Kyber 144 pkgs x 1 TB HBM4E / ~600 kW (GTC25); low end allows 8-high HBM4E option; also proxy for post-2029 generation,S/derived,https://www.tomshardware.com/pc-components/gpus/nvidia-demonstrates-rubin-ultra-tray-worlds-1st-ai-gpu-with-1tb-of-hbm4e
+rack,GB200_lpddr_tb_per_mw,126,136,TB/MW,36 Grace x 480 GB = 17 TB / 125-135 kW,S/derived,https://www.supermicro.com/datasheet/datasheet_SuperCluster_GB200_NVL72.pdf
+rack,GB300_lpddr_tb_per_mw,120,129,TB/MW,17 TB / 132-142 kW,P/derived,https://www.nvidia.com/en-gb/data-center/gb300-nvl72
+rack,VR_lpddr_tb_per_mw,122,289,TB/MW,27.6 TB (Lenovo 768 GB/CPU) - 54 TB (NVIDIA max 1.5 TB/CPU) / 187-227 kW,P+S/derived,https://www.nvidia.com/en-us/data-center/vera-rubin-nvl72/
+rack,KY_lpddr_tb_per_mw,180,360,TB/MW,144 Vera x 0.77-1.5 TB / ~600 kW,S/derived,https://glennklockwood.com/garden/processors/R300
+share,rack_share_of_it,0.80,0.90,ratio,accelerator servers (GPU + host) share of IT power; Epoch AI facility split GPUs 40% / other server 22% / network+other IT 9%,T,https://epoch.ai/data-insights/gpus-power-usage-in-ai-data-centers
+asic,asic_share,0.25,0.40,ratio,custom ASIC share of new AI IT capacity; TrendForce ASIC 27.8% of AI server shipments 2026 and rising,S,https://www.trendforce.com/presscenter/news/20260120-12887.html
+asic,asic_hbm_ratio,0.7,1.3,ratio,ASIC HBM per MW relative to NVIDIA: TPU v7 192 GB at ~1.1 kW all-in (~175 TB/MW); Trn3 144 GB/chip; MTIA 288-512 GB at 1.2-1.7 kW,P+S/derived,https://blog.google/products/google-cloud/ironwood-tpu-age-of-inference/
