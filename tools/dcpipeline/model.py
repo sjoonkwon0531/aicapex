@@ -57,8 +57,15 @@ def load(raw=False, k_far=None):
     return tr, co
 
 
-def simulate(tr, co, n=20000, rho=0.5, alpha=0.5, seed=7):
+def simulate(tr, co, n=20000, rho=0.5, alpha=0.5, seed=7, endog=True):
+    """endog=True: delay raises cancellation of S3/S4 capacity (hazard per year of added delay),
+    and part of the cancelled capacity is re-sited outside the modelled schedule (LAST['reloc'])."""
     rng = np.random.default_rng(seed)
+    ap = pd.read_csv(HERE / "data/attrition.csv").set_index("param") if (HERE / "data/attrition.csv").exists() else None
+    if ap is None:
+        endog = False
+    rrng = np.random.default_rng(seed + 1000)   # separate stream: keeps delay draws identical with endog on/off
+    online_reloc = {y: np.zeros(n) for y in YEARS}
     cov = np.array([[1, rho], [rho, 1]])
     z = rng.multivariate_normal([0, 0], cov, size=n)
     zf = {"power": z[:, 0], "social": z[:, 1]}
@@ -96,17 +103,28 @@ def simulate(tr, co, n=20000, rho=0.5, alpha=0.5, seed=7):
         yb = np.floor(b0).astype(int)
         yd = np.floor(b0 + total / 12.0).astype(int)
         tranche_log.append((t.state, t.stage, yb, yd, gw))
+        kept, pc = gw, np.zeros(n)
+        if endog and t.stage in ("S3", "S4"):
+            lam = rrng.uniform(ap.loc["lambda_per_year", "low"], ap.loc["lambda_per_year", "high"], n)
+            pc = 1 - np.exp(-lam * total / 12.0)
+            kept = gw * (1 - pc)
+            rel = gw * pc * rrng.uniform(ap.loc["relocate_share", "low"], ap.loc["relocate_share", "high"], n)
+            lag = rrng.uniform(ap.loc["relocate_lag_months", "low"], ap.loc["relocate_lag_months", "high"], n)
+            yr = np.floor(b0 + np.minimum(total, 12.0) / 12.0 + lag / 12.0).astype(int)
+            for y in YEARS:
+                online_reloc[y] += np.where(yr <= y, rel, 0.0)
         for y in YEARS:
             online_base.setdefault((t.state, y), np.zeros(n))
             online_delay.setdefault((t.state, y), np.zeros(n))
             online_base[(t.state, y)] += np.where(yb <= y, gw, 0.0)
-            online_delay[(t.state, y)] += np.where(yd <= y, gw, 0.0)
+            online_delay[(t.state, y)] += np.where(yd <= y, kept, 0.0)
         shares = pd.Series(own_bind).replace("", "none").value_counts(normalize=True)
         recs.append({
             "state": t.state, "stage": t.stage, "gw_mid": (t.gw_low + t.gw_high) / 2,
             "base_year": t.base_year,
             "own_delay_p50": np.median(own), "total_delay_p10": np.percentile(total, 10),
             "total_delay_p50": np.median(total), "total_delay_p90": np.percentile(total, 90),
+            "cancel_share_p50": np.median(pc),
             "binding_top": shares.drop("none", errors="ignore").idxmax() if (shares.drop("none", errors="ignore").size) else "none",
             **{f"bind_{c}": shares.get(c, 0.0) for c in list(FACTOR) + ["none"]},
         })
@@ -153,7 +171,7 @@ def simulate(tr, co, n=20000, rho=0.5, alpha=0.5, seed=7):
                      "add_base_p50": np.median(b - bp), "add_delay_p50": np.median(d - dp),
                      "add_delay_p10": np.percentile(d - dp, 10), "add_delay_p90": np.percentile(d - dp, 90)})
     agg_tab = pd.DataFrame(rows)
-    LAST.update(base=online_base, delay=online_delay, tranches=tranche_log, states=list(tr.state.unique()), n=n)
+    LAST.update(base=online_base, delay=online_delay, tranches=tranche_log, reloc=online_reloc, states=list(tr.state.unique()), n=n)
     return stage_tab, year_tab, agg_tab, agg
 
 

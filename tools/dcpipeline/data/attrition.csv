@@ -1,0 +1,4 @@
+param,low,high,basis,tier,url
+lambda_per_year,0.05,0.12,cancellation hazard per year of added delay (S3/S4); Georgia Power pipeline removed ~24% of data center projects 2023-2025 (~5 exits/quarter) and 2.9 GW in Q1 2026,P/T,https://www.utilitydive.com/news/georgia-power-large-load-data-centers/806300/
+relocate_share,0.2,0.5,share of cancelled capacity re-sited in another state (assessment; e.g. Microsoft Licking County revived; QTS DeForest cancelled; WoodMac: developers shift to existing pipelines),assessment,https://www.woodmac.com/es/press-releases/us-data-centre-developers-shift-focus-to-existing-pipelines-as-new-capacity-additions-slow-in-q1-2026/
+relocate_lag_months,24,48,restart lag at new site; Latitude: announcement to first power ~33 months (n=19),T,https://www.techtimes.com/articles/330794/20261116/latitude-finds-data-center-power-contracts-cover-22-reported-load-utilities-seek-power-plants.htm

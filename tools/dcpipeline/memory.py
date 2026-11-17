@@ -60,6 +60,8 @@ def it_adds(case):
     L = dict(model.LAST)
     key = "base" if case == "baseline_schedule" else "delay"
     it, _, sh = convert.convert(L[key], L["states"], L["n"])
+    if key == "delay":
+        it = convert.with_reloc(L, it, sh)
     return {y: (it[y] - it[y - 1]) / sh for y in YEARS}, L["n"]
 
 

@@ -48,6 +48,16 @@ def convert(cum_by_state_year, states, n, rng_seed=3):
     return it_cum, ld_cum, share
 
 
+def with_reloc(L, it, sh):
+    """Add re-sited capacity (LAST['reloc'], absolute US GW) to 9-state IT, expressed so that
+    it / share gives the US total including relocations."""
+    if "reloc" not in L:
+        return it
+    rc = {("RELOC", y): L["reloc"][y] for y in model.YEARS}
+    itr, _, _ = convert(rc, ["RELOC"], L["n"])
+    return {y: it[y] + itr[y] * sh for y in model.YEARS}
+
+
 def summarise(it_cum, ld_cum, share, label):
     rows, prev_it = [], 0
     for y in model.YEARS:
@@ -73,6 +83,7 @@ def main():
         model.simulate(tr, c2, 8000, 0.5, 0.5, seed=11)
         L = dict(model.LAST)
         it, ld, sh = convert(L["delay"], L["states"], L["n"])
+        it = with_reloc(L, it, sh)
         out += summarise(it, ld, sh, label)
         store[label] = (it, sh)
         if label == "all":
@@ -113,6 +124,7 @@ def main():
         model.simulate(tr_raw, c, 6000, 0.5, 0.5, seed=11)
         L = dict(model.LAST)
         it, _, sh = convert(L["delay"], L["states"], L["n"])
+        it = with_reloc(L, it, sh)
         num = den = 0.0
         for _, _, yb, yd, gw in L["tranches"]:
             m = yb == 2027
