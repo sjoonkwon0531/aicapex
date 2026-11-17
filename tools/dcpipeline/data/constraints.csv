@@ -1,0 +1,61 @@
+state,stage,constraint,p_active,delay_low,delay_high,evidence,url
+TX,S1,interconnect,0.6,0,6,QSA quarterly energization approval; IROL 3200 MW and per-utility NTE limits,https://www.ercot.com/files/docs/2026/09/16/QSA-Results-and-Large-Load-IROL-Mitigation-Plans_final.pdf
+TX,S2,politics,0.7,3,12,TCEQ pause on air and stormwater permits (ordered 2026-09-21),https://www.texastribune.org/2026/10/20/data-center-permits-tceq-abbott-texas-pause/
+TX,S2,generation,0.4,3,12,on-site gas share ~80% of near-term power; turbine slots into 2029-30,https://www.power-eng.com/gas/turbines/data-centers-drive-record-surge-in-ge-vernova-power-equipment-orders-as-turbine-slots-tighten-through-2030/
+TX,S2,equipment,0.5,0,6,transformer and switchgear lead times,https://www.ajot.com/news/us-power-companies-scramble-to-secure-equipment-as-surging-data-center-demand-strains-supplies
+TX,S3,politics,0.8,6,18,Abbott audit 2026-08-03 gates approval and Batch Zero; Hinojosa approval moratorium proposal (from 2027-01-19),https://www.gibsondunn.com/what-governor-abbotts-data-center-audit-directive-means-for-ercot-and-the-batch-zero-study-process/
+TX,S3,interconnect,0.6,6,24,Batch Zero allocates MW by year 2028-2032; study deadline TBD,https://www.ercot.com/files/docs/2026/09/11/14-Batch-Zero-Update.pdf
+TX,S3,generation,0.5,0,12,gas turbine and BTM permit coupling,https://www.texastribune.org/2026/10/20/data-center-permits-tceq-abbott-texas-pause/
+TX,S3,water,0.2,0,6,mandatory water survey; TWDB penalties (2026-09-14),https://www.texastribune.org/2026/10/20/data-center-permits-tceq-abbott-texas-pause/
+TX,S4,politics,0.7,12,36,2027 legislative session; Democratic House; moratorium proposal,https://www.ksat.com/news/texas/2026/11/04/gina-hinojosa-won-the-governors-race-what-happens-to-texas-data-centers-now/
+TX,S4,interconnect,0.8,24,48,Batch 1 from June 2027; transmission 3-4+ years,https://www.ercot.com/files/docs/2026/09/11/14-Batch-Zero-Update.pdf
+TX,S4,local,0.2,6,12,local opposition (Texas has fewer local zoning tools),https://www.woodmac.com/press-releases/us-data-centre-additions-return-to-growth-in-q2-2026-as-developers-push-construction-and-pipeline-continues-to-expand2/
+VA,S1,interconnect,0.5,6,24,Dominion 4-7 years request-to-meter; substation build,https://www.utilitydive.com/news/dominion-energy-offshore-wind-earnings/804617/
+VA,S2,equipment,0.6,3,9,CBRE: fit-out and liquid-cooling retrofits >6 months,https://www.cbre.com/insights/books/north-america-data-center-trends-h1-2026
+VA,S2,interconnect,0.4,0,12,substation energization timing,https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5ai---dominion_energy.pdf
+VA,S3,interconnect,0.8,12,36,transmission and substation build; Dominion high/low energization scenarios,https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5ai---dominion_energy.pdf
+VA,S3,generation,0.5,0,12,PJM 2028/29 auction 6831 MW short at cap,https://www.pjm.com/-/media/DotCom/about-pjm/newsroom/2026-releases/20260714-pjm-capacity-auction-procures-138318-mw-of-generation-resources.pdf
+VA,S4,interconnect,0.8,24,48,ELOA stage; only 41% included in forecast,https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5ai---dominion_energy.pdf
+VA,S4,local,0.5,6,18,Loudoun ended by-right approval (2025-03-18),https://care.gmu.edu/wp-content/uploads/STEP_Brief_05_Data_Centers_2026-09-03.pdf
+VA,S4,tax,0.3,0,6,consumption tax $0.011/kWh from 2026-07-01; sales tax exemption review in 2027,https://www.hunton.com/insights/legal/virginia-adds-electricity-consumption-tax-but-stops-short-of-repealing-data-center-sales-tax-exemption
+GA,S2,equipment,0.5,0,9,equipment and fit-out,https://www.cbre.com/insights/books/north-america-data-center-trends-h1-2026
+GA,S3,generation,0.6,6,24,commitments exceed certified 9.9 GW by ~1 GW; 2-6 GW RFP,https://www.utilitydive.com/news/southern-co-contracted-large-load-data-centers/826919/
+GA,S3,politics,0.3,0,6,Democratic 3-2 PSC majority; affordability docket,https://www.wrdw.com/2026/11/06/election-may-bring-reckoning-data-centers-georgia/
+GA,S4,politics,0.7,1,6,Gov-elect Bottoms temporary moratorium on new approvals,https://www.wrdw.com/2026/11/06/election-may-bring-reckoning-data-centers-georgia/
+GA,S4,local,0.4,6,18,71 local moratorium records 2025-26 (21 active),https://mjbommar.github.io/moratorium-data-2026/states/georgia.html
+GA,S4,generation,0.5,6,24,new generation beyond certified capacity,https://www.utilitydive.com/news/southern-co-contracted-large-load-data-centers/826919/
+OH,S2,local,0.2,0,6,Ashville vote blocked a campus under construction,https://fortune.com/2026/11/04/ohio-data-center-ballot-measures-midterm-elections/
+OH,S2,equipment,0.5,0,6,equipment and commissioning,https://www.ajot.com/news/us-power-companies-scramble-to-secure-equipment-as-surging-data-center-demand-strains-supplies
+OH,S3,generation,0.6,6,18,PJM capacity shortfall two auctions running,https://www.powermag.com/pjms-2028-2029-capacity-auction-falls-short-of-reliability-standard-for-second-straight-year/
+OH,S3,interconnect,0.5,6,18,AEP transmission; PJM schedule back-loaded to 2029-30,https://www.pjm.com/-/media/DotCom/committees-groups/subcommittees/las/2026/20260929/20260929-item-5f---aep.pdf
+OH,S3,politics,0.3,0,12,Gov-elect Acton conditional moratorium (new projects),https://abcnews.com/Technology/wireStory/data-centers-beating-midterm-elections-reckoning-ahead-tech-137902293
+OH,S4,local,0.6,12,36,125+ local moratoria; 14+ restrictions passed 2026-11-03,https://fortune.com/2026/11/04/ohio-data-center-ballot-measures-midterm-elections/
+OH,S4,politics,0.6,6,24,Acton conditions: own costs; CBAs; clawbacks,https://abcnews.com/Technology/wireStory/data-centers-beating-midterm-elections-reckoning-ahead-tech-137902293
+OH,S4,tax,0.3,0,6,sales tax exemption applications frozen since May 2026,https://wysu.org/ohio-news/2026-08-06/dewine-ohio-data-center-tax-break-is-for-next-governor-to-decide-on
+PA,S2,equipment,0.6,3,9,equipment and commissioning,https://www.ajot.com/news/us-power-companies-scramble-to-secure-equipment-as-surging-data-center-demand-strains-supplies
+PA,S3,generation,0.7,12,36,EO 2026-05 build/bring/buy 100% capacity; curtail-first; PJM shortfall,https://www.morganlewis.com/pubs/2026/08/governor-shapiro-issues-executive-order-imposing-new-requirements-for-data-centers
+PA,S3,politics,0.4,0,12,EO 2026-05 DEP permit gate (COA required),https://www.morganlewis.com/pubs/2026/08/governor-shapiro-issues-executive-order-imposing-new-requirements-for-data-centers
+PA,S4,politics,0.7,12,36,EO permit gate; removal from fast track,https://techinformed.com/pennsylvania-ends-fast-track-path-for-data-centers/
+PA,S4,local,0.5,6,24,local approvals required before DEP review,https://www.morganlewis.com/pubs/2026/08/governor-shapiro-issues-executive-order-imposing-new-requirements-for-data-centers
+PA,S4,generation,0.5,24,48,dedicated generation 2029-33,https://www.blackridgeresearch.com/news-releases/ppls-advanced-stage-pennsylvania-data-center-pipeline-reaches-35-3-gw-with-2-gw-qts-deal-agreed-in-the-us
+IN,S2,equipment,0.5,0,9,equipment and commissioning,https://www.ajot.com/news/us-power-companies-scramble-to-secure-equipment-as-surging-data-center-demand-strains-supplies
+IN,S3,generation,0.6,0,18,build-after-commit; NIPSCO GenCo gas 2x1.3 GW,https://www.in.gov/oed/files/2026-Indiana-Energy-Plan-Draft-OED-4.20.26-For-Web.pdf
+IN,S4,local,0.6,6,24,25 counties with moratoria; Indianapolis to Dec 2027,https://www.citact.org/node/3996
+IN,S4,tax,0.3,0,6,HB 1333 sales tax 0% to 1% (status unverified),https://www.axios.com/local/indianapolis/2026/02/04/pike-township-data-center-stalls-indiana-lawmakers-incentivize
+UT,S2,generation,0.6,6,18,~1.7 GW BTM gas; genset and turbine delivery; air permits,https://le.utah.gov/interim/2026/pdf/00003188.pdf
+UT,S3,generation,0.7,12,36,RMP firm generation; new Utah gas mid-2030s,https://www.rockymountainpower.net/content/dam/pcorp/documents/en/rockymountainpower/rates-regulation/utah/filings/docket-26-035-05/0_Application.pdf
+UT,S4,local,0.6,12,36,7 county/city pauses in 2026,https://le.utah.gov/interim/2026/pdf/00003139.pdf
+UT,S4,water,0.5,12,36,Stratos water-rights protests; HB 76 notice,https://www.sltrib.com/news/2026/10/20/kevin-olearys-utah-data-center/
+UT,S4,generation,0.7,36,60,RMP cannot serve Novva until 2031,https://www.sltrib.com/news/environment/2026/02/09/utahs-data-centers-may-consume/
+AZ,S2,interconnect,0.6,3,12,substation/transmission energization; ~10% summer reserve,https://kjzz.org/business/2026-10-26/arizona-utilities-scramble-to-keep-up-as-data-center-boom-drives-rapid-expansion-of-the-power-grid
+AZ,S3,generation,0.6,12,36,APS seeks 8 GW for 2031; Gila Bend 1.28 GW gas,https://www.kjzz.org/business/2026-09-02/aps-says-it-cant-commit-to-new-data-centers-because-of-electric-grid-constraints
+AZ,S3,interconnect,0.5,6,24,SRP 3-4 years infrastructure; 5-10 year ramp,https://kjzz.org/business/2026-10-26/arizona-utilities-scramble-to-keep-up-as-data-center-boom-drives-rapid-expansion-of-the-power-grid
+AZ,S4,generation,0.7,48,72,APS no new DC commitments since 2024-01-01,https://www.kjzz.org/business/2026-09-02/aps-says-it-cant-commit-to-new-data-centers-because-of-electric-grid-constraints
+AZ,S4,local,0.4,6,18,Phoenix special permit; Gilbert standards; Pinal scaled back,https://www.bisnow.com/news/phoenix/data-center/phoenix-data-center-projects-face-delays-as-public-backlash-regulations-mount
+AZ,S4,tax,0.3,0,6,3-year pause on new DC tax incentives from 2026-07-01,https://www.kjzz.org/business/2026-07-14/agency-received-flood-of-applications-ahead-of-pause-on-arizona-data-center-tax-breaks
+AZ,S4,water,0.2,0,12,groundwater (not quantified as binding),https://www.bisnow.com/news/phoenix/data-center/phoenix-data-center-projects-face-delays-as-public-backlash-regulations-mount
+WI,S2,interconnect,0.6,0,9,ATC line for Vantage refiled; 35 PSC questions,https://www.fool.com/earnings/call-transcripts/2026/10/30/wec-energy-wec-q3-2026-earnings-call-transcript/
+WI,S3,generation,0.6,12,30,WEC combined cycle ~2031; MISO 1.4-1.5 GW per GW load,https://www.fool.com/earnings/call-transcripts/2026/10/30/wec-energy-wec-q3-2026-earnings-call-transcript/
+WI,S4,local,0.6,12,36,Janesville referendum passed (62.8%); Wrightstown 87% opposed,https://urbanmilwaukee.com/2026/11/10/janesville-passes-referendum-limiting-data-centers-part-of-national-wave/
+WI,S4,tax,0.4,0,12,Gov-elect Crowley pledges sales tax exemption repeal,https://www.spglobal.com/energy/en/news-research/latest-news/electric-power/110426-democrat-crowley-wins-wisconsin-governors-race-on-renewables-friendly-platform
+WI,S4,politics,0.3,6,24,Crowley: full grid costs; 70% renewable for incentives,https://www.spglobal.com/energy/en/news-research/latest-news/electric-power/110426-democrat-crowley-wins-wisconsin-governors-race-on-renewables-friendly-platform

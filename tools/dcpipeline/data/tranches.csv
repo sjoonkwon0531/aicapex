@@ -1,0 +1,31 @@
+state,stage,gw_low,gw_high,base_year,attrition_low,attrition_high,basis
+TX,S1,1.0,5.3,2026.9,0.00,0.02,ERCOT approved-to-energize minus observed (5.3 GW upper bound)
+TX,S2,9.5,15.0,2027.8,0.02,0.05,BNEF ERCOT DC additions through 2030 (9.45 GW) to midpoint toward DCMap 30.2
+TX,S3,10.0,22.0,2028.8,0.05,0.15,ERCOT Section 9.5 loads (22 GW) net of S2
+TX,S4,15.0,30.0,2030.0,0.20,0.40,deliverable share: officials' ~65 GW by 2032 minus S1-S3
+VA,S1,0.0,1.0,2026.9,0.00,0.02,no public figure; nominal
+VA,S2,2.4,3.5,2027.3,0.02,0.05,CBRE NoVA under construction 2.42 GW (IT) x 1.0-1.4
+VA,S3,15.0,19.0,2028.8,0.05,0.10,Dominion ESA+CLOA 21.4 GW minus S2 (contract MW)
+VA,S4,13.4,13.4,2031.0,0.20,0.40,Dominion ELOA 32.5 GW x 41% included in forecast
+GA,S1,0.0,0.5,2026.9,0.00,0.02,no public figure; nominal
+GA,S2,2.9,7.3,2027.3,0.02,0.05,CBRE Atlanta 2.88 GW to PSC broken ground 8.5 GW minus energized 1.2
+GA,S3,4.0,7.1,2028.8,0.05,0.15,PSC committed 12.4 + 3.2 GW minus broken ground 8.5
+GA,S4,12.0,23.6,2029.8,0.24,0.45,PSC near-term pipeline 23.6 GW; historic removal ~24%
+OH,S2,2.5,5.0,2027.3,0.02,0.08,PJM AEP Ohio adjustment 4.98 GW by 2027 (includes some operating)
+OH,S3,9.0,12.9,2029.0,0.05,0.15,AEP Ohio ESAs 17.9 GW minus S2; PJM schedule 2028-2030
+OH,S4,3.0,9.8,2030.5,0.30,0.55,DCMap 9.8 GW; 13 GW study requests pre-tariff
+PA,S2,2.3,8.5,2027.8,0.02,0.08,PJM PPL 2.26 GW by 2028 (70% util.) to PPL-reported 8.5 GW under construction
+PA,S3,4.3,8.6,2029.5,0.05,0.15,PJM PPL ESA-backed 10.9 GW plateau minus S2
+PA,S4,5.0,21.0,2031.0,0.30,0.55,PPL LOA load 21.2 GW (PJM gives 0% in first 3 years)
+IN,S2,1.0,1.8,2027.0,0.02,0.05,I&M cumulative 1.81 GW by 2027
+IN,S3,2.5,4.5,2029.3,0.05,0.25,I&M +2.5 GW to 2031 + NIPSCO-Amazon 2.4 GW (1.2 GW cut option)
+IN,S4,2.0,8.0,2030.5,0.30,0.55,no state total; Cleanview 8 campuses >=1 GW planned
+UT,S2,2.6,2.6,2027.0,0.02,0.10,Gardner/451 under construction 2.6 GW (1.7 BTM)
+UT,S3,0.1,1.0,2028.0,0.05,0.20,first SB 132 ESA >100 MW; no queue total
+UT,S4,2.0,10.0,2031.0,0.40,0.70,announced gigasites (Stratos 7.5; Creekstone 10; Joule 4) heavily discounted
+AZ,S2,0.8,2.0,2027.3,0.02,0.05,DCMap 0.78 / JLL 1.7 GW
+AZ,S3,6.0,6.5,2029.0,0.05,0.15,APS 4.0-4.5 GW + SRP 2 GW committed
+AZ,S4,2.0,7.3,2031.0,0.30,0.55,DCMap Phoenix planned 7.3 GW
+WI,S2,1.1,1.5,2027.8,0.02,0.05,Port Washington 0.9 + Meta Beaver Dam 0.22 + Microsoft ph2
+WI,S3,3.4,4.5,2030.0,0.05,0.20,We Energies growth 4.9 GW 2026-31 minus S2
+WI,S4,1.0,4.0,2031.0,0.30,0.60,pending Janesville/Menomonie/Kenosha; no MW
