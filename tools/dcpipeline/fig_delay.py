@@ -27,7 +27,7 @@ B = [["" for _ in STAGES] for _ in STATES]
 for r in st.itertuples():
     i, j = STATES.index(r.state), STAGES.index(r.stage)
     M[i, j] = r.total_delay_p50
-    B[i][j] = KO[r.binding_top]
+    B[i][j] = KO[r.binding_top] if r.total_delay_p50 >= 1 else "–"
 im = ax1.imshow(np.ma.masked_invalid(M), cmap="cividis", vmin=0, vmax=60, aspect="auto")
 ax1.set_facecolor(sjfig.PALETTE["light"])
 for i in range(len(STATES)):

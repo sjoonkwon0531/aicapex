@@ -97,6 +97,27 @@ def simulate(tr, co, n=20000, rho=0.5, alpha=0.5, seed=7):
             "binding_top": shares.drop("none", errors="ignore").idxmax() if (shares.drop("none", errors="ignore").size) else "none",
             **{f"bind_{c}": shares.get(c, 0.0) for c in list(FACTOR) + ["none"]},
         })
+    # utility connection throughput caps (GW/yr): excess rolls into the next year
+    if (HERE / "data/throughput.csv").exists():
+        caps = pd.read_csv(HERE / "data/throughput.csv")
+        for c in caps.itertuples():
+            if c.state not in set(tr.state):
+                continue
+            cap = rng.uniform(c.cap_low, c.cap_high, n)
+            carry = np.zeros(n)
+            prev_raw = np.zeros(n)
+            cum = np.zeros(n)
+            for y in YEARS:
+                raw = online_delay[(c.state, y)]
+                if y >= c.from_year:
+                    avail = (raw - prev_raw) + carry
+                    take = np.minimum(avail, cap)
+                    carry = avail - take
+                else:
+                    take = raw - prev_raw
+                prev_raw = raw.copy()
+                cum = cum + take
+                online_delay[(c.state, y)] = cum.copy()
     stage_tab = pd.DataFrame(recs)
     yr = []
     for (s, y), b in online_base.items():
