@@ -1,6 +1,74 @@
 {
-  "updated": "2026-11-19",
+  "updated": "2026-11-24",
   "entries": [
+    {
+      "date": "2026-11-24",
+      "title": "알파벳, 캐나다달러 회사채 60억 달러(C$) 발행",
+      "body": "알파벳은 11월 19일 캐나다달러 회사채 60억 캐나다달러를 4개 트랜치(2029~2066년 만기, 쿠폰 4.100~6.000%)로 가격을 정했다. 결제일은 11월 24일이다. 순조달액은 약 59.7억 캐나다달러로, 회사는 일반 목적(기존 차입 상환 포함)에 쓴다고 밝혔다. 11월 12일 이후 발행이라 시뮬레이터 출발점에는 들어 있지 않다.",
+      "sites": [
+        "hyperscaler",
+        "google",
+        "capex"
+      ],
+      "sources": [
+        {
+          "title": "알파벳 424B2 (2026-11-23)",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000119312526470750/d115240d424b2.htm"
+        },
+        {
+          "title": "알파벳 가격조건표 FWP (2026-11-20)",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000119312526469213/d21316dfwp.htm"
+        }
+      ],
+      "decision": true
+    },
+    {
+      "date": "2026-11-24",
+      "title": "메타, 소송 중 C클래스 주식배당 보류, ATM 주식 발행도 그 뒤로",
+      "body": "메타는 델라웨어 형평법원의 C클래스 재분류 소송(재판 2027년 4월 19일 시작 예정)이 진행되는 동안 C클래스 보통주를 발행하지 않기로 했다. 이에 따라 이미 결의한 C클래스 주식배당 지급이 미뤄진다. 회사는 C클래스 거래가 시작되기 전에는 앞서 밝힌 ATM(시장가 분할 매도) 프로그램을 시작하지 않으므로, 주식배당 지급 뒤에야 시작할 것으로 본다고 밝혔다.",
+      "sites": [
+        "hyperscaler"
+      ],
+      "sources": [
+        {
+          "title": "메타 8-K (2026-11-23)",
+          "url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026075541/meta-20261118.htm"
+        }
+      ],
+      "decision": false
+    },
+    {
+      "date": "2026-11-24",
+      "title": "엔비디아, 젠슨 황 CEO 복귀",
+      "body": "엔비디아 이사회는 11월 22일 젠슨 황을 사장·CEO·이사로 즉시 복귀시켰다. 콜레트 크레스는 부사장 겸 CFO로 돌아간다. 11월 11일 사임 후 11일 만이다.",
+      "sites": [
+        "capex",
+        "memsim"
+      ],
+      "sources": [
+        {
+          "title": "NVIDIA 8-K (2026-11-23)",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000090/nvda-20261122.htm"
+        }
+      ],
+      "decision": false
+    },
+    {
+      "date": "2026-11-24",
+      "title": "H100 임대료 지수 11월 10일 3.06달러, 9월 말보다 11.3% 올라",
+      "body": "Silicon Data의 비하이퍼스케일러 H100 지수는 11월 10일 시간당 3.06달러로 9월 30일(2.75달러)보다 11.3% 높다. 3분기 평균은 2.69달러로 1년 전(2.07달러)보다 29.6% 높다. 하이퍼스케일러 H100 지수는 9월 30일 7.20달러다. CoreWeave는 11월 10일 실적 발표에서 앰피어·호퍼 세대 가격이 전 분기보다 30~50% 올랐다고 밝혔다.",
+      "sites": [
+        "hyperscaler",
+        "capex"
+      ],
+      "sources": [
+        {
+          "title": "Silicon Data, Hopper and Ampere rents are rising (2026-11-16)",
+          "url": "https://www.silicondata.com/blog/hopper-ampere-gpu-rents-coreweave-repricing"
+        }
+      ],
+      "decision": false
+    },
     {
       "date": "2026-11-19",
       "title": "엔비디아 3분기 매출 1,158억 달러, 공급 약정 2,790억→3,900억 달러(주로 메모리)",
