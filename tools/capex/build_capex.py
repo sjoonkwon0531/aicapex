@@ -24,7 +24,7 @@ assert page.count(anchor) == 1
 page = page.replace(anchor, card_n + '\n' + anchor)
 li_old = '    </ul>\n  </section>'
 assert page.count(li_old) == 1
-page = page.replace(li_old, '      <li>그림 n은 관세청 품목별 수출입실적(공공데이터포털 API, 10자리 HSK 854232xxxx)을 1~9월끼리 더한 값입니다. 2021~2025년 대만행 분기 값은 UN Comtrade와 금액·중량 모두 일치했습니다. 이 그림은 연구실의 매일 수집 자료(메모리 국면 모니터의 공개 데이터)를 읽어 매일 갱신되며, 그 자료를 불러오지 못하면 2026년 11월 5일에 고정한 값으로 그립니다. 범용 D램 가격 국면은 <a href="https://memsim.sjoonkwon.com">메모리 국면 모니터</a>에서 매일 갱신됩니다.</li>\n' + li_old)
+page = page.replace(li_old, '      <li>그림 n은 관세청 품목별 수출입실적(공공데이터포털 API, 10자리 HSK 854232xxxx)을 두 해의 같은 기간(1월부터 최신 공표 월까지)끼리 더한 값입니다. 2021~2025년 대만행 분기 값은 UN Comtrade와 금액·중량 모두 일치했습니다. 이 그림은 연구실의 매일 수집 자료(메모리 국면 모니터의 공개 데이터)를 읽어 매일 갱신되며, 그 자료를 불러오지 못하면 2026년 11월 5일에 고정한 값으로 그립니다. 범용 D램 가격 국면은 <a href="https://memsim.sjoonkwon.com">메모리 국면 모니터</a>에서 매일 갱신됩니다.</li>\n' + li_old)
 
 chart_n = r'''
 <script>
